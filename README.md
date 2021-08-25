@@ -13,3 +13,8 @@ Opsteady is created to deliver and maintain hundreds of clusters. We suggest tha
 The initial idea for a platform started in 2015 and evolved over many years of us helping organizations improve their software delivery processes. We focussed on delivering and maintaining platforms, while at the same time also changing the way organizations work. We were and still are, always looking to increase the quality of the software delivery lifecycle and making sure that developers have a delightful experience while building and operating their software.
 
 Opsteady is a creation of Ivo and Armin, powered by Xebia.
+
+## Get started
+
+- [Architectural decisions](docs/adr/toc.md)
+- [Opsteady documentation](docs/opsteady/toc.md)

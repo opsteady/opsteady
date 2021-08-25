@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "hediet.vscode-drawio",
+    "vincent-ledu.adr-tools",
+    "streetsidesoftware.code-spell-checker",
+    "ms-azuretools.vscode-docker",
+    "hashicorp.terraform",
+    "yzhang.markdown-all-in-one",
+    "davidanson.vscode-markdownlint",
+    "redhat.vscode-yaml"
+  ]
+}
