@@ -5,6 +5,7 @@ Date: 2021-08-25
 ## Status
 
 Status: Accepted on 2021-08-25
+Foundation for [0004-interface.md](0004-interface.md) on 2021-08-25
 
 ## Context
 
