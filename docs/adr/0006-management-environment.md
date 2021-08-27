@@ -5,6 +5,7 @@ Date: 2021-08-27
 ## Status
 
 Status: Accepted on 2021-08-27
+Foundation for [0007-management-connectivity.md](0007-management-connectivity.md) on 2021-08-27
 Builds on [0005-multi-cloud.md](0005-multi-cloud.md) on 2021-08-27
 
 ## Context

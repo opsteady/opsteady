@@ -6,6 +6,7 @@ Date: 2021-08-26
 
 Status: Accepted on 2021-08-26
 Foundation for [0006-management-environment.md](0006-management-environment.md) on 2021-08-27
+Foundation for [0007-management-connectivity.md](0007-management-connectivity.md) on 2021-08-27
 
 ## Context
 
