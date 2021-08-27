@@ -9,3 +9,4 @@
 - [6. Management environment](0006-management-environment.md)
 - [7. Management connectivity](0007-management-connectivity.md)
 - [8. Vault](0008-vault.md)
+- [9. IP ranges](0009-ip-ranges.md)
