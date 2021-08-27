@@ -6,3 +6,4 @@
 - [3. Project scope](0003-project-scope.md)
 - [4. Interface](0004-interface.md)
 - [5. Multi-cloud](0005-multi-cloud.md)
+- [6. Management environment](0006-management-environment.md)

@@ -5,6 +5,7 @@ Date: 2021-08-26
 ## Status
 
 Status: Accepted on 2021-08-26
+Foundation for [0006-management-environment.md](0006-management-environment.md) on 2021-08-27
 
 ## Context
 
