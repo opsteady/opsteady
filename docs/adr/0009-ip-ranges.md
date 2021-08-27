@@ -45,11 +45,16 @@ AWS needs to be split up into subnet per Availability Zone (three by default) fo
 | 10.0.27.0/23   | 510         | left         |
 | 10.0.27.0/23   | 510         | left         |
 
-Azure doesn't need to be split as it uses all the IP address from one pool spread across multiple Availability zones.
+Azure needs to be split into one subnet which is spread across all Availability zones for Pods that need the most IP addresses and the load-balancer for external access.
 
 | Subnet address | Useable IPs | Used for   |
 | -------------- | ----------- | ---------- |
-| 10.0.0.0/19    | 8190        | Pod subnet |
+| 10.0.0.0/20    | 4094        | Pod subnet |
+| 10.0.16.0/24   | 254         | LB subnet  |
+| 10.0.17.0/24   | 254         | left       |
+| 10.0.18.0/23   | 254         | left       |
+| 10.0.20.0/22   | 1022        | left       |
+| 10.0.24.0/21   | 2046        | left       |
 
 In AWS we still have some IP subnets left because of the split we need to do which we can use for other load balancers or to add some other new features in the future. If for some reason we hit a problem with the ranges we could extend those with the ranges left or we could add another /19 or a smaller range depending on the needs.
 
