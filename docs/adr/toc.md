@@ -8,3 +8,4 @@
 - [5. Multi-cloud](0005-multi-cloud.md)
 - [6. Management environment](0006-management-environment.md)
 - [7. Management connectivity](0007-management-connectivity.md)
+- [8. Vault](0008-vault.md)
