@@ -19,7 +19,7 @@ We are running in multiple clouds and although we can have such an environment p
 
 We are choosing Azure over AWS purely on the fact that Azure offers us a better Active Directory with enterprise features like Azure AD Privileged Identity Management which might be interesting down the line.
 
-The decision is to have an environment in Azure named **management** that contains a small infrastructure based on AKS to be able to run any supporting tools needed for the management of other environments.
+The decision is to have a subscription in Azure named **management** that contains a small infrastructure based on AKS to be able to run any supporting tools needed for the management of other environments.
 Next to that, we will use the Azure Active Directory as the main Opsteady management IDP.
 
 This environment is not the same as the other environments as it is only used by Opsteady and needs to be very secure as it is the entry point to maintain other environments.

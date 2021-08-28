@@ -8,7 +8,7 @@ Status: Accepted on 2021-08-27
 
 ## Context
 
-We need to store and use secrets throughout the whole CI/CD process for the creation and maintenance of environments. Besides secretes, we need to store different properties and configurations for rolled-out environments.
+We need to store and use secrets throughout the whole CI/CD process for the creation and maintenance of the platforms. Besides secretes, we need to store different properties and configurations for the rolled-out platforms.
 
 ## Decision
 

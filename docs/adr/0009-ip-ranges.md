@@ -18,7 +18,7 @@ There are 3 private ranges available:
 - Range from 172.16.0.0 to 172.31.255.255 — a 172.16.0.0 network with a 255.240.0.0 (or a 12-bit) mask
 - Range from 192.168.0.0 to 192.168.255.255 a 192.168.0.0 network masked by 255.255.0.0 or /16
 
-The simplest solution would be to choose a /16 range in a 10.x.x.x network because it gives a lot of IP addresses. But there are some drawbacks to this approach. First, if there are other networks (on-premise) that need to be paired it might lead to a problem with overlapping ranges. Second, we might have the same problem if we wanted to connect all environments to a management network.
+The simplest solution would be to choose a /16 range in a 10.x.x.x network because it gives a lot of IP addresses. But there are some drawbacks to this approach. First, if there are other networks (on-premise) that need to be peered it might lead to a problem with overlapping ranges. Second, we might have the same problem if we wanted to connect all environments to a management network.
 
 Choosing a very small range like a /21 with 2046 IP addresses could work but when split into multiple other ranges for pods and load balancers it becomes just too small.
 

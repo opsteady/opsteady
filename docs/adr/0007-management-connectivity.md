@@ -10,7 +10,7 @@ Builds on [0005-multi-cloud.md](0005-multi-cloud.md) on 2021-08-27
 
 ## Context
 
-Managing created environments involves regular lifecycle management of the platform but also troubleshooting in case of (severe) issues.
+Managing customer platforms requires regular lifecycle management and troubleshooting in case of (severe) issues.
 
 We will be offering both Azure and AWS as target clouds for our platforms and we need network access to the resources that we host within those clouds. Most resources are available on a public endpoint or through the cloud API's. However, it is also possible to run cloud resources privately, meaning that network traffic will not leave the cloud provider backbone. This increases speed and security but at the cost of increased management complexity.
 
@@ -45,13 +45,13 @@ However, this approach also has some downsides:
 
 Instead of containing our cloud resources in a fully private environment, we could opt to make them publicly available. This significantly reduces the complexity of reaching those resources but at a cost of a degraded security boundary. Without any additional measures, we would be exposing our endpoints to DDoS attacks or brute-force hacking.
 
-In practice, the only endpoint that we are talking about here is the Kubernetes API. Both clouds have a possibility of whitelisting IP addresses that are allowed to contact the API. This reduces the attack services significantly and combined with the identity-based access for the API should provide enough security to get started with our platforms.
+In practice, the only endpoint that we are talking about here is the Kubernetes API. Both clouds have a possibility of whitelisting IP addresses that are allowed to contact the API. This reduces the attack surface significantly and combined with the identity-based access for the API should provide enough security to get started with our platforms.
 
 ## Decision
 
 We see multiple ways of managing our platforms from a network perspective. They are not mutually exclusive options: we could always switch to a different model and be able to manage our clusters.
 
-We, therefore, propose to start with the most simple option by using public endpoints with whitelisting for our cloud resources. Considering that we are just starting and need to make progress in the right areas and not have had any push back from customers yet on security requirements, this seems like to right approach to start with.
+We, therefore, propose to start with the most simple option by using public endpoints with whitelisting for our cloud resources. Considering that we are just starting and need to make progress in the right areas this seems like the right approach to start with.
 
 If our platform scale increases significantly, or our security requirements increase, we can opt to switch to a more heavy-weight model where we make our cloud resources private. This will then be decided upon in a future ADR.
 
