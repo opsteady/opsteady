@@ -5,6 +5,7 @@ Date: 2021-08-25
 ## Status
 
 Status: Accepted on 2021-08-25
+Foundation for [0011-no-local-tools.md](0011-no-local-tools.md) on 2021-08-28
 
 ## Context
 

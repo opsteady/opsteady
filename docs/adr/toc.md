@@ -11,3 +11,4 @@
 - [8. Vault](0008-vault.md)
 - [9. IP ranges](0009-ip-ranges.md)
 - [10. Programming language](0010-programming-language.md)
+- [11. No local tools](0011-no-local-tools.md)
