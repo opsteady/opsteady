@@ -6,6 +6,7 @@ Date: 2021-08-27
 
 Status: Accepted on 2021-08-27
 Foundation for [0007-management-connectivity.md](0007-management-connectivity.md) on 2021-08-27
+Foundation for [0008-vault.md](0008-vault.md) on 2021-08-27
 Builds on [0005-multi-cloud.md](0005-multi-cloud.md) on 2021-08-27
 
 ## Context
@@ -23,6 +24,8 @@ The decision is to have a subscription in Azure named **management** that contai
 Next to that, we will use the Azure Active Directory as the main Opsteady management IDP.
 
 This environment is not the same as the other environments as it is only used by Opsteady and needs to be very secure as it is the entry point to maintain other environments.
+
+One of the first concrete functions of the management environment is to host the Terraform backend storage for all the clouds. That way we only have to initialize and bootstrap one place where we can store all the states when rolling out new platforms.
 
 ## Consequences
 

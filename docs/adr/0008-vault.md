@@ -5,6 +5,7 @@ Date: 2021-08-27
 ## Status
 
 Status: Accepted on 2021-08-27
+Builds on [0006-management-environment.md](0006-management-environment.md) on 2021-08-27
 
 ## Context
 
@@ -16,6 +17,8 @@ One of the options was to use a cloud-native solution but as we are using multip
 We will be storing the secrets and our configuration inside Vault, this way we have one uniform way for both.
 
 Besides that, we will also use Vault for getting access to all the environments so that we have one entry point for getting credentials for the environments we created.
+
+This Vault will be running on the management platform.
 
 ## Consequences
 
