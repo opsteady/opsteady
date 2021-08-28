@@ -10,7 +10,7 @@ Builds on [0005-multi-cloud.md](0005-multi-cloud.md) on 2021-08-27
 
 ## Context
 
-Managing customer platforms requires regular lifecycle management and troubleshooting in case of (severe) issues.
+Managing user platforms requires regular lifecycle management and troubleshooting in case of (severe) issues.
 
 We will be offering both Azure and AWS as target clouds for our platforms and we need network access to the resources that we host within those clouds. Most resources are available on a public endpoint or through the cloud API's. However, it is also possible to run cloud resources privately, meaning that network traffic will not leave the cloud provider backbone. This increases speed and security but at the cost of increased management complexity.
 

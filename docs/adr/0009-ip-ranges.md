@@ -8,7 +8,7 @@ Status: Accepted on 2021-08-27
 
 ## Context
 
-Decide on IP ranges to be used for the customers.
+Decide on IP ranges to be used for the platforms.
 
 ## Decision
 

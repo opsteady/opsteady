@@ -11,7 +11,7 @@ Foundation for [0007-management-connectivity.md](0007-management-connectivity.md
 
 ## Context
 
-Decide if the platform should be available on multiple clouds and or on-premise.
+Decide if the platform should be available on multiple clouds and on on-premise.
 
 ## Decision
 

@@ -28,7 +28,7 @@ Every container platform needs to have a landing zone, foundation, kubernetes, c
 
 **Interface layer** is everything that is user-facing. It starts with an API to the platform which is the Kubernetes API and a portal. It is also the layer that implements and adds integrations and developer features to facilitate self-service. And it is the layer that facilitates operations of the platform but also makes sure operations for developers is simple but advanced.
 
-**Rollout** is not a layer but it is the way how the platform is rolled out to different environments and customers which is a fundamental piece that brings all the other layers to life and is, therefore, part of the Opsteady scope.
+**Rollout** is not a layer but it is the way how the platform is rolled out to different environments and users which is a fundamental piece that brings all the other layers to life and is, therefore, part of the Opsteady scope.
 
 ### Container platform
 
