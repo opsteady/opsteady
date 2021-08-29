@@ -5,6 +5,7 @@ Date: 2021-08-27
 ## Status
 
 Status: Accepted on 2021-08-27
+Foundation on [0012-ci-cd.md](0012-ci-cd.md) on 2021-08-29
 
 ## Context
 
