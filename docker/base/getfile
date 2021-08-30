@@ -1,0 +1,107 @@
+#!/bin/bash
+
+set -euo pipefail
+
+# 1) Download file to tmp dir
+# 2) Verify checksum if given
+# 3) Unpack file if needed
+# 4) Move file so all users can use use it (make executable)
+
+CHEKSUM=''
+NAME=''
+CREDENTIALS=''
+
+print_usage() {
+  echo "Program usage: getfile [FLAGS] [URL]
+
+        Flag: -h [Help message]
+        Flag: -c [SHA 256 checksum]
+        Flag: -n [binary name]
+        "
+  exit 0
+}
+
+while getopts 'hc:u:n:' flag; do
+  case "${flag}" in
+    h) print_usage ;;
+    c) CHEKSUM="${OPTARG}" ;;
+    n) NAME="${OPTARG}" ;;
+    u) CREDENTIALS="${OPTARG}" ;;
+    *) print_usage
+       exit 1 ;;
+  esac
+done
+
+# 1) Download file to tmp dir ---------------------------------------------------------------------
+CURRENT_DIR=$(pwd)
+
+rm -rf /tmp/downloadingscript
+mkdir -p /tmp/downloadingscript
+cd /tmp/downloadingscript
+
+if [[ ! -z ${CREDENTIALS} ]]; then
+  curl -u ${CREDENTIALS} --silent --insecure --location --remote-name ${@:$OPTIND:1} --fail --show-error
+else
+  curl --silent --insecure --location --remote-name ${@:$OPTIND:1} --fail --show-error
+fi
+
+OUTPUT_FILE=$(ls | head -n 1)
+
+# 2) Verify checksum if given ---------------------------------------------------------------------
+if [[ ${CHEKSUM} != '' ]]; then
+  echo "${CHEKSUM} ${OUTPUT_FILE}" | sha256sum --check
+fi
+
+# 3) Unpack file if needed ------------------------------------------------------------------------
+GZIP=$(file ${OUTPUT_FILE} | grep -q 'gzip compressed data' && echo yes || echo no)
+
+if [[ $GZIP == 'yes' ]]; then
+  tar xvzf ${OUTPUT_FILE}
+  rm -rf ${OUTPUT_FILE}
+fi
+
+GZIP=$(file ${OUTPUT_FILE} | grep -q 'gzip compressed data' && echo yes || echo no)
+
+if [[ ${GZIP} == 'yes' ]]; then
+  tar -xvzf ${OUTPUT_FILE}
+  rm -rf ${OUTPUT_FILE}
+fi
+
+TAR=$(file ${OUTPUT_FILE} | grep -q 'POSIX tar archive' && echo yes || echo no)
+
+if [[ ${TAR} == 'yes' ]]; then
+  tar -xvf ${OUTPUT_FILE}
+  rm -rf ${OUTPUT_FILE}
+fi
+
+ZIP=$(file ${OUTPUT_FILE} | grep -q 'Zip archive data' && echo yes || echo no)
+
+if [[ ${ZIP} == 'yes' ]]; then
+  unzip ${OUTPUT_FILE}
+  rm -rf ${OUTPUT_FILE}
+fi
+
+# 4) Move file so all users can use use it (make executable) --------------------------------------
+FOLDER=$(ls | head -n 1)
+if [[ -d ${FOLDER} ]]; then
+  cd ${FOLDER}
+fi
+
+find . -type f | while read ACTUAL_FILE; do
+
+  BINARY=$(file ${ACTUAL_FILE} | grep -q 'executable' && echo yes || echo no)
+  if [[ ${BINARY} == 'yes' ]]; then
+
+    if [[ ${NAME} != '' ]]; then
+      mv ${ACTUAL_FILE} /usr/local/bin/${NAME}
+      chmod +x /usr/local/bin/${NAME}
+      echo "Executable: /usr/local/bin/${NAME}"
+    else
+      mv ${ACTUAL_FILE} /usr/local/bin/${ACTUAL_FILE}
+      chmod +x /usr/local/bin/${ACTUAL_FILE}
+      echo "Executable: /usr/local/bin/${ACTUAL_FILE}"
+    fi
+
+  fi
+
+done

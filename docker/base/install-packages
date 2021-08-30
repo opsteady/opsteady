@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -euo pipefail
+
+# Update 
+apt-get update
+
+# Install packages without recommends packages only required ones
+apt-get install --no-install-recommends -y $@
+
+# Remove caches
+rm -rf /var/lib/apt/lists/*
