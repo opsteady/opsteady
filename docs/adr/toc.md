@@ -13,3 +13,6 @@
 - [10. Programming language](0010-programming-language.md)
 - [11. No local tools](0011-no-local-tools.md)
 - [12. CI/CD](0012-ci-cd.md)
+- [13. Management setup](0013-management-setup.md)
+- [14. Roles responsibilities](0014-roles-responsibilities.md)
+- [15. Security and Compliance](0015-security-and-compliance.md)

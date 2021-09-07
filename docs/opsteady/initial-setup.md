@@ -1,6 +1,6 @@
 # Initial setup of the Management platform
 
-This documentation is used to initially setup the management platform as a way to bootstrap everything and to be able to use CI/CD from then on.
+This documentation is used to initially setup the management platform as a way to bootstrap everything and to be able to use CI/CD from then on. It builds based on [ADR management setup](../adr/0013-management-setup.md)
 
 ## 00 Requirements
 
@@ -9,9 +9,12 @@ We assume:
 - you have access to Azure
 - you have created a **management** subscription
 - you have admin rights on the **management** subscription
+- you have an domain (subdomain) that you can use
 - you have Docker installed
 
-Note: some names used below need to be adjusted as they are globally unique in Azure
+Note-1: The domain (subdomain) like op.opsteady.com is used create subdomains for every platform like management.op.opsteady.com or dev-aws.op.opsteady.com. On top of these subdomains we will expose applications, like vault.management.op.opsteady.com.
+
+Note-2: some names used below need to be adjusted as they are globally unique in Azure
 
 ## 01 Docker images
 
@@ -34,22 +37,46 @@ export ACR_NAME=dev-management
 docker run -it --rm -v $(pwd):/data dev-management.azurecr.io/cicd:1.0.0 /bin/bash
 ```
 
+Before you start comment the lines behind `backend "azurerm"` in `terraform.tf`, this will keep the state temporary locally.
+
 Actual steps to perform in the container locally or VSC remote container or on your local machine
 
 ```bash
 az login --use-device-code
-cd management/bootstrap
 az account set --subscription management
+cd management/bootstrap
 terraform providers lock -platform=darwin_amd64 -platform=linux_amd64
 terraform init
 terraform plan -var="management_bootstrap_terraform_state_location=westeurope" -var="management_bootstrap_terraform_state_account_name=devmgmweu"
 terraform apply -var="management_bootstrap_terraform_state_location=westeurope" -var="management_bootstrap_terraform_state_account_name=devmgmweu"
 ```
 
-Uncomment the lines behind `backend "azurerm"` in the `provider.tf` to upload the state to the remote backend.
+Uncomment the lines behind `backend "azurerm"` in `terraform.tf` to upload the state to the remote backend.
 
 ```bash
 terraform init -reconfigure -backend-config "storage_account_name=devmgmweu"
 ```
 
 `terraform.tfstate` will be empty and as it is uploaded to the remote storage, it can be safely deleted together with `terraform.tfstate.backup`.
+
+## 03 Infra
+
+```bash
+cd management/infra
+terraform providers lock -platform=darwin_amd64 -platform=linux_amd64
+terraform init -backend-config "storage_account_name=devmgmweu"
+terraform plan \
+  -var='management_infra_acr_name=devmgmweu' \
+  -var='management_infra_vnet_address_space=["10.0.0.0/19"]'\
+  -var='management_infra_azure_subnet_pods_address_prefixes=["10.0.0.0/20"]' \
+  -var='management_infra_cluster_admins=[]' \
+  -var='management_infra_cluster_admin_owners=[]'\
+  -var='management_infra_cluster_developers=[]' \
+  -var='management_infra_cluster_developer_owners=[]' \
+  -var='management_infra_cluster_viewers=[]' \
+  -var='management_infra_cluster_viewer_owners=[]' \
+  -var='management_infra_domain=op.opsteady.com' \
+  -var='management_infra_location=westeurope' \
+  -var='management_infra_log_analytics_workspace_retention=7' \
+  -var='management_infra_azure_subnet_public_address_prefixes=["10.0.16.0/24"]
+```
