@@ -20,7 +20,7 @@ resource "azurerm_subnet" "pods" {
   ]
 }
 
-# Although we are not using this yet we are deciding to create it if we want to use it later
+# Although we are not using this yet, we've decided to create it if we want to use it later
 resource "azurerm_subnet" "pub" {
   name                 = "pub-management"
   resource_group_name  = azurerm_resource_group.foundation.name

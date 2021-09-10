@@ -1,4 +1,4 @@
-# Used to store logs from various Azure services for debugging and insights
+# Used to store logs from various Azure services for debugging and insights.
 resource "azurerm_log_analytics_workspace" "management" {
   name                = "management-analytics"
   location            = azurerm_resource_group.management.location

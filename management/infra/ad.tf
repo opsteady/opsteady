@@ -1,8 +1,7 @@
-# See ADR 0014 Roles responisbilites
+# See ADR 0014 Roles responsibilities
 
 # Providing the members is optional as this can also be managed from the Azure Portal
 # Providing the owners is optional as this also can be managed from the Azure Portal
-
 
 resource "azuread_group" "cluster_admin" {
   display_name            = "cluster-admin"
@@ -10,7 +9,7 @@ resource "azuread_group" "cluster_admin" {
   security_enabled        = true
 
   members = var.management_infra_cluster_admins
-  # If no owners specified ther user who runs the initial Terraform becomes the owner
+  # If no owners are specified, the user who runs the initial Terraform becomes the owner.
   owners = var.management_infra_cluster_admin_owners
 }
 

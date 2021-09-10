@@ -28,7 +28,6 @@ variable "management_infra_cluster_developer_owners" {
   default = []
 }
 
-
 variable "management_infra_cluster_viewers" {
   type    = list(string)
   default = []

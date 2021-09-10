@@ -6,8 +6,7 @@ resource "azurerm_container_registry" "management" {
   sku                 = "Basic" # https://docs.microsoft.com/en-us/azure/container-registry/container-registry-skus
 }
 
-
-# Enabling monitoring on the ACR https://docs.microsoft.com/en-us/azure/container-registry/monitor-service
+# Enable monitoring on the ACR https://docs.microsoft.com/en-us/azure/container-registry/monitor-service
 resource "azurerm_monitor_diagnostic_setting" "acr" {
   name                       = "acr"
   target_resource_id         = azurerm_container_registry.management.id
@@ -44,8 +43,7 @@ resource "azurerm_monitor_diagnostic_setting" "acr" {
   }
 }
 
-
-# acr-management user is created to be used from EKS (AWS) to pull containers from management ACR
+# acr-management user is created to be used from outside Azure to pull containers from management ACR
 resource "azuread_application" "acr_management" {
   display_name               = "acr-management"
   oauth2_allow_implicit_flow = true
