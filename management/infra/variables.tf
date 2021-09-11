@@ -10,29 +10,29 @@ variable "management_infra_log_analytics_workspace_retention" {
   type = number
 }
 
-variable "management_infra_cluster_admins" {
+variable "management_infra_platform_admins" {
   type    = list(string)
   default = []
 }
 
-variable "management_infra_cluster_admin_owners" {
+variable "management_infra_platform_admin_owners" {
   type    = list(string)
   default = []
 }
-variable "management_infra_cluster_developers" {
+variable "management_infra_platform_developers" {
   type    = list(string)
   default = []
 }
-variable "management_infra_cluster_developer_owners" {
+variable "management_infra_platform_developer_owners" {
   type    = list(string)
   default = []
 }
 
-variable "management_infra_cluster_viewers" {
+variable "management_infra_platform_viewers" {
   type    = list(string)
   default = []
 }
-variable "management_infra_cluster_viewer_owners" {
+variable "management_infra_platform_viewer_owners" {
   type    = list(string)
   default = []
 }

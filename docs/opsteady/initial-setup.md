@@ -71,12 +71,12 @@ terraform plan \
   -var='management_infra_acr_name=devmgmtweu' \
   -var='management_infra_vnet_address_space=["10.0.0.0/19"]'\
   -var='management_infra_azure_subnet_pods_address_prefixes=["10.0.0.0/20"]' \
-  -var='management_infra_cluster_admins=[]' \
-  -var='management_infra_cluster_admin_owners=[]'\
-  -var='management_infra_cluster_developers=[]' \
-  -var='management_infra_cluster_developer_owners=[]' \
-  -var='management_infra_cluster_viewers=[]' \
-  -var='management_infra_cluster_viewer_owners=[]' \
+  -var='management_infra_platform_admins=[]' \
+  -var='management_infra_platform_admin_owners=[]'\
+  -var='management_infra_platform_developers=[]' \
+  -var='management_infra_platform_developer_owners=[]' \
+  -var='management_infra_platform_viewers=[]' \
+  -var='management_infra_platform_viewer_owners=[]' \
   -var='management_infra_domain=os.opsteady.com' \
   -var='management_infra_location=westeurope' \
   -var='management_infra_log_analytics_workspace_retention=7' \

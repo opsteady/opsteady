@@ -8,7 +8,7 @@ Status: Accepted on 2021-09-10
 
 ## Context
 
-We recognize **cluster-admin**, **cluster-developer** and **cluster-viewer** as roles on our platform. We however need to define detailed responsibilities and rights per role.
+We recognize **platform-admin**, **platform-developer** and **platform-viewer** as roles on our platform. We however need to define detailed responsibilities and rights per role.
 
 ## Decision
 
