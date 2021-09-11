@@ -16,12 +16,12 @@ terraform {
    * After this is done, remove the local statefile and its backup,
    * commit the remote backend and work from the remote state.
    */
-  # backend "azurerm" {
-  #   resource_group_name  = "terraform-state"
-  #   storage_account_name = "This name should match var.management_bootstrap_terraform_state_account_name"
-  #   container_name       = "management"
-  #   key                  = "bootstrap.tfstate"
-  # }
+  backend "azurerm" {
+    resource_group_name  = "terraform-state"
+    storage_account_name = "This name should match management_bootstrap_terraform_state_account_name"
+    container_name       = "management"
+    key                  = "bootstrap.tfstate"
+  }
 }
 
 provider "azurerm" {

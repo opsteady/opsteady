@@ -25,7 +25,7 @@ Although tools might change overtime we do have a set of tools we consider essen
 | helm               | Uniform way of deploying releases to Kubernetes                                   |
 | cloud cli          | Uniform way to talk to the cloud (AWS, Azure, Google, etc..) APIs for operations  |
 
-Because the guidelines might change more often and extensive documentation might be required on certain tools and ways of working we will document that separately from the ADR and link it directly to this ADR to acknowledge the importance of guidelines and consistency across the project.
+Because the guidelines might change more often and extensive documentation might be required on certain tools and ways of working we will [document that separately](../opsteady/guidelines.md) from the ADR and link it directly to this ADR to acknowledge the importance of guidelines and consistency across the project.
 
 ## Consequences
 
