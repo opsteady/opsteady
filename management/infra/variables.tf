@@ -16,25 +16,20 @@ variable "management_infra_platform_admins" {
 }
 
 variable "management_infra_platform_admin_owners" {
-  type    = list(string)
-  default = []
+  type = list(string)
 }
 variable "management_infra_platform_developers" {
-  type    = list(string)
-  default = []
+  type = list(string)
 }
 variable "management_infra_platform_developer_owners" {
-  type    = list(string)
-  default = []
+  type = list(string)
 }
 
 variable "management_infra_platform_viewers" {
-  type    = list(string)
-  default = []
+  type = list(string)
 }
 variable "management_infra_platform_viewer_owners" {
-  type    = list(string)
-  default = []
+  type = list(string)
 }
 
 variable "management_infra_vnet_address_space" {
