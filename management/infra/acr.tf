@@ -46,7 +46,6 @@ resource "azurerm_monitor_diagnostic_setting" "acr" {
 # acr-management user is created to be used from outside Azure to pull containers from management ACR
 resource "azuread_application" "acr_management" {
   display_name               = "acr-management"
-  oauth2_allow_implicit_flow = true
 }
 
 resource "azuread_service_principal" "acr_management" {
@@ -54,11 +53,16 @@ resource "azuread_service_principal" "acr_management" {
   app_role_assignment_required = false
 }
 
+resource "time_rotating" "example" {
+  rotation_days = 30
+}
+
 resource "azuread_service_principal_password" "acr_management" {
   service_principal_id = azuread_service_principal.acr_management.id
-  description          = "ACR management password"
-  value                = var.management_infra_acr_management_password
-  end_date_relative    = "8760h"
+
+  keepers = {
+    rotation = time_rotating.example.id
+  }
 }
 
 resource "azurerm_role_assignment" "acr_management" {

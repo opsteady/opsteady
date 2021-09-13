@@ -1,7 +1,6 @@
 # Initial setup of the Management platform
 
 This documentation is used to initially setup the management platform as a way to bootstrap everything and to be able to use CI/CD from then on. It builds based on [ADR management setup](../adr/0013-management-setup.md)
-
 ## 00 Requirements
 
 We assume:
@@ -35,11 +34,13 @@ Note-1: Make sure to replace `dev-management.azurecr.io` with whatever container
 Either open the project in Visual Studio code with the provided remote container or use the container manually:
 
 ```bash
-export ACR_NAME=dev-management
+# Run this from the root of the repository
 docker run -it --rm -v $(pwd):/data dev-management.azurecr.io/cicd:1.0.0 /bin/bash
 ```
 
-Before you start, comment the entire `backend "azurerm"` section in `terraform.tf`. This will keep the state local temporarily.
+Before you start, comment the entire `backend "azurerm"` section in `management/bootstrap/terraform.tf`. This will keep the state local temporarily.
+
+When bootstrapping we provide a set of defaults for the Terraform values. They are located in `management/defaults/bootstrap.default.tfvars`. You can choose to use this file as-is, or copy it to `management/defaults/bootstrap.tfvars` and adjust the values. This custom file will be ignored in the Git repository and is for your use only.
 
 Actual steps to perform in the container locally, VSC remote container or on your local machine:
 
@@ -49,36 +50,30 @@ az account set --subscription management
 cd management/bootstrap
 terraform providers lock -platform=darwin_amd64 -platform=linux_amd64
 terraform init
-terraform plan -var="management_bootstrap_terraform_state_location=westeurope" -var="management_bootstrap_terraform_state_account_name=devmgmtweu"
-terraform apply -var="management_bootstrap_terraform_state_location=westeurope" -var="management_bootstrap_terraform_state_account_name=devmgmtweu"
+
+terraform apply -var-file=../defaults/bootstrap.default.tfvars   # Adjust to ../defaults/bootstrap.tfvars if you have a custom variables file
 ```
 
-Uncomment the lines behind `backend "azurerm"` in `terraform.tf` to upload the state to the remote backend:
+Uncomment the entire `backend "azurerm"` section in `management/bootstrap/terraform.tf` to upload the state to the remote backend. **Make sure to update the `storage_account_name` setting to the name that you used in the previous apply step.**:
 
 ```bash
-terraform init -reconfigure -backend-config "storage_account_name=devmgmtweu"
+terraform init -reconfigure -backend-config "storage_account_name=This name should match management_bootstrap_terraform_state_account_name"
 ```
 
 `terraform.tfstate` will be empty and as it is uploaded to the remote storage, it can be safely deleted together with `terraform.tfstate.backup`.
 
 ## 03 Infra
 
+Update update the `storage_account_name` setting in `management/infra/terraform.tf` to the name that you used in the previous bootstrap.
+
+When creating the initial management infra, we provide a set of defaults for the Terraform values. They are located in `management/defaults/infra.default.tfvars`. To deploy the management infrastructure successfully, you will have to copy the default file to a custom tfvars file called `management/defaults/infra.tfvars`. In this file you need to update the `management_infra_key_vault_ip_rules` to include your IP address in the (now) empty list. This makes sure that when Terraform needs to configure the Key Vault it can do so from your location.
+`
+
 ```bash
 cd management/infra
 terraform providers lock -platform=darwin_amd64 -platform=linux_amd64
-terraform init -backend-config "storage_account_name=devmgmweu"
-terraform plan \
-  -var='management_infra_acr_name=devmgmtweu' \
-  -var='management_infra_vnet_address_space=["10.0.0.0/19"]'\
-  -var='management_infra_azure_subnet_pods_address_prefixes=["10.0.0.0/20"]' \
-  -var='management_infra_platform_admins=[]' \
-  -var='management_infra_platform_admin_owners=[]'\
-  -var='management_infra_platform_developers=[]' \
-  -var='management_infra_platform_developer_owners=[]' \
-  -var='management_infra_platform_viewers=[]' \
-  -var='management_infra_platform_viewer_owners=[]' \
-  -var='management_infra_domain=os.opsteady.com' \
-  -var='management_infra_location=westeurope' \
-  -var='management_infra_log_analytics_workspace_retention=7' \
-  -var='management_infra_azure_subnet_public_address_prefixes=["10.0.16.0/24"]
+terraform init
+terraform apply -var-file=../defaults/infra.tfvars
 ```
+
+After a successful apply, you can delete the custom `management/defaults/infra.tfvars` file because you will not need it anymore.
