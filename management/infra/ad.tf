@@ -18,8 +18,8 @@ resource "azuread_group" "platform_developer" {
   prevent_duplicate_names = true
   security_enabled        = true
 
-  members = var.management_infra_platform_developer_owners
-  owners  = var.management_infra_platform_developers
+  members = var.management_infra_platform_developers
+  owners  = var.management_infra_platform_developer_owners
 }
 
 resource "azuread_group" "platform_viewer" {
@@ -27,6 +27,6 @@ resource "azuread_group" "platform_viewer" {
   prevent_duplicate_names = true
   security_enabled        = true
 
-  members = var.management_infra_platform_viewer_owners
-  owners  = var.management_infra_platform_viewers
+  members = var.management_infra_platform_viewers
+  owners  = var.management_infra_platform_viewer_owners
 }
