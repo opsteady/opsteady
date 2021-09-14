@@ -12,6 +12,7 @@ resource "azurerm_key_vault" "management" {
     bypass         = "AzureServices"
 
     ip_rules = var.management_infra_key_vault_ip_rules
+    virtual_network_subnet_ids = [azurerm_subnet.pods.id]
   }
 }
 
@@ -26,6 +27,12 @@ resource "azurerm_role_assignment" "key_vault_administrator" {
   principal_id         = each.value
 }
 
+resource "time_sleep" "wait_for_key_vault_iam_propagation" {
+  depends_on = [azurerm_role_assignment.key_vault_administrator]
+
+  create_duration = "10s"
+}
+
 # Disk encryption resources for AKS
 
 resource "azurerm_key_vault_key" "management" {
@@ -38,6 +45,8 @@ resource "azurerm_key_vault_key" "management" {
     "unwrapKey",
     "wrapKey"
   ]
+
+  depends_on = [time_sleep.wait_for_key_vault_iam_propagation]
 }
 
 resource "azurerm_disk_encryption_set" "management" {

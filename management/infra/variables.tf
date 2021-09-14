@@ -26,10 +26,6 @@ variable "management_infra_aks_system_node_size" {
   type = string
 }
 
-variable "management_infra_aks_api_authorized_ip_ranges" {
-  type = list
-}
-
 variable "management_infra_aks_api_server_authorized_ip_ranges" {
   type = list(any)
 }

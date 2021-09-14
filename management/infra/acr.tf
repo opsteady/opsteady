@@ -43,31 +43,14 @@ resource "azurerm_monitor_diagnostic_setting" "acr" {
   }
 }
 
-# acr-management user is created to be used from outside Azure to pull containers from management ACR
-resource "azuread_application" "acr_management" {
-  display_name               = "acr-management"
-}
-
-resource "azuread_service_principal" "acr_management" {
-  application_id               = azuread_application.acr_management.application_id
-  app_role_assignment_required = false
-}
-
-resource "time_rotating" "example" {
-  rotation_days = 30
-}
-
-resource "azuread_service_principal_password" "acr_management" {
-  service_principal_id = azuread_service_principal.acr_management.id
-
-  keepers = {
-    rotation = time_rotating.example.id
-  }
+module "acr_management" {
+  source = "../../internal/modules/service-principal"
+  name   = "acr-management"
 }
 
 resource "azurerm_role_assignment" "acr_management" {
   role_definition_name             = "AcrPull"
   scope                            = azurerm_container_registry.management.id
-  principal_id                     = azuread_service_principal.acr_management.object_id
+  principal_id                     = module.acr_management.azuread_service_principal_object_id
   skip_service_principal_aad_check = true # skip the Azure Active Directory check which may fail due to replication lag
 }
