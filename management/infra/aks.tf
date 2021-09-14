@@ -47,3 +47,27 @@ resource "azurerm_kubernetes_cluster" "management" {
     enabled = true
   }
 }
+
+resource "azurerm_monitor_diagnostic_setting" "aks" {
+  name                       = var.management_infra_aks_name
+  target_resource_id         = azurerm_kubernetes_cluster.management.id
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.management.id
+
+  log {
+    category = "kube-apiserver"
+    enabled  = true
+
+    retention_policy {
+      enabled = false
+    }
+  }
+
+  log {
+    category = "kube-controller-manager"
+    enabled  = true
+
+    retention_policy {
+      enabled = false
+    }
+  }
+}

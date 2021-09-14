@@ -15,6 +15,48 @@ resource "azurerm_key_vault" "management" {
   }
 }
 
+resource "azurerm_role_assignment" "crypto_user" {
+  scope                = azurerm_key_vault.management.id
+  role_definition_name = "Key Vault Crypto User"
+  principal_id         = module.vault_unseal.azuread_service_principal_object_id
+}
+
+resource "azurerm_private_endpoint" "keyvault_pods" {
+  name                = "keyvault-pods"
+  resource_group_name = azurerm_resource_group.management.name
+  location            = azurerm_resource_group.management.location
+  subnet_id           = azurerm_subnet.pods.id
+
+  private_service_connection {
+    name                           = "vault-pods"
+    private_connection_resource_id = azurerm_key_vault.management.id
+    subresource_names              = ["Vault"]
+    is_manual_connection           = false
+  }
+}
+
+resource "azurerm_private_dns_zone" "keyvault" {
+  name                = "privatelink.vaultcore.azure.net"
+  resource_group_name = azurerm_resource_group.management.name
+}
+
+resource "azurerm_private_dns_a_record" "keyvault" {
+  name                = azurerm_key_vault.management.name
+  zone_name           = azurerm_private_dns_zone.keyvault.name
+  resource_group_name = azurerm_resource_group.management.name
+  ttl                 = 300
+  records = [
+    azurerm_private_endpoint.keyvault_pods.private_service_connection.0.private_ip_address
+  ]
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "keyvault" {
+  name                  = "keyvault"
+  resource_group_name   = azurerm_resource_group.management.name
+  private_dns_zone_name = azurerm_private_dns_zone.keyvault.name
+  virtual_network_id    = azurerm_virtual_network.management.id
+}
+
 resource "azurerm_role_assignment" "key_vault_administrator" {
   for_each = toset(concat([
     data.azurerm_client_config.current.object_id],
@@ -24,6 +66,28 @@ resource "azurerm_role_assignment" "key_vault_administrator" {
   scope                = azurerm_key_vault.management.id
   role_definition_name = "Key Vault Administrator"
   principal_id         = each.value
+}
+
+resource "time_sleep" "wait_for_key_vault_iam_propagation" {
+  depends_on = [azurerm_role_assignment.key_vault_administrator]
+
+  create_duration = "10s"
+}
+
+# Vault auto-unseal key
+
+resource "azurerm_key_vault_key" "vault" {
+  name         = "vault"
+  key_vault_id = azurerm_key_vault.management.id
+  key_type     = "RSA"
+  key_size     = 2048
+
+  key_opts = [
+    "wrapKey",
+    "unwrapKey",
+  ]
+
+  depends_on = [time_sleep.wait_for_key_vault_iam_propagation]
 }
 
 # Disk encryption resources for AKS
@@ -38,6 +102,8 @@ resource "azurerm_key_vault_key" "management" {
     "unwrapKey",
     "wrapKey"
   ]
+
+  depends_on = [time_sleep.wait_for_key_vault_iam_propagation]
 }
 
 resource "azurerm_disk_encryption_set" "management" {

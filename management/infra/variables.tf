@@ -26,10 +26,6 @@ variable "management_infra_aks_system_node_size" {
   type = string
 }
 
-variable "management_infra_aks_api_authorized_ip_ranges" {
-  type = list
-}
-
 variable "management_infra_aks_api_server_authorized_ip_ranges" {
   type = list(any)
 }
@@ -93,5 +89,17 @@ variable "management_infra_azure_subnet_public_address_prefixes" {
 }
 
 variable "management_infra_domain" {
+  type = string
+}
+
+variable "management_infra_vault_image_repository" {
+  type = string
+}
+
+variable "management_infra_vault_image_tag" {
+  type = string
+}
+
+variable "management_infra_vault_chart_version" {
   type = string
 }
