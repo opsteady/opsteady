@@ -3,6 +3,9 @@ FROM $ACR_NAME.azurecr.io/base:1.0.0
 
 USER root
 
+# Used by the Opsteady cli
+RUN install-packages golang-1.16 git
+
 # https://kubernetes.io/releases/
 RUN getfile https://releases.hashicorp.com/terraform/1.0.5/terraform_1.0.5_linux_amd64.zip
 
@@ -18,5 +21,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # Ubuntu 21.04 has months old version therefore using pip to install it
 RUN DEBIAN_FRONTEND=noninteractive install-packages python3-pip
 RUN pip install azure-cli==2.27.2
+
+ENV PATH="/usr/lib/go-1.16/bin:${PATH}"
 
 USER 1000

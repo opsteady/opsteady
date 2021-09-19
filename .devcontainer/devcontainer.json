@@ -1,3 +1,18 @@
 {
-  "image": "dev-management.azurecr.io/cicd:1.0.0"
+  "image": "dev-management.azurecr.io/cicd:1.0.0",
+  "forwardPorts": [8250],
+  "mounts": [
+    "source=${localEnv:HOME}/.cache,target=/home/platform/.cache,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.cache/opsteady-go,target=/home/platform/go,type=bind,consistency=cached"
+  ],
+  "extensions": [
+    "hediet.vscode-drawio",
+    "vincent-ledu.adr-tools",
+    "streetsidesoftware.code-spell-checker",
+    "ms-azuretools.vscode-docker",
+    "hashicorp.terraform",
+    "yzhang.markdown-all-in-one",
+    "davidanson.vscode-markdownlint",
+    "redhat.vscode-yaml"
+  ]
 }
