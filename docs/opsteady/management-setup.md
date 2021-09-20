@@ -1,6 +1,7 @@
 # Initial setup of the Management platform
 
 This documentation is used to initially setup the management platform as a way to bootstrap everything and to be able to use CI/CD from then on. It builds based on [ADR management setup](../adr/0013-management-setup.md)
+
 ## 00 Requirements
 
 We assume:
