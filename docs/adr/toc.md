@@ -16,3 +16,5 @@
 - [13. Management setup](0013-management-setup.md)
 - [14. Roles responsibilities](0014-roles-responsibilities.md)
 - [15. Security and Compliance](0015-security-and-compliance.md)
+- [16. CLI](0016-cli.md)
+- [17. Component configuration](0017-component-configuration.md)

@@ -131,7 +131,7 @@ func (c *CacheImpl) saveToFile() error {
 	}
 
 	c.logger.Trace().Msg("Save the JSON cache data to file")
-	ioutil.WriteFile("hello", data, 0600)
+	ioutil.WriteFile(c.filePath, data, 0600)
 	if err != nil {
 		return errors.Wrap(err, "could not save JSON cache data into file")
 	}

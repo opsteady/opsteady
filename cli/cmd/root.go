@@ -46,6 +46,12 @@ func init() {
 	initializeGlobalFlags()
 	initializeGlobalConfig()
 	initLogin()
+	initComponentFlags(buildCmd)
+	initComponentFlags(deployCmd)
+	initComponentFlags(destroyCmd)
+	initComponentFlags(testCmd)
+	initComponentFlags(validateCmd)
+	initComponentFlags(releaseCmd)
 }
 
 func initializeLogging() {
@@ -54,6 +60,16 @@ func initializeLogging() {
 		TimeFormat: "15:04:05", // Only show the time not the date
 	}
 	logger = zerolog.New(output).With().Timestamp().Logger().Level(zerolog.InfoLevel)
+}
+
+func setDefaults() {
+	homeDir, err := homedir.Dir()
+	if err != nil {
+		logger.Fatal().Err(err).Msg("Could not find the home dir")
+	}
+	viper.SetDefault("cache_path", fmt.Sprintf("%s/.cache", homeDir))
+	viper.SetDefault("cache_file", fmt.Sprintf("%s/.cache/.platform-cache", homeDir))
+	viper.SetDefault("tmp_folder", "/tmp/opsteady")
 }
 
 func initializeGlobalFlags() {
@@ -69,15 +85,6 @@ func initializeGlobalFlags() {
 	viper.BindEnv("vault_address")
 	viper.BindPFlag("vault_insecure", rootCmd.Flags().Lookup("vault-insecure"))
 	viper.BindEnv("vault_insecure")
-}
-
-func setDefaults() {
-	homeDir, err := homedir.Dir()
-	if err != nil {
-		logger.Fatal().Err(err).Msg("Could not find the home dir")
-	}
-	viper.SetDefault("cache_path", fmt.Sprintf("%s/.cache", homeDir))
-	viper.SetDefault("cache_file", fmt.Sprintf("%s/.cache/.platform-cache", homeDir))
 }
 
 func initializeGlobalConfig() {

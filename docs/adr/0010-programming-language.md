@@ -6,6 +6,7 @@ Date: 2021-08-27
 
 Status: Accepted on 2021-08-27
 Foundation on [0012-ci-cd.md](0012-ci-cd.md) on 2021-08-29
+Foundation for [0016-cli.md](0016-cli.md) on 2021-09-26
 
 ## Context
 
