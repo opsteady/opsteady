@@ -19,8 +19,8 @@ management_infra_aks_system_node_count=2
 management_infra_aks_system_node_size="Standard_B2s"
 management_infra_aks_api_server_authorized_ip_ranges=[]
 management_infra_aks_system_nodepool_node_count=3
-management_infra_aks_system_nodepool_node_size="Standard_B2s"
+management_infra_aks_system_nodepool_node_size="Standard_DS2_v2"
 
-management_infra_key_vault_name="managementnew"
+management_infra_key_vault_name="management"
 management_infra_key_vault_ip_rules=[]
 management_infra_key_vault_administrators=[]
