@@ -6,13 +6,12 @@ USER root
 # Used by the Opsteady cli
 RUN install-packages golang-1.16 git
 
-# https://kubernetes.io/releases/
 RUN getfile https://releases.hashicorp.com/terraform/1.0.5/terraform_1.0.5_linux_amd64.zip
 
-# https://github.com/helm/helm/releases
+RUN getfile https://releases.hashicorp.com/vault/1.8.2/vault_1.8.2_linux_amd64.zip
+
 RUN getfile https://get.helm.sh/helm-v3.6.3-linux-amd64.tar.gz
 
-# https://github.com/aws/aws-cli/blob/v2/CHANGELOG.rst
 RUN getfile https://storage.googleapis.com/kubernetes-release/release/v1.22.1/bin/linux/amd64/kubectl
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
