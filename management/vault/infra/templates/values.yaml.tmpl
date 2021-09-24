@@ -1,0 +1,76 @@
+global:
+  tlsDisable: false
+
+server:
+  livenessProbe:
+    enabled: true
+  image:
+    repository: ${vault_image_repository}
+    tag: ${vault_image_tag}
+  dataStorage:
+    enabled: true
+  auditStorage:
+    enabled: true
+  ha:
+    enabled: true
+    replicas: 3
+    raft:
+      enabled: true
+      config: |
+        disable_mlock = true
+        ui = true
+
+        listener "tcp" {
+          tls_disable     = false
+          tls_cert_file   = "/vault/userconfig/vault-tls/tls.crt"
+          tls_key_file    = "/vault/userconfig/vault-tls/tls.key"
+          tls_client_ca_file = "/vault/userconfig/vault-tls/ca.crt"
+          address         = "[::]:8200"
+          cluster_address = "[::]:8201"
+        }
+
+        storage "raft" {
+          path = "/vault/data"
+
+          retry_join {
+            leader_api_addr = "https://vault-0.vault-internal:8200"
+            leader_ca_cert_file = "/vault/userconfig/vault-tls/ca.crt"
+            leader_client_cert_file = "/vault/userconfig/vault-tls/tls.crt"
+            leader_client_key_file = "/vault/userconfig/vault-tls/tls.key"
+          }
+
+          retry_join {
+            leader_api_addr = "https://vault-1.vault-internal:8200"
+            leader_ca_cert_file = "/vault/userconfig/vault-tls/ca.crt"
+            leader_client_cert_file = "/vault/userconfig/vault-tls/tls.crt"
+            leader_client_key_file = "/vault/userconfig/vault-tls/tls.key"
+          }
+
+          retry_join {
+            leader_api_addr = "https://vault-2.vault-internal:8200"
+            leader_ca_cert_file = "/vault/userconfig/vault-tls/ca.crt"
+            leader_client_cert_file = "/vault/userconfig/vault-tls/tls.crt"
+            leader_client_key_file = "/vault/userconfig/vault-tls/tls.key"
+          }
+        }
+
+        seal "azurekeyvault" {
+          client_id = "${client_id}"
+          client_secret = "${client_secret}"
+          tenant_id = "${tenant_id}"
+          vault_name = "${vault_name}"
+          key_name = "${key_name}"
+        }
+
+        service_registration "kubernetes" {}
+  extraVolumes:
+    - type: secret
+      name: vault-tls
+  extraEnvironmentVars:
+    VAULT_ADDR: https://127.0.0.1:8200
+
+ui:
+  enabled: true
+  serviceType: LoadBalancer
+  externalPort: 443
+  loadBalancerIP: ${loadbalancer_ip}

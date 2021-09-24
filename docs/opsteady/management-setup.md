@@ -65,16 +65,46 @@ terraform init -reconfigure -backend-config "storage_account_name=This name shou
 
 ## 03 Infra
 
-Update update the `storage_account_name` setting in `management/infra/terraform.tf` to the name that you used in the previous bootstrap.
+Update the `storage_account_name` setting in `management/infra/terraform.tf` to the name that you used in the previous bootstrap.
 
-When creating the initial management infra, we provide a set of defaults for the Terraform values. They are located in `management/defaults/infra.default.tfvars`. To deploy the management infrastructure successfully, you will have to copy the default file to a custom tfvars file called `management/defaults/infra.tfvars`. In this file you need to update the `management_infra_key_vault_ip_rules` to include your IP address in the (now) empty list. This makes sure that when Terraform needs to configure the Key Vault it can do so from your location.
+When creating the initial management infra, we provide a set of defaults for the Terraform values. They are located in `management/defaults/infra.default.tfvars`. To deploy the management infrastructure successfully, copy the default file to a custom tfvars file called `management/defaults/infra.tfvars`. In this file update the `management_infra_key_vault_ip_rules` to include your IP address in the (now) empty list. This makes sure that when Terraform needs to configure the Key Vault it can do so from your location.
 `
 
 ```bash
 cd management/infra
 terraform providers lock -platform=darwin_amd64 -platform=linux_amd64
-terraform init
+terraform init -backend-config storage_account_name="This name should match management_bootstrap_terraform_state_account_name"
 terraform apply -var-file=../defaults/infra.tfvars
 ```
 
 After a successful apply, you can delete the custom `management/defaults/infra.tfvars` file because you will not need it anymore.
+
+At this point a DNS zone has been created for the Opsteady platform. From your DNS hosting provider you need to delegate a subzone to this domain.
+
+```bash
+terraform state show azurerm_dns_zone.public_root
+```
+
+The output of this command will show you the name servers (amongst other things) that you need to delegate to. The `management_infra_domain` variable in the infra defaults contains the subdomain that you need to delegate to. Create the NS records with your DNS hosting provider. It can take some time before the DNS resolving is active.
+
+## 04 Vault
+
+When creating the Vault infrastructure, we provide a set of defaults for the Terraform values. They are located in `management/defaults/vault-infra.default.tfvars`. To deploy the Vault infrastructure successfully, copy the default file to a custom tfvars file called `management/defaults/vault-infra.tfvars`. In this file update the `management_vault_infa_storage_account_name` to a unique name. This storage account will host the Vault CA certificate. Make sure that the `management_infra_*` settings are equal to the values that you used in the management infra step. Vault builds on top of the management infra and needs to locate certain resources based on these names.
+
+```bash
+cd management/vault/infra
+terraform providers lock -platform=darwin_amd64 -platform=linux_amd64
+terraform init -backend-config storage_account_name="This name should match management_bootstrap_terraform_state_account_name"
+terraform apply -var-file=../../defaults/vault-infra.tfvars
+```
+
+Vault is now deployed to the cluster but all the instances are in a sealed state. We need initialise the cluster with the following steps:
+
+```bash
+az aks get-credentials -g management -n management --admin
+kubectl exec -n platform -it vault-0 -- vault operator init -ca-path=/vault/userconfig/vault-tls/ca.crt
+```
+
+**If the command succeeds you will see the unseal keys and the initial root token for Vault. Store this in a secure location and distribute the unseal keys to trusted parties.**
+
+The certificate authority file for Vault can be downloaded from `https://${management_vault_infra_storage_account_name}.blob.core.windows.net/vault-ca/ca.pem`. With this file you should be able to connect securely to Vault on `https://vault.management.${management_infra_domain}`.
