@@ -1,7 +1,6 @@
 package tasks
 
 import (
-	"bytes"
 	"fmt"
 	"io"
 	"os"
@@ -12,7 +11,7 @@ import (
 
 // Command is the interface for running binaries
 type Command interface {
-	Run() (string, error)
+	Run() error
 	AddArgs(...string)
 	AddEnv(string, string)
 	AddEnvs(map[string]string)
@@ -28,24 +27,22 @@ type CommandImpl struct {
 }
 
 // NewCommand creates the CommandImpl
-func NewCommand(command, workingDir string, writer io.Writer) Command {
+func NewCommand(command, workingDir string) Command {
 	return &CommandImpl{
 		Args:       []string{},
 		Env:        make(map[string]string),
 		Command:    command,
 		WorkingDir: workingDir,
-		writer:     writer,
 	}
 }
 
-// Run executes the command.
-func (c *CommandImpl) Run() (string, error) {
+// Run runs the command
+func (c *CommandImpl) Run() error {
 	cmd := exec.Command(c.Command, c.Args...)
 	cmd.Dir = c.WorkingDir
 
-	var stdoutBuf bytes.Buffer
-	cmd.Stdout = io.MultiWriter(c.writer, &stdoutBuf)
-	cmd.Stderr = c.writer
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 
 	// add all environment variables to the Env of the command
 	env := os.Environ()
@@ -55,10 +52,10 @@ func (c *CommandImpl) Run() (string, error) {
 	cmd.Env = env
 
 	if err := cmd.Run(); err != nil {
-		return "", errors.Wrapf(err, "Failed to execute command %s", c.Command)
+		return errors.Wrapf(err, "Failed to execute command %s", c.Command)
 	}
 
-	return stdoutBuf.String(), nil
+	return nil
 }
 
 // AddArgs adds arguments to the command

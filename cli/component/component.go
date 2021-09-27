@@ -1,12 +1,13 @@
 package component
 
 import (
+	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 
 	"github.com/opsteady/opsteady/cli/configuration"
 	"github.com/opsteady/opsteady/cli/credentials"
+	"github.com/opsteady/opsteady/cli/tasks"
 	"github.com/opsteady/opsteady/cli/utils"
 	"github.com/opsteady/opsteady/cli/vault"
 	"github.com/rs/zerolog"
@@ -48,7 +49,16 @@ type DefaultComponent struct {
 	DryRun                bool
 	AwsID                 string
 	AzureID               string
-	PlatformVersion       string // Version of the platform (used as a folder in Vault)
+	PlatformVersion       string       // Version of the platform (used as a folder in Vault)
+	HelmCharts            []*HelmChart // We expect all charts to be comming from management ACR
+	// Names of the folders a component uses which will determin what will be executed, order can be adjusted
+	Terraform string
+	Helm      string
+	Kubectl   string
+	// Override order
+	OverrideDeployOrder   []string
+	OverrideDestroyOrder  []string
+	OverrideValidateOrder []string
 }
 
 // RequiresComponents sets other components this component requires on.
@@ -101,49 +111,7 @@ func (c *DefaultComponent) SetCloudCredentialsToEnv() {
 	}
 }
 
-// PrepareTerraformBackend prepares the terraform to use remote storage
-// in the management subscription.
-func (c *DefaultComponent) PrepareTerraformBackend() {
-	c.Logger.Info().Msg("Preparing Terraform environment...")
-
-	mgmtCreds, err := c.Credentials.Azure("management")
-	if err != nil {
-		c.Logger.Fatal().Err(err).Msg("could not get management credentials to prepare terraform")
-	}
-
-	tfBackendCreds := fmt.Sprintf(`
-	subscription_id = "%s"
-	tenant_id = "%s"
-	client_id = "%s"
-	client_secret = "%s"`,
-		c.GlobalConfig.ManagementSubscriptionID,
-		c.GlobalConfig.TenantID,
-		mgmtCreds["client_id"].(string),
-		mgmtCreds["client_secret"].(string))
-
-	// Try to determine which blob key to use for Terraform state.
-	var blobKey string
-	if c.AwsID != "" && c.AzureID == "" {
-		blobKey = fmt.Sprintf("%s/%s/%s.tfstate", "aws", c.AwsID, c.ComponentName)
-	} else if c.AwsID == "" && c.AzureID != "" {
-		blobKey = fmt.Sprintf("%s/%s/%s.tfstate", "azure", c.AzureID, c.ComponentName)
-	} else if c.AwsID == "" && c.AzureID == "" {
-		c.Logger.Fatal().Msg("Please specify a target AWS/Azure ID")
-	} else if c.AwsID != "" && c.AzureID != "" {
-		c.Logger.Info().Msg("You specified both an Azure and AWS ID, using the backend blob key in the Terraform provider")
-	}
-
-	if blobKey != "" {
-		c.Logger.Info().Str("backend", blobKey).Msg("Using backend blob key")
-		tfBackendCreds = fmt.Sprintf("key = \"%s\"\n%s", blobKey, tfBackendCreds)
-	}
-
-	if err := ioutil.WriteFile(c.TerraformBackendConfigPath, []byte(tfBackendCreds), 0644); err != nil {
-		c.Logger.Fatal().Err(err).Str("path", c.TerraformBackendConfigPath).Msg("could not write the backend config file")
-	}
-}
-
-// AzureIDorAwsID returns AzureID if both AWS and Azure ID are set.
+// AzureIDorAwsID returns AzureID if both AWS and Azure ID are set
 func (c *DefaultComponent) AzureIDorAwsID() string {
 	if c.AzureID == "" {
 		return c.AwsID
@@ -183,4 +151,86 @@ func (c *DefaultComponent) SetPlatformInfoToComponentConfig() {
 	c.ComponentConfig.GeneralAddOrOverride("platform_version", c.PlatformVersion)
 	c.ComponentConfig.GeneralAddOrOverride("platform_environment_name", c.AzureIDorAwsID())
 	c.ComponentConfig.GeneralAddOrOverride("platform_component_name", c.ComponentName)
+}
+
+// RetrieveComponentConfig returns component config
+func (c *DefaultComponent) RetrieveComponentConfig() map[string]string {
+	values, err := c.ComponentConfig.RetrieveConfig(c.PlatformVersion, c.AzureIDorAwsID(), c.ComponentNameAndAllTheDependencies())
+	if err != nil {
+		c.Logger.Fatal().Err(err).Msg("could not deploy")
+	}
+	return values
+}
+
+// DetermineOrderOfExecution checks which folders exist (for example terraform, helm, etc..)
+// and returns this as a list, thereby determining what will be executed.
+// The default order is terraform, helm and then kubernetes but this can be
+// overridden with for example OverrideDeployOrder.
+func (c *DefaultComponent) DetermineOrderOfExecution() []string {
+	folders := []string{}
+	if _, err := os.Stat(fmt.Sprintf("%s/%s", c.ComponentFolder, c.Terraform)); !errors.Is(err, os.ErrNotExist) {
+		folders = append(folders, c.Terraform)
+	}
+	if _, err := os.Stat(fmt.Sprintf("%s/%s", c.ComponentFolder, c.Helm)); !errors.Is(err, os.ErrNotExist) {
+		folders = append(folders, c.Helm)
+	}
+	if _, err := os.Stat(fmt.Sprintf("%s/%s", c.ComponentFolder, c.Kubectl)); !errors.Is(err, os.ErrNotExist) {
+		folders = append(folders, c.Kubectl)
+	}
+	return folders
+}
+
+// AddAzureADCredentialsToComponentConfig adds Azure AD credentials to component config to be used elsewhere
+func (c *DefaultComponent) AddAzureADCredentialsToComponentConfig() {
+	azureAD, err := c.Credentials.AzureAD()
+	if err != nil {
+		c.Logger.Fatal().Err(err).Msg("could not get credentials for AzureAD")
+	}
+
+	c.ComponentConfig.GeneralAddOrOverride("azuread_client_id", azureAD["client_id"].(string))
+	c.ComponentConfig.GeneralAddOrOverride("azuread_client_secret", azureAD["client_secret"].(string))
+}
+
+// AddManagementCredentialsToComponentConfig adds management credentials to component config to be used elsewhere
+func (c *DefaultComponent) AddManagementCredentialsToComponentConfig() {
+	mgmtSubscriptionCreds, err := c.Credentials.Azure("management")
+	if err != nil {
+		c.Logger.Fatal().Err(err).Msg("could not get credentials for management subscription")
+	}
+
+	c.ComponentConfig.GeneralAddOrOverride("management_client_id", mgmtSubscriptionCreds["client_id"].(string))
+	c.ComponentConfig.GeneralAddOrOverride("management_client_secret", mgmtSubscriptionCreds["client_secret"].(string))
+	c.ComponentConfig.GeneralAddOrOverride("management_subscription_id", c.GlobalConfig.ManagementSubscriptionID)
+	c.ComponentConfig.GeneralAddOrOverride("tenant_id", c.GlobalConfig.TenantID)
+}
+
+// LoginToAKSorEKS logs in to AKS or EKS
+func (c *DefaultComponent) LoginToAKSorEKS(componentConfig map[string]string) {
+	if c.AwsID != "" {
+		aws := tasks.NewAws(c.GlobalConfig.TmpFolder, c.Logger)
+		if err := aws.LoginToEKS(componentConfig["kubernetes_aws_region"], componentConfig["kubernetes_aws_name"]); err != nil {
+			c.Logger.Fatal().Err(err).Msg("could not login to EKS")
+		}
+	}
+	if c.AzureID != "" {
+		c.Logger.Info().Msg("Preparing AKS environment...")
+		AKSCreds, err := c.Credentials.AKS(c.AzureID)
+		if err != nil {
+			c.Logger.Fatal().Err(err).Msg("could not get credentials to prepare AKS")
+		}
+		az := tasks.NewAz(c.GlobalConfig.TmpFolder, c.Logger)
+		if err := az.LoginToAzure(AKSCreds["client_id"].(string), AKSCreds["client_secret"].(string), c.GlobalConfig.TenantID); err != nil {
+			c.Logger.Fatal().Err(err).Msg("could not login to Azure")
+		}
+		clusterName := componentConfig["kubernetes_azure_name"]
+		clusterResourceGroup := fmt.Sprintf("kubernetes-%s", clusterName)
+		// Management cluster is different therefore we override this stuff here
+		if clusterName == "management" {
+			clusterResourceGroup = "management"
+		}
+
+		if err := az.LoginToAKS(clusterName, clusterResourceGroup); err != nil {
+			c.Logger.Fatal().Err(err).Msg("could not login to ASK via az")
+		}
+	}
 }

@@ -54,6 +54,9 @@ func executeComponent(cmd *cobra.Command, executeComponent func(c component.Comp
 		AwsID:                      awsIDFlag,
 		AzureID:                    azureIDFlag,
 		PlatformVersion:            platformVersionFlag,
+		Terraform:                  "terraform",
+		Helm:                       "helm",
+		Kubectl:                    "kubernetes",
 	}
 
 	logger.Debug().Msg("Run the the component")

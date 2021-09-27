@@ -14,7 +14,6 @@ type Terraform struct {
 	cachePath          string
 	backendStorageName string
 	logger             *zerolog.Logger
-	logWriter          *LogWriter
 }
 
 // NewTerraform returns a Terraform task runner
@@ -25,7 +24,6 @@ func NewTerraform(path, backendConfigPath, backendStorageName, cachePath string,
 		backendStorageName: backendStorageName,
 		cachePath:          fmt.Sprintf("%s/terraform", cachePath),
 		logger:             logger,
-		logWriter:          &LogWriter{logger: logger},
 	}
 }
 
@@ -33,11 +31,10 @@ func NewTerraform(path, backendConfigPath, backendStorageName, cachePath string,
 func (t *Terraform) FmtCheck() error {
 	t.logger.Info().Str("path", t.path).Msg("Checking Terraform code format in path")
 
-	command := NewCommand("terraform", t.path, t.logWriter)
+	command := NewCommand("terraform", t.path)
 	command.AddArgs("fmt", "-check", ".")
 
-	_, err := command.Run()
-	return err // either it is nil or it has an error
+	return command.Run()
 }
 
 // Plan runs a Terraform plan.
@@ -46,12 +43,11 @@ func (t *Terraform) FmtCheck() error {
 func (t *Terraform) Plan(vars map[string]string) error {
 	t.logger.Info().Str("path", t.path).Msg("Running Terraform plan in")
 
-	command := NewCommand("terraform", t.path, t.logWriter)
+	command := NewCommand("terraform", t.path)
 	command.AddArgs("plan", "-input=false")
 	command.AddEnvs(addTfVarPrefixToVars(vars))
 
-	_, err := command.Run()
-	return err // either it is nil or it has an error
+	return command.Run()
 }
 
 // Apply runs a Terraform apply with auto approval.
@@ -60,12 +56,11 @@ func (t *Terraform) Plan(vars map[string]string) error {
 func (t *Terraform) Apply(vars map[string]string) error {
 	t.logger.Info().Str("path", t.path).Msg("Running Terraform apply in")
 
-	command := NewCommand("terraform", t.path, t.logWriter)
+	command := NewCommand("terraform", t.path)
 	command.AddArgs("apply", "-input=false", "-auto-approve")
 	command.AddEnvs(addTfVarPrefixToVars(vars))
 
-	_, err := command.Run()
-	return err // either it is nil or it has an error
+	return command.Run()
 }
 
 // InitAndPlan combines Terraform init and plan
@@ -95,7 +90,7 @@ func (t *Terraform) Init() error {
 		return err
 	}
 
-	command := NewCommand("terraform", t.path, t.logWriter)
+	command := NewCommand("terraform", t.path)
 	command.AddArgs("init", "-reconfigure", "-upgrade")
 	if t.backendStorageName != "" {
 		command.AddArgs(fmt.Sprintf("-backend-config=storage_account_name=%s", t.backendStorageName))
@@ -105,8 +100,7 @@ func (t *Terraform) Init() error {
 	}
 	command.AddEnv("TF_PLUGIN_CACHE_DIR", t.cachePath)
 
-	_, err := command.Run()
-	return err // either it is nil or it has an error
+	return command.Run()
 }
 
 func addTfVarPrefixToVars(vars map[string]string) map[string]string {
@@ -125,10 +119,9 @@ func (t *Terraform) Destroy(vars map[string]string) error {
 
 	t.logger.Info().Str("path", t.path).Msg("Running Terraform destroy in")
 
-	command := NewCommand("terraform", t.path, t.logWriter)
+	command := NewCommand("terraform", t.path)
 	command.AddArgs("destroy", "-auto-approve")
 	command.AddEnvs(addTfVarPrefixToVars(vars))
 
-	_, err := command.Run()
-	return err // either it is nil or it has an error
+	return command.Run()
 }

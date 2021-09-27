@@ -43,3 +43,34 @@ Destroy management bootstrap:
 ```bash
 go run . destroy --component management-bootstrap --azure-id management
 ```
+
+## Folder structure
+
+To simplify and standardize the code and the repository there are some guidelines for folders used in the CLI. Every component (management-bootstrap, foundation, DNS, etc..) has a **cicd** folder where the golang code is created. This code is used to initialize settings like Helm charts, adjust the default execution order or create a completely new flow for deploy, build, etc... if necessary.
+
+This is a full example of a root folder of a component that we recommend to be used:
+
+```bash
+aws # The files can be either in the root, aws or azure folder if they differ in config
+aws/cicd # component golang code used for executing the component
+aws/crd # Kubernetes CRD yaml files that need to be created before other steps
+aws/helm/nginx/values.yaml # helm folder can have multiple charts with a values.yaml file
+aws/helm/dns/values.yaml # helm folder can have multiple charts with a values.yaml file
+aws/terraform # Terraform code to create resources
+aws/kubernetes # Kubernetes yaml files to be applied to Kubernetes
+aws/code # golang/javascript/java code with a program where the code can be any name
+aws/code/docker # contains the Dockerfile for creating a container image
+aws/code/chart # contains the chart for this code
+```
+
+You can always override this in a component golang code but it is not recommended!
+
+## Default environment variables available
+
+The following environment variables are always available in every step:
+
+- vault_address
+- vault_token
+- platform_version
+- platform_environment_name
+- platform_component_name

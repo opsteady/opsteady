@@ -31,5 +31,5 @@ var (
 
 func initLogin() {
 	rootCmd.AddCommand(loginCmd)
-	loginCmd.Flags().StringVarP(&role, "role", "r", "admin", "Role to use: platform-admin, platform-developer, platform-viewer")
+	loginCmd.Flags().StringVarP(&role, "role", "r", "platform-admin", "Role to use: platform-admin, platform-developer, platform-viewer")
 }

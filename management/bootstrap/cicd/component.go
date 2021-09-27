@@ -10,4 +10,5 @@ type ManagementBootstrap struct {
 // Initialize creates a new managementBootstrap struct
 func (m *ManagementBootstrap) Initialize(defaultComponent component.DefaultComponent) {
 	m.DefaultComponent = defaultComponent
+	m.DefaultComponent.Terraform = "" // Use root of the folder
 }

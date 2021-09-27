@@ -4,3 +4,4 @@
 #vault_insecure: false
 #tenant_id: "this is the Azure Tenant ID"
 #management_subscription_id: "this is the Azure subscription ID of the management environment"
+#management_helm_repository: "The management Helm repository"
