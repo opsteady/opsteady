@@ -10,8 +10,6 @@ import (
 	"github.com/pkg/errors"
 )
 
-// https://blog.kowalczyk.info/article/wOYk/advanced-command-execution-in-go-with-osexec.html
-
 // Command is the interface for running binaries
 type Command interface {
 	Run() (string, error)
@@ -40,7 +38,7 @@ func NewCommand(command, workingDir string, writer io.Writer) Command {
 	}
 }
 
-// Run runs the command
+// Run executes the command.
 func (c *CommandImpl) Run() (string, error) {
 	cmd := exec.Command(c.Command, c.Args...)
 	cmd.Dir = c.WorkingDir

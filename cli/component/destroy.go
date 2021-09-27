@@ -2,7 +2,7 @@ package component
 
 import "github.com/opsteady/opsteady/cli/tasks"
 
-// Destroy Component
+// Destroy runs the component destruction.
 func (c *DefaultComponent) Destroy() {
 	c.SetCloudCredentialsToEnv()
 	c.PrepareTerraformBackend()

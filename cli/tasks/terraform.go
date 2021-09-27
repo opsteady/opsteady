@@ -40,9 +40,9 @@ func (t *Terraform) FmtCheck() error {
 	return err // either it is nil or it has an error
 }
 
-// Plan runs a Terraform plan
-// The vars are added as TF_VAR environment variables when executing
-// Terraform is run without input question
+// Plan runs a Terraform plan.
+// The vars are added as TF_VAR environment variables when executing,
+// so that Terraform runs without input questions.
 func (t *Terraform) Plan(vars map[string]string) error {
 	t.logger.Info().Str("path", t.path).Msg("Running Terraform plan in")
 
@@ -54,9 +54,9 @@ func (t *Terraform) Plan(vars map[string]string) error {
 	return err // either it is nil or it has an error
 }
 
-// Apply runs a Terraform apply
-// The vars are added as TF_VAR environment variables when executing
-// Terraform is run without input question and with auto approve
+// Apply runs a Terraform apply with auto approval.
+// The vars are added as TF_VAR environment variables when executing,
+// so that Terraform runs without input questions.
 func (t *Terraform) Apply(vars map[string]string) error {
 	t.logger.Info().Str("path", t.path).Msg("Running Terraform apply in")
 
@@ -84,13 +84,13 @@ func (t *Terraform) InitAndApply(vars map[string]string) error {
 	return t.Apply(vars)
 }
 
-// Init initializes the Terraform providers and backend
-// Always remove the .terraform folder to make sure that we use the correct platform-dependent providers.
-// Terraform is run with reconfigure and upgrade flags
-// It sets the TF_PLUGIN_CACHE_DIR
+// Init initializes the Terraform providers and backend.
+// Terraform is run with reconfigure and upgrade flags.
+// It sets the TF_PLUGIN_CACHE_DIR to cache plugins in a well-known location.
 func (t *Terraform) Init() error {
 	t.logger.Info().Str("path", t.path).Str("cache", t.cachePath).Msg("Initializing Terraform in")
 
+	// Always remove the .terraform folder to make sure that we use the correct platform-dependent providers.
 	if err := os.RemoveAll(fmt.Sprintf("%s/.terraform", t.path)); err != nil {
 		return err
 	}

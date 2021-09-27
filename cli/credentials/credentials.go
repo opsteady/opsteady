@@ -100,9 +100,8 @@ func (vc *VaultCredentials) getAzureCreds(path string, id string) (map[string]in
 		return nil, errors.Wrapf(err, "failed to retrieve credentials from Vault for %s", id)
 	}
 
-	// Azure API is eventually consistent with permissions.
-	// Therefore we wait an arbitrary amount of time.
-	// This way we make sure that the new service principle has permissions on the subscription.
+	// Azure API is eventually consistent with permissions, therefore we wait an arbitrary amount of time.
+	// This way we make sure that the new service principal has permissions on the subscription.
 	vc.logger.Warn().Dur("wait", vc.AzureSleep).Msg("Waiting for credentials to be processed by Azure")
 	time.Sleep(vc.AzureSleep)
 
@@ -112,7 +111,7 @@ func (vc *VaultCredentials) getAzureCreds(path string, id string) (map[string]in
 	return secret, nil
 }
 
-// AzureAD retrieves credentials used for reading from Azure AD
+// AzureAD retrieves credentials used for reading from Azure AD.
 func (vc *VaultCredentials) AzureAD() (map[string]interface{}, error) {
 	id := "AzureAD"
 

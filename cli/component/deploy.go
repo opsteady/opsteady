@@ -4,7 +4,7 @@ import (
 	"github.com/opsteady/opsteady/cli/tasks"
 )
 
-// Deploy Component
+// Deploy runs the component setup and deployment.
 func (c *DefaultComponent) Deploy() {
 	c.SetCloudCredentialsToEnv()
 	c.PrepareTerraformBackend()

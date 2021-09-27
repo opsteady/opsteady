@@ -12,13 +12,13 @@ import (
 	"github.com/rs/zerolog"
 )
 
-// ComponentConfig interface to retrieve component config from Vault
+// ComponentConfig interface to retrieve component config from Vault.
 type ComponentConfig interface {
 	RetrieveConfig(string, string, []string) (map[string]string, error)
 	GeneralAddOrOverride(string, string)
 }
 
-// ComponentConfigImpl if the implementation of the ComponentConfig interface
+// ComponentConfigImpl is the implementation of the ComponentConfig interface.
 type ComponentConfigImpl struct {
 	TTL       time.Duration
 	cache     cache.Cache
@@ -27,7 +27,7 @@ type ComponentConfigImpl struct {
 	overrides map[string]string
 }
 
-// NewComponentConfig return implementation of ComponentConfig
+// NewComponentConfig returns an implementation of ComponentConfig.
 func NewComponentConfig(cache cache.Cache, vault vault.Vault, logger *zerolog.Logger) ComponentConfig {
 	return &ComponentConfigImpl{
 		cache:     cache,
@@ -38,12 +38,12 @@ func NewComponentConfig(cache cache.Cache, vault vault.Vault, logger *zerolog.Lo
 	}
 }
 
-// GeneralAddOrOverride adds key values which will be always added regardless which component you are using
+// GeneralAddOrOverride adds key values which will be always added regardless of which component you are using.
 func (c *ComponentConfigImpl) GeneralAddOrOverride(key, value string) {
 	c.overrides[key] = value
 }
 
-// RetrieveConfig retrieves config for the component from Vault
+// RetrieveConfig retrieves the component config from Vault.
 func (c *ComponentConfigImpl) RetrieveConfig(version, environment string, components []string) (map[string]string, error) {
 	componentID := fmt.Sprintf("%s-%s-%s", version, environment, strings.Join(components[:], "-"))
 	settings := c.cache.Retrieve(componentID)

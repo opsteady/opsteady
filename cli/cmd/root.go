@@ -73,7 +73,7 @@ func setDefaults() {
 }
 
 func initializeGlobalFlags() {
-	rootCmd.PersistentFlags().BoolVarP(&cacheFlag, "cache", "", cacheFlag, "Cache passwords, fetching credentials all the time from Vault takes time")
+	rootCmd.PersistentFlags().BoolVarP(&cacheFlag, "cache", "", cacheFlag, "Cache the passwords to reduce credential fetching overhead")
 	rootCmd.PersistentFlags().BoolVarP(&cacheAllFlag, "cache-all", "", cacheAllFlag, "Cache all Vault calls")
 	rootCmd.PersistentFlags().StringVarP(&vaultFlag, "vault-address", "", vaultFlag, "Vault address")
 	rootCmd.PersistentFlags().BoolVarP(&vaultInsecureFlag, "vault-insecure", "", vaultInsecureFlag, "Allow insecure Vault connection")
