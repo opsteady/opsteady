@@ -46,6 +46,12 @@ func init() {
 	initializeGlobalFlags()
 	initializeGlobalConfig()
 	initLogin()
+	initComponentFlags(buildCmd)
+	initComponentFlags(deployCmd)
+	initComponentFlags(destroyCmd)
+	initComponentFlags(testCmd)
+	initComponentFlags(validateCmd)
+	initComponentFlags(releaseCmd)
 }
 
 func initializeLogging() {
@@ -56,8 +62,18 @@ func initializeLogging() {
 	logger = zerolog.New(output).With().Timestamp().Logger().Level(zerolog.InfoLevel)
 }
 
+func setDefaults() {
+	homeDir, err := homedir.Dir()
+	if err != nil {
+		logger.Fatal().Err(err).Msg("Could not find the home dir")
+	}
+	viper.SetDefault("cache_path", fmt.Sprintf("%s/.cache", homeDir))
+	viper.SetDefault("cache_file", fmt.Sprintf("%s/.cache/.platform-cache", homeDir))
+	viper.SetDefault("tmp_folder", "/tmp/opsteady")
+}
+
 func initializeGlobalFlags() {
-	rootCmd.PersistentFlags().BoolVarP(&cacheFlag, "cache", "", cacheFlag, "Cache passwords, fetching credentials all the time from Vault takes time")
+	rootCmd.PersistentFlags().BoolVarP(&cacheFlag, "cache", "", cacheFlag, "Cache the passwords to reduce credential fetching overhead")
 	rootCmd.PersistentFlags().BoolVarP(&cacheAllFlag, "cache-all", "", cacheAllFlag, "Cache all Vault calls")
 	rootCmd.PersistentFlags().StringVarP(&vaultFlag, "vault-address", "", vaultFlag, "Vault address")
 	rootCmd.PersistentFlags().BoolVarP(&vaultInsecureFlag, "vault-insecure", "", vaultInsecureFlag, "Allow insecure Vault connection")
@@ -69,15 +85,6 @@ func initializeGlobalFlags() {
 	viper.BindEnv("vault_address")
 	viper.BindPFlag("vault_insecure", rootCmd.Flags().Lookup("vault-insecure"))
 	viper.BindEnv("vault_insecure")
-}
-
-func setDefaults() {
-	homeDir, err := homedir.Dir()
-	if err != nil {
-		logger.Fatal().Err(err).Msg("Could not find the home dir")
-	}
-	viper.SetDefault("cache_path", fmt.Sprintf("%s/.cache", homeDir))
-	viper.SetDefault("cache_file", fmt.Sprintf("%s/.cache/.platform-cache", homeDir))
 }
 
 func initializeGlobalConfig() {

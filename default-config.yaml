@@ -1,3 +1,6 @@
 # This is an example YAML file, please create your own called config.yaml
+
 #vault_address: ""
 #vault_insecure: false
+#tenant_id: "this is the Azure Tenant ID"
+#management_subscription_id: "this is the Azure subscription ID of the management environment"

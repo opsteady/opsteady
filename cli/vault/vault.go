@@ -4,11 +4,8 @@
 package vault
 
 import (
-	"crypto/tls"
-	"net/http"
 	"time"
 
-	"github.com/hashicorp/go-retryablehttp"
 	oidc "github.com/hashicorp/vault-plugin-auth-jwt"
 	"github.com/hashicorp/vault/api"
 	"github.com/opsteady/opsteady/cli/cache"
@@ -23,6 +20,7 @@ type Vault interface {
 	Read(string, map[string][]string) (map[string]interface{}, error)
 	Write(string, map[string]interface{}) (map[string]interface{}, error)
 	GetToken() string
+	GetAddress() string
 }
 
 // VaultImpl is the Vault interface implementation
@@ -35,67 +33,40 @@ type VaultImpl struct {
 // NewVault creates Vault
 func NewVault(address, role string, insecure bool, cache cache.Cache, logger *zerolog.Logger) (Vault, error) {
 	logger.Debug().Msg("Initialize Vault")
-	client, err := createClient(address, insecure, logger)
+
+	config := api.DefaultConfig()
+	config.ConfigureTLS(&api.TLSConfig{Insecure: insecure})
+	client, err := api.NewClient(config)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "could not create the Vault client")
+	}
+	client.SetAddress(address)
+
+	token := ""
+	tokenMap := cache.Retrieve(role)
+	if tokenMap == nil {
+		logger.Info().Str("role", role).Msg("Token not available in cache, logging in")
+		var err error
+		if token, err = oidcLogin(role, client, logger); err != nil {
+			return nil, err
+		}
+		cache.Store(role, map[string]interface{}{"token": token}, tokenTTL)
+	} else {
+		token = tokenMap["token"].(string)
 	}
 
+	client.SetToken(token)
 	vault := &VaultImpl{
 		client: client,
 		logger: logger,
 		cache:  cache,
 	}
 
-	tokenMap := cache.Retrieve(role)
-	if tokenMap != nil {
-		vault.client.SetToken(tokenMap["token"].(string))
-		return vault, nil
-	}
-
-	logger.Info().Str("role", role).Msg("Token not available in cache, logging in")
-	if err := vault.oidcLogin(role); err != nil {
-		return nil, err
-	}
-
-	cache.Store(role, map[string]interface{}{"token": vault.client.Token()}, tokenTTL)
-
 	return vault, nil
 }
 
-func createClient(address string, insecure bool, logger *zerolog.Logger) (*api.Client, error) {
-	logger.Debug().Msg("Creating Vault client")
-	retryClient := retryablehttp.NewClient()
-
-	transport := &http.Transport{
-		Proxy:           http.ProxyFromEnvironment,
-		MaxIdleConns:    10,
-		IdleConnTimeout: 5 * time.Second,
-	}
-
-	// Enable insecure Vault
-	if insecure {
-		transport.TLSClientConfig = &tls.Config{
-			InsecureSkipVerify: true,
-		}
-	}
-
-	httpClient := retryClient.StandardClient()
-	httpClient.Timeout = 30 * time.Second
-	httpClient.Transport = transport
-
-	client, err := api.NewClient(&api.Config{
-		Address:    address,
-		HttpClient: httpClient,
-	})
-	if err != nil {
-		return nil, errors.Wrap(err, "could not create the Vault client")
-	}
-
-	return client, nil
-}
-
-func (v *VaultImpl) oidcLogin(role string) error {
-	v.logger.Info().Str("role", role).Msg("Login using OIDC method")
+func oidcLogin(role string, client *api.Client, logger *zerolog.Logger) (string, error) {
+	logger.Info().Str("role", role).Msg("Login using OIDC method")
 	oidcHandler := &oidc.CLIHandler{}
 	oidcData := map[string]string{
 		"role":          role,
@@ -103,14 +74,13 @@ func (v *VaultImpl) oidcLogin(role string) error {
 		"port":          "8250",
 	}
 
-	secret, err := oidcHandler.Auth(v.client, oidcData)
+	secret, err := oidcHandler.Auth(client, oidcData)
 	if err != nil {
-		return errors.Wrap(err, "could not get the Vault token")
+		return "", errors.Wrap(err, "could not get the Vault token")
 	}
 
-	v.logger.Info().Str("role", role).Msg("Successfully logged in")
-	v.client.SetToken(secret.Auth.ClientToken)
-	return nil
+	logger.Info().Str("role", role).Msg("Successfully logged in")
+	return secret.Auth.ClientToken, nil
 }
 
 // Read reads a secret from a specified Vault path
@@ -143,4 +113,9 @@ func (v *VaultImpl) Write(path string, data map[string]interface{}) (map[string]
 // GetToken returns the Vault token for others to use, for example Terraform
 func (v *VaultImpl) GetToken() string {
 	return v.client.Token()
+}
+
+// GetAddress returns the Vault address for others to use, for example Terraform
+func (v *VaultImpl) GetAddress() string {
+	return v.client.Address()
 }
