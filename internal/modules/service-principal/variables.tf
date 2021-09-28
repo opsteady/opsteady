@@ -29,3 +29,13 @@ variable "owners" {
   type    = list(string)
   default = []
 }
+
+variable "redirect_uris" {
+  type    = list(string)
+  default = []
+}
+
+variable "group_membership_claims" {
+  type    = list(string)
+  default = null
+}

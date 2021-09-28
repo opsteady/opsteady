@@ -13,8 +13,8 @@ resource "azuread_group" "platform_admin" {
   owners = var.management_infra_platform_admin_owners
 }
 
-resource "azuread_group" "platform_developer" {
-  display_name            = "platform-developer"
+resource "azuread_group" "platform_operator" {
+  display_name            = "platform-operator"
   prevent_duplicate_names = true
   security_enabled        = true
 

@@ -75,6 +75,11 @@ cd management/infra
 terraform providers lock -platform=darwin_amd64 -platform=linux_amd64
 terraform init -backend-config storage_account_name="This name should match management_bootstrap_terraform_state_account_name"
 terraform apply -var-file=../defaults/infra.tfvars
+
+# Run the Terraform plan again to make sure that everything is applied.
+# The virtual network rules in the Key Vault network ACL might not apply
+# the first time for some unknown reason.
+terraform apply -var-file=../defaults/infra.tfvars
 ```
 
 After a successful apply, you can delete the custom `management/defaults/infra.tfvars` file because you will not need it anymore.
@@ -87,7 +92,7 @@ terraform state show azurerm_dns_zone.public_root
 
 The output of this command will show you the name servers (amongst other things) that you need to delegate to. The `management_infra_domain` variable in the infra defaults contains the subdomain that you need to delegate to. Create the NS records with your DNS hosting provider. It can take some time before the DNS resolving is active.
 
-## 04 Vault
+## 04 Vault Infrastructure
 
 When creating the Vault infrastructure, we provide a set of defaults for the Terraform values. They are located in `management/defaults/vault-infra.default.tfvars`. To deploy the Vault infrastructure successfully, copy the default file to a custom tfvars file called `management/defaults/vault-infra.tfvars`. In this file update the `management_vault_infa_storage_account_name` to a unique name. This storage account will host the Vault CA certificate. Make sure that the `management_infra_*` settings are equal to the values that you used in the management infra step. Vault builds on top of the management infra and needs to locate certain resources based on these names.
 
@@ -105,6 +110,27 @@ az aks get-credentials -g management -n management --admin
 kubectl exec -n platform -it vault-0 -- vault operator init -ca-path=/vault/userconfig/vault-tls/ca.crt
 ```
 
-**If the command succeeds you will see the unseal keys and the initial root token for Vault. Store this in a secure location and distribute the unseal keys to trusted parties.**
+**If the command succeeds you will see the recovery keys and the initial root token for Vault. Store this in a secure location and distribute the recovery keys to trusted parties.**
 
 The certificate authority file for Vault can be downloaded from `https://${management_vault_infra_storage_account_name}.blob.core.windows.net/vault-ca/ca.pem`. With this file you should be able to connect securely to Vault on `https://vault.management.${management_infra_domain}`.
+
+## 04 Vault Configuration
+
+When creating the Vault configuration, we provide a set of defaults for the Terraform values. They are located in `management/defaults/vault-config.default.tfvars`. To deploy the Vault configuration successfully, copy the default file to a custom tfvars file called `management/defaults/vault-config.tfvars`. Add the management subscription ID as a value to the `management_vault_config_subscriptions` map. Make sure that the `management_infra_*` settings are equal to the values that you used in the management infra step. Vault builds on top of the management infra and needs to locate certain resources based on these names.
+
+The `management_vault_config_subscriptions` variable will contain all the subscriptions that are going to be managed by the Opsteady platform. The `management_vault_config_accounts` variable will contain all the AWS accounts that are managed by the Opsteady platform. As the platform grows, these variables will be extended. For now it's just the management subscriptions that we want to bring under management.
+
+When doing the initial Vault configuration (when the management subscription is not yet managed by Opsteady CI/CD) make sure to comment the `client_id` and `cient_secret` settings in the azuread provider in the `terraform.tf` file.
+
+```bash
+cd management/vault/config
+terraform providers lock -platform=darwin_amd64 -platform=linux_amd64
+terraform init -backend-config storage_account_name="This name should match management_bootstrap_terraform_state_account_name"
+
+# Before we can apply the Terraform code, we need to grab the Vault CA certificate and put it in a well-known location, so that the Vault provider can use it.
+curl -o vault-ca.pem https://${management_vault_infra_storage_account_name}.blob.core.windows.net/vault-ca/ca.pem
+
+terraform apply -var-file=../../defaults/vault-config.tfvars -var management_vault_config_token=$VAULT_ROOT_TOKEN_FROM_VAULT_INFRA_RUN
+```
+
+You should now be able to login via OIDC on `https://vault.management.${management_infra_domain}` and see the configurations.

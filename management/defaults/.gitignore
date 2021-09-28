@@ -1,4 +1,4 @@
 bootstrap.tfvars
 infra.tfvars
-vault.tfvars
 vault-infra.tfvars
+vault-config.tfvars
