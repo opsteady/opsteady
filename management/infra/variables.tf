@@ -18,14 +18,6 @@ variable "management_infra_aks_kubernetes_version" {
   type = string
 }
 
-variable "management_infra_aks_system_node_count" {
-  type = number
-}
-
-variable "management_infra_aks_system_node_size" {
-  type = string
-}
-
 variable "management_infra_aks_api_server_authorized_ip_ranges" {
   type = list(any)
 }

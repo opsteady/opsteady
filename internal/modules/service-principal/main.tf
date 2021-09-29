@@ -1,6 +1,7 @@
 resource "azuread_application" "spn" {
-  display_name = var.name
-  owners       = var.owners
+  display_name            = var.name
+  owners                  = var.owners
+  group_membership_claims = var.group_membership_claims
 
   dynamic "required_resource_access" {
     for_each = var.required_resource_access
@@ -27,6 +28,10 @@ resource "azuread_application" "spn" {
       enabled              = app_role.value["enabled"]
       value                = app_role.value["value"]
     }
+  }
+
+  web {
+    redirect_uris = var.redirect_uris
   }
 }
 

@@ -1,6 +1,6 @@
 # This storage account will serve to host the Vault CA certificate. This
 # certificate is used by the CI/CD mechanism to validate the Vault server.
-resource "azurerm_storage_account" "vault" {
+resource "azurerm_storage_account" "vault_ca" {
   name                      = var.management_vault_infra_storage_account_name
   resource_group_name       = data.azurerm_resource_group.management.name
   location                  = var.management_infra_location
@@ -20,13 +20,13 @@ resource "azurerm_storage_account" "vault" {
 
 resource "azurerm_storage_container" "vault_ca" {
   name                  = "vault-ca"
-  storage_account_name  = azurerm_storage_account.vault.name
+  storage_account_name  = azurerm_storage_account.vault_ca.name
   container_access_type = "blob"
 }
 
 resource "azurerm_storage_blob" "vault_ca" {
   name                   = "ca.pem"
-  storage_account_name   = azurerm_storage_account.vault.name
+  storage_account_name   = azurerm_storage_account.vault_ca.name
   storage_container_name = azurerm_storage_container.vault_ca.name
   type                   = "Block"
   source_content         = tls_self_signed_cert.ca.cert_pem
