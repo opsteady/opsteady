@@ -8,7 +8,7 @@ To run the CLI locally use the project container or run locally. If running loca
 
 ```bash
 docker run -it --rm \
-  --net host \
+  -p 8250:8250 \
   -v $(pwd):/data \
   -v ${HOME}/.cache:/home/platform/.cache \
   -v ${HOME}/.cache/opsteady-go:/home/platform/go \

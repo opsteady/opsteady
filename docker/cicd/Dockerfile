@@ -23,4 +23,9 @@ RUN pip install azure-cli==2.27.2
 
 ENV PATH="/usr/lib/go-1.16/bin:${PATH}"
 
+ARG VAULT_CA_STORAGE_ACCOUNT
+RUN if [[ ! -z "$VAULT_CA_STORAGE_ACCOUNT" ]]; then curl -o /vault-ca.pem https://$VAULT_CA_STORAGE_ACCOUNT.blob.core.windows.net/vault-ca/ca.pem; fi
+
+ENV VAULT_CACERT=/vault-ca.pem
+
 USER 1000

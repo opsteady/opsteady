@@ -23,3 +23,13 @@ variable "management_vault_config_subscriptions" {
 variable "management_vault_config_accounts" {
   type = map(string)
 }
+
+variable "azuread_client_id" {
+  type = string
+  default = ""
+}
+
+variable "azuread_client_secret" {
+  type = string
+  default = ""
+}

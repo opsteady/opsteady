@@ -4,11 +4,11 @@ resource "vault_policy" "platform_viewer" {
 }
 
 resource "vault_policy" "platform_operator" {
-  name   = "platform_operator"
+  name   = "platform-operator"
   policy = file("policies/platform-operator.hcl")
 }
 
 resource "vault_policy" "platform_admin" {
-  name   = "platform_admin"
+  name   = "platform-admin"
   policy = file("policies/platform-admin.hcl")
 }

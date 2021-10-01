@@ -41,7 +41,7 @@ docker run -it --rm -v $(pwd):/data dev-management.azurecr.io/cicd:1.0.0 /bin/ba
 
 Before you start, comment the entire `backend "azurerm"` section in `management/bootstrap/terraform.tf`. This will keep the state local temporarily.
 
-When bootstrapping we provide a set of defaults for the Terraform values. They are located in `management/defaults/bootstrap.default.tfvars`. You can choose to use this file as-is, or copy it to `management/defaults/bootstrap.tfvars` and adjust the values. This custom file will be ignored in the Git repository and is for your use only.
+When bootstrapping we provide a set of defaults for the Terraform values. They are located in `management/defaults/bootstrap.default.tfvars.json`. You can choose to use this file as-is, or copy it to `management/defaults/bootstrap.tfvars.json` and adjust the values. This custom file will be ignored in the Git repository and is for your use only.
 
 Actual steps to perform in the container locally, VSC remote container or on your local machine:
 
@@ -49,10 +49,10 @@ Actual steps to perform in the container locally, VSC remote container or on you
 az login --use-device-code
 az account set --subscription management
 cd management/bootstrap
-terraform providers lock -platform=darwin_amd64 -platform=linux_amd64
 terraform init
+terraform providers lock -platform=darwin_amd64 -platform=linux_amd64
 
-terraform apply -var-file=../defaults/bootstrap.default.tfvars   # Adjust to ../defaults/bootstrap.tfvars if you have a custom variables file
+terraform apply -var-file=../defaults/bootstrap.default.tfvars.json   # Adjust to ../defaults/bootstrap.tfvars.json if you have a custom variables file
 ```
 
 Uncomment the entire `backend "azurerm"` section in `management/bootstrap/terraform.tf` to upload the state to the remote backend. **Make sure to update the `storage_account_name` setting to the name that you used in the previous apply step.**:
@@ -65,24 +65,20 @@ terraform init -reconfigure -backend-config "storage_account_name=This name shou
 
 ## 03 Infra
 
-Update the `storage_account_name` setting in `management/infra/terraform.tf` to the name that you used in the previous bootstrap.
-
-When creating the initial management infra, we provide a set of defaults for the Terraform values. They are located in `management/defaults/infra.default.tfvars`. To deploy the management infrastructure successfully, copy the default file to a custom tfvars file called `management/defaults/infra.tfvars`. In this file update the `management_infra_key_vault_ip_rules` to include your IP address in the (now) empty list. This makes sure that when Terraform needs to configure the Key Vault it can do so from your location.
+When creating the initial management infra, we provide a set of defaults for the Terraform values. They are located in `management/defaults/infra.default.tfvars.json`. To deploy the management infrastructure successfully, copy the default file to a custom tfvars file called `management/defaults/infra.tfvars.json`. In this file update the `management_infra_key_vault_ip_rules` to include your IP address in the (now) empty list. This makes sure that when Terraform needs to configure the Key Vault it can do so from your location.
 `
 
 ```bash
 cd management/infra
-terraform providers lock -platform=darwin_amd64 -platform=linux_amd64
 terraform init -backend-config storage_account_name="This name should match management_bootstrap_terraform_state_account_name"
-terraform apply -var-file=../defaults/infra.tfvars
+terraform providers lock -platform=darwin_amd64 -platform=linux_amd64
+terraform apply -var-file=../defaults/infra.tfvars.json
 
 # Run the Terraform plan again to make sure that everything is applied.
 # The virtual network rules in the Key Vault network ACL might not apply
 # the first time for some unknown reason.
-terraform apply -var-file=../defaults/infra.tfvars
+terraform apply -var-file=../defaults/infra.tfvars.json
 ```
-
-After a successful apply, you can delete the custom `management/defaults/infra.tfvars` file because you will not need it anymore.
 
 At this point a DNS zone has been created for the Opsteady platform. From your DNS hosting provider you need to delegate a subzone to this domain.
 
@@ -94,19 +90,24 @@ The output of this command will show you the name servers (amongst other things)
 
 ## 04 Vault Infrastructure
 
-When creating the Vault infrastructure, we provide a set of defaults for the Terraform values. They are located in `management/defaults/vault-infra.default.tfvars`. To deploy the Vault infrastructure successfully, copy the default file to a custom tfvars file called `management/defaults/vault-infra.tfvars`. In this file update the `management_vault_infa_storage_account_name` to a unique name. This storage account will host the Vault CA certificate. Make sure that the `management_infra_*` settings are equal to the values that you used in the management infra step. Vault builds on top of the management infra and needs to locate certain resources based on these names.
+When creating the Vault infrastructure, we provide a set of defaults for the Terraform values. They are located in `management/defaults/vault-infra.default.tfvars.json`. To deploy the Vault infrastructure successfully, copy the default file to a custom tfvars file called `management/defaults/vault-infra.tfvars.json`. In this file update the `management_vault_infra_storage_account_name` to a unique name. This storage account will host the Vault CA certificate.
 
 ```bash
 cd management/vault/infra
-terraform providers lock -platform=darwin_amd64 -platform=linux_amd64
 terraform init -backend-config storage_account_name="This name should match management_bootstrap_terraform_state_account_name"
-terraform apply -var-file=../../defaults/vault-infra.tfvars
+terraform providers lock -platform=darwin_amd64 -platform=linux_amd64
+
+# This command will give you some warnings about values for undeclared variables. This is expected and can be ignored.
+terraform apply -compact-warnings -var-file=../../defaults/infra.tfvars.json -var-file=../../defaults/vault-infra.tfvars.json
 ```
 
 Vault is now deployed to the cluster but all the instances are in a sealed state. We need initialise the cluster with the following steps:
 
 ```bash
+# Get the admin credentials for the Kubernetes cluster
 az aks get-credentials -g management -n management --admin
+
+# Initialize the Vault cluster
 kubectl exec -n platform -it vault-0 -- vault operator init -ca-path=/vault/userconfig/vault-tls/ca.crt
 ```
 
@@ -116,21 +117,100 @@ The certificate authority file for Vault can be downloaded from `https://${manag
 
 ## 04 Vault Configuration
 
-When creating the Vault configuration, we provide a set of defaults for the Terraform values. They are located in `management/defaults/vault-config.default.tfvars`. To deploy the Vault configuration successfully, copy the default file to a custom tfvars file called `management/defaults/vault-config.tfvars`. Add the management subscription ID as a value to the `management_vault_config_subscriptions` map. Make sure that the `management_infra_*` settings are equal to the values that you used in the management infra step. Vault builds on top of the management infra and needs to locate certain resources based on these names.
-
-The `management_vault_config_subscriptions` variable will contain all the subscriptions that are going to be managed by the Opsteady platform. The `management_vault_config_accounts` variable will contain all the AWS accounts that are managed by the Opsteady platform. As the platform grows, these variables will be extended. For now it's just the management subscriptions that we want to bring under management.
-
-When doing the initial Vault configuration (when the management subscription is not yet managed by Opsteady CI/CD) make sure to comment the `client_id` and `cient_secret` settings in the azuread provider in the `terraform.tf` file.
+When creating the Vault configuration, we provide a set of defaults for the Terraform values. They are located in `management/defaults/vault-config.default.tfvars.json`. To deploy the Vault configuration successfully, copy the default file to a custom tfvars file called `management/defaults/vault-config.tfvars.json`. Add the management subscription ID as a value to the `management_vault_config_subscriptions` object.
 
 ```bash
 cd management/vault/config
-terraform providers lock -platform=darwin_amd64 -platform=linux_amd64
 terraform init -backend-config storage_account_name="This name should match management_bootstrap_terraform_state_account_name"
+terraform providers lock -platform=darwin_amd64 -platform=linux_amd64
 
 # Before we can apply the Terraform code, we need to grab the Vault CA certificate and put it in a well-known location, so that the Vault provider can use it.
 curl -o vault-ca.pem https://${management_vault_infra_storage_account_name}.blob.core.windows.net/vault-ca/ca.pem
 
-terraform apply -var-file=../../defaults/vault-config.tfvars -var management_vault_config_token=$VAULT_ROOT_TOKEN_FROM_VAULT_INFRA_RUN
+# This command will give you some warnings about values for undeclared variables. This is expected and can be ignored.
+terraform apply -compact-warnings -var-file=../../defaults/infra.tfvars.json -var-file=../../defaults/vault-config.tfvars.json -var management_vault_config_token=$VAULT_ROOT_TOKEN_FROM_VAULT_INFRA_RUN
 ```
 
+NOTE: If you did not add yourself to the "platform-admin" group while creating the management infra then you need to add yourself now via the Azure Portal.
+
 You should now be able to login via OIDC on `https://vault.management.${management_infra_domain}` and see the configurations.
+
+## 05 Revoke the Vault root token
+
+The Vault root token should only be used in emergencies and never in regular Vault usage. The root token can always be regenerated from the recovery keys. To ensure maximum security you should revoke the root token with the following commands:
+
+```
+export VAULT_TOKEN=$ROOT_TOKEN_FROM_VAULT_INIT
+vault token revoke -ca-cert=vault-ca.pem -address=https://vault.management.${management_infra_domain} -self
+```
+
+The initial manual bootstrap for the management environment is now complete, well done!
+
+# Switching to the Opsteady CLI for management
+
+**IMPORTANT: Please exit the container that you have been working in before executing the next steps**
+
+## 01 Add Vault CA certificate to the CI/CD container image
+
+The Vault CA is needed to securely connect to Vault from the CLI. The Vault CA is hosted at a well-known location that you've configured in the Vault infrastructure step. Build the Docker image again but this time add the a build argument to trigger the Vault CA download during build:
+
+```
+cd docker/cicd
+docker build --build-arg ACR_NAME=dev-management --build-arg VAULT_CA_STORAGE_ACCOUNT=${management_vault_infra_storage_account_name} -t dev-management.azurecr.io/cicd:1.0.0 .
+```
+
+## 02 Push the CI/CD container image to the registry
+
+After a successful build you can push the image to the registry:
+
+```
+az login
+az account set --subscription management
+az acr login -n ${management_infra_acr_name}
+docker push ${management_infra_acr_name}.azurecr.io/cicd:1.0.0 .
+```
+
+## 03 Seed Vault with management configuration
+
+Before we can start using the CLI to manage our management environment we need to seed the Vault with our configuration data. For each of the components (management infra, vault infra and vault config) you have created a `$COMPONENT.fvars.json` file that contains the settings for Terraform. This information now needs to be stored in Vault. Please review the contents of the `tfvars.json` files in the `management/defaults` folder and make the adjustments you want (e.g. remove your IP from the key vault whitelist in infra).
+
+```
+# Start the CI/CD container (replace dev-management with your ACR name)
+docker run -it --rm \
+  -p 8250:8250 \
+  -v $(pwd):/data \
+  -v ${HOME}/.cache:/home/platform/.cache \
+  -v ${HOME}/.cache/opsteady-go:/home/platform/go \
+  dev-management.azurecr.io/cicd:1.0.0 /bin/bash
+
+# Set the Vault address
+export VAULT_ADDR=http://vault.management.${management_infra_domain}
+
+# Log into the Vault with OIDC
+vault login -method=oidc role=platform-admin listenaddress=0.0.0.0
+
+# Store the component configurations
+vault kv put config/v0/platform/management/management-bootstrap-manual @management/defaults/bootstrap.tfvars.json
+vault kv put config/v0/platform/management/management-infra-manual @management/defaults/infra.tfvars.json
+vault kv put config/v0/platform/management/management-vault-infra-manual @management/defaults/vault-infra.tfvars.json
+vault kv put config/v0/platform/management/management-vault-config-manual @management/defaults/vault-config.tfvars.json
+```
+
+## 04 Run the CLI
+
+We are now ready to manage all the management components with the CLI. First we need to configure the CLI by copying the `default-config.yaml` to `config.yaml` and entering the appropriate values for the Vault location and management environment.
+
+```
+cp default-config.yaml config.yaml
+
+# Open the config.yaml and enter the correct values for your environment
+```
+
+Now we can run the CLI for all the components and check the Terraform plan. Depending on if you made any changes to the configurations, you will see some changes but mostly it should show no changes.
+
+```
+go run main.go deploy -c management-bootstrap --dry-run --azure-id management --cache
+go run main.go deploy -c management-infra --dry-run --azure-id management --cache
+go run main.go deploy -c management-vault-infra --dry-run --azure-id management --cache
+go run main.go deploy -c management-vault-config --dry-run --azure-id management --cache
+```
