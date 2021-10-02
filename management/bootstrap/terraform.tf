@@ -18,7 +18,6 @@ terraform {
    */
   backend "azurerm" {
     resource_group_name  = "terraform-state"
-    storage_account_name = "This name should match management_bootstrap_terraform_state_account_name"
     container_name       = "management"
     key                  = "azure/management/management-bootstrap.tfstate"
   }

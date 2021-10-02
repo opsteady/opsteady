@@ -5,6 +5,70 @@ resource "vault_mount" "kv" {
   type = "kv-v2"
 }
 
+# AzureAD secrets engine
+
+module "vault_azuread_access" {
+  source = "../../../internal/modules/service-principal"
+  name   = "vault-azuread-access"
+
+  required_resource_access = [
+    {
+      resource_app_id = data.azuread_application_published_app_ids.well_known.result.MicrosoftGraph
+
+      resource_access = [
+        {
+          id   = azuread_service_principal.msgraph.app_role_ids["Application.ReadWrite.All"]
+          type = "Role"
+        },
+        {
+          id   = azuread_service_principal.msgraph.app_role_ids["Directory.Read.All"]
+          type = "Role"
+        }
+      ]
+    },
+    {
+      resource_app_id = data.azuread_application_published_app_ids.well_known.result.AzureActiveDirectoryGraph
+
+      resource_access = [
+        {
+          id   = azuread_service_principal.aadgraph.app_role_ids["Application.ReadWrite.All"]
+          type = "Role"
+        },
+        {
+          id   = azuread_service_principal.aadgraph.app_role_ids["Directory.Read.All"]
+          type = "Role"
+        }
+      ]
+    }
+  ]
+}
+
+resource "vault_azure_secret_backend" "azuread_secrets" {
+  subscription_id = data.azurerm_client_config.current.subscription_id
+  tenant_id       = data.azurerm_client_config.current.tenant_id
+  client_id       = module.vault_azuread_access.azuread_service_principal_application_id
+  client_secret   = module.vault_azuread_access.azuread_service_principal_password
+  path            = "azuread"
+}
+
+resource "vault_azure_secret_backend_role" "azuread_role" {
+  backend               = vault_azure_secret_backend.azuread_secrets.path
+  role                  = "management"
+  application_object_id = module.vault_azuread_access.azuread_application_object_id
+  ttl                   = 3600
+  max_ttl               = 14400
+}
+
+# Assign the vault-azuread-secrets service principal the owner role on the management subscription, so that
+# it can generate dynamic secrets for this subscription.
+resource "azurerm_role_assignment" "azuread_secrets" {
+  scope                = "/subscriptions/${data.azurerm_client_config.current.subscription_id}"
+  role_definition_name = "Owner"
+  principal_id         = module.vault_azuread_access.azuread_service_principal_object_id
+}
+
+# Azure Subscriptions secrets engine
+
 # The vault-azure-access service principal is used to generate new service principals and
 # assign ownership to Azure subscriptions so that they can be managed.
 module "vault_azure_access" {
@@ -27,7 +91,7 @@ module "vault_azure_access" {
 
 # Creation of service principals takes time to propagate within Azure AD.
 resource "time_sleep" "wait_for_service_principal_propagation" {
-  depends_on = [module.vault_azure_access]
+  depends_on = [module.vault_azure_access, module.vault_azuread_access]
 
   create_duration = "20s"
 }
@@ -42,10 +106,15 @@ resource "null_resource" "grant_admin_consent" {
     command = "az ad app permission admin-consent --id ${module.vault_azure_access.azuread_application_application_id}"
   }
 
+  # Grant Admin consent via the AZ CLI.
+  provisioner "local-exec" {
+    command = "az ad app permission admin-consent --id ${module.vault_azuread_access.azuread_application_application_id}"
+  }
+
   depends_on = [time_sleep.wait_for_service_principal_propagation]
 }
 
-# Assign the vault-azure-secrets service principle the owner role on the management subscription, so that
+# Assign the vault-azure-secrets service principlal the owner role on the management subscription, so that
 # it can generate dynamic secrets for this subscription.
 resource "azurerm_role_assignment" "azure_secrets" {
   scope                = "/subscriptions/${data.azurerm_client_config.current.subscription_id}"

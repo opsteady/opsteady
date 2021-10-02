@@ -52,7 +52,7 @@ resource "time_rotating" "spn" {
 resource "azuread_service_principal_password" "spn" {
   service_principal_id = azuread_service_principal.spn.id
 
-  keepers = {
+  rotate_when_changed = {
     rotation = time_rotating.spn.id
   }
 }

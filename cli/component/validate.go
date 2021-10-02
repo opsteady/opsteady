@@ -5,7 +5,7 @@ import "github.com/opsteady/opsteady/cli/tasks"
 // Validate validates the Terraform code
 func (c *DefaultComponent) Validate() {
 
-	executeOrder := c.DeterminOrderOfExecution()
+	executeOrder := c.DetermineOrderOfExecution()
 	if len(c.OverrideValidateOrder) != 0 {
 		executeOrder = c.OverrideValidateOrder
 	}

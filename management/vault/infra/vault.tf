@@ -1,6 +1,6 @@
 module "vault_unseal" {
   source = "../../../internal/modules/service-principal"
-  name   = "vault-unseal-new"
+  name   = "vault-unseal"
 }
 
 # Vault auto-unseal key

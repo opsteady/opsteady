@@ -17,10 +17,7 @@ resource "azurerm_key_vault" "management" {
 }
 
 resource "azurerm_role_assignment" "key_vault_administrator" {
-  for_each = toset(concat([
-    data.azurerm_client_config.current.object_id],
-    var.management_infra_key_vault_administrators
-  ))
+  for_each = toset(var.management_infra_key_vault_administrators)
 
   scope                = azurerm_key_vault.management.id
   role_definition_name = "Key Vault Administrator"

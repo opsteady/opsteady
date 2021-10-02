@@ -81,6 +81,11 @@ path "aws/*"
   capabilities = ["read", "create", "update", "delete", "list", "sudo"]
 }
 
+path "azuread/*"
+{
+  capabilities = ["read", "create", "update", "delete", "list", "sudo"]
+}
+
 path "azure/*"
 {
   capabilities = ["read", "create", "update", "delete", "list", "sudo"]

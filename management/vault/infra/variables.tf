@@ -29,3 +29,13 @@ variable "management_vault_infra_image_tag" {
 variable "management_vault_infra_chart_version" {
   type = string
 }
+
+variable "azuread_client_id" {
+  type = string
+  default = ""
+}
+
+variable "azuread_client_secret" {
+  type = string
+  default = ""
+}

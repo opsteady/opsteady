@@ -2,7 +2,7 @@ variable "management_infra_domain" {
   type = string
 }
 
-variable "management_vault_config_token" {
+variable "vault_token" {
   type = string
 }
 

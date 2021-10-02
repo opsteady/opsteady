@@ -45,7 +45,7 @@ resource "azurerm_monitor_diagnostic_setting" "acr" {
 
 module "acr_management" {
   source = "../../internal/modules/service-principal"
-  name   = "acr-management"
+  name   = "management-acr"
 }
 
 resource "azurerm_role_assignment" "acr_management" {

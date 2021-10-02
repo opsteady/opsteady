@@ -83,3 +83,13 @@ variable "management_infra_azure_subnet_public_address_prefixes" {
 variable "management_infra_domain" {
   type = string
 }
+
+variable "azuread_client_id" {
+  type = string
+  default = ""
+}
+
+variable "azuread_client_secret" {
+  type = string
+  default = ""
+}
