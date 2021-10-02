@@ -7,7 +7,9 @@ type ManagementInfra struct {
 	component.DefaultComponent
 }
 
-// Initialize creates a new managementBootstrap struct
+// Initialize creates a new managementInfra struct
 func (m *ManagementInfra) Initialize(defaultComponent component.DefaultComponent) {
 	m.DefaultComponent = defaultComponent
+	m.DefaultComponent.Terraform = "" // Use root of the folder
+	m.DefaultComponent.AddAzureADCredentialsToComponentConfig()
 }

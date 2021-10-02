@@ -10,4 +10,5 @@ type GlobalConfig struct {
 	TmpFolder                string `mapstructure:"tmp_folder"`
 	TenantID                 string `mapstructure:"tenant_id"`
 	ManagementSubscriptionID string `mapstructure:"management_subscription_id"`
+	ManagementHelmRepository string `mapstructure:"management_helm_repository"`
 }
