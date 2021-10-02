@@ -46,6 +46,7 @@ resource "vault_jwt_auth_backend_role" "platform_viewer" {
   role_type   = "oidc"
   allowed_redirect_uris = [
     "https://vault.management.${var.management_infra_domain}/ui/vault/auth/oidc/oidc/callback",
+    "http://localhost:8250/oidc/callback",
   ]
   groups_claim = "groups"
   bound_claims = { "groups" = data.azuread_group.platform_viewer.id }
@@ -61,6 +62,7 @@ resource "vault_jwt_auth_backend_role" "platform_operator" {
   role_type   = "oidc"
   allowed_redirect_uris = [
     "https://vault.management.${var.management_infra_domain}/ui/vault/auth/oidc/oidc/callback",
+    "http://localhost:8250/oidc/callback",
   ]
   groups_claim = "groups"
   bound_claims = { "groups" = data.azuread_group.platform_operator.id }
@@ -76,6 +78,7 @@ resource "vault_jwt_auth_backend_role" "platform_admin" {
   role_type   = "oidc"
   allowed_redirect_uris = [
     "https://vault.management.${var.management_infra_domain}/ui/vault/auth/oidc/oidc/callback",
+    "http://localhost:8250/oidc/callback",
   ]
   groups_claim = "groups"
   bound_claims = { "groups" = data.azuread_group.platform_admin.id }

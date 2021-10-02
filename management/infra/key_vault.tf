@@ -12,7 +12,7 @@ resource "azurerm_key_vault" "management" {
     bypass         = "AzureServices"
 
     ip_rules = var.management_infra_key_vault_ip_rules
-    virtual_network_subnet_ids = [azurerm_subnet.pods.id]
+    virtual_network_subnet_ids = [azurerm_subnet.pods.id] # Needed to give the Vault pods access to Key Vault
   }
 }
 

@@ -30,7 +30,7 @@ terraform {
   backend "azurerm" {
     resource_group_name  = "terraform-state"
     container_name       = "management"
-    key                  = "infra.tfstate"
+    key                  = "azure/management/management-infra.tfstate"
   }
 }
 
