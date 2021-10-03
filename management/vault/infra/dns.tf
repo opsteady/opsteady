@@ -6,11 +6,11 @@ resource "azurerm_dns_a_record" "vault" {
   records             = [azurerm_public_ip.vault.ip_address]
 }
 
-# This resource lives in the nodes-management resource group to ensure that
+# This resource lives in the nodes resource group to ensure that
 # the dynamically created loadbalancer can use the IP address.
 resource "azurerm_public_ip" "vault" {
   name                = "vault"
-  resource_group_name = "nodes-management"
+  resource_group_name = "nodes-${var.management_infra_aks_name}"
   location            = var.management_infra_location
   allocation_method   = "Static"
   sku                 = "Standard"

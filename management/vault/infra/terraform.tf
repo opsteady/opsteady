@@ -7,7 +7,7 @@ terraform {
     }
 
     azuread = {
-      version = "~> 2.3.0"
+      version = "~> 2.5.0"
     }
 
     kubernetes = {
@@ -32,6 +32,11 @@ terraform {
 
 provider "azurerm" {
   features {}
+}
+
+provider "azuread" {
+  client_id     = var.azuread_client_id
+  client_secret = var.azuread_client_secret
 }
 
 provider "kubernetes" {

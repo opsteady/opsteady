@@ -38,14 +38,12 @@ func (t *Terraform) FmtCheck() error {
 }
 
 // Plan runs a Terraform plan.
-// The vars are added as TF_VAR environment variables when executing,
-// so that Terraform runs without input questions.
-func (t *Terraform) Plan(vars map[string]string) error {
+// The vars are added as a JSON file so that Terraform runs without input questions.
+func (t *Terraform) Plan(varsFile string) error {
 	t.logger.Info().Str("path", t.path).Msg("Running Terraform plan in")
 
 	command := NewCommand("terraform", t.path)
-	command.AddArgs("plan", "-input=false")
-	command.AddEnvs(addTfVarPrefixToVars(vars))
+	command.AddArgs("plan", "-compact-warnings", "-input=false", fmt.Sprintf("-var-file=%s", varsFile))
 
 	return command.Run()
 }
@@ -53,30 +51,29 @@ func (t *Terraform) Plan(vars map[string]string) error {
 // Apply runs a Terraform apply with auto approval.
 // The vars are added as TF_VAR environment variables when executing,
 // so that Terraform runs without input questions.
-func (t *Terraform) Apply(vars map[string]string) error {
+func (t *Terraform) Apply(varsFile string) error {
 	t.logger.Info().Str("path", t.path).Msg("Running Terraform apply in")
 
 	command := NewCommand("terraform", t.path)
-	command.AddArgs("apply", "-input=false", "-auto-approve")
-	command.AddEnvs(addTfVarPrefixToVars(vars))
+	command.AddArgs("apply", "-compact-warnings", "-input=false", "-auto-approve", fmt.Sprintf("-var-file=%s", varsFile))
 
 	return command.Run()
 }
 
 // InitAndPlan combines Terraform init and plan
-func (t *Terraform) InitAndPlan(vars map[string]string) error {
+func (t *Terraform) InitAndPlan(varsFile string) error {
 	if err := t.Init(); err != nil {
 		return err
 	}
-	return t.Plan(vars)
+	return t.Plan(varsFile)
 }
 
 // InitAndApply combines Terraform init and apply
-func (t *Terraform) InitAndApply(vars map[string]string) error {
+func (t *Terraform) InitAndApply(varsFile string) error {
 	if err := t.Init(); err != nil {
 		return err
 	}
-	return t.Apply(vars)
+	return t.Apply(varsFile)
 }
 
 // Init initializes the Terraform providers and backend.
@@ -103,16 +100,8 @@ func (t *Terraform) Init() error {
 	return command.Run()
 }
 
-func addTfVarPrefixToVars(vars map[string]string) map[string]string {
-	tmp := make(map[string]string)
-	for k, v := range vars {
-		tmp[fmt.Sprintf("TF_VAR_%s", k)] = v
-	}
-	return tmp
-}
-
 // Destroy runs a Terraform destroy command
-func (t *Terraform) Destroy(vars map[string]string) error {
+func (t *Terraform) Destroy(varsFile string) error {
 	if err := t.Init(); err != nil {
 		return err
 	}
@@ -120,8 +109,7 @@ func (t *Terraform) Destroy(vars map[string]string) error {
 	t.logger.Info().Str("path", t.path).Msg("Running Terraform destroy in")
 
 	command := NewCommand("terraform", t.path)
-	command.AddArgs("destroy", "-auto-approve")
-	command.AddEnvs(addTfVarPrefixToVars(vars))
+	command.AddArgs("destroy", "-compact-warnings", "-auto-approve", fmt.Sprintf("-var-file=%s", varsFile))
 
 	return command.Run()
 }

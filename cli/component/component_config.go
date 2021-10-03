@@ -14,7 +14,7 @@ import (
 
 // ComponentConfig interface to retrieve component config from Vault.
 type ComponentConfig interface {
-	RetrieveConfig(string, string, []string) (map[string]string, error)
+	RetrieveConfig(string, string, []string) (map[string]interface{}, error)
 	GeneralAddOrOverride(string, string)
 }
 
@@ -44,25 +44,15 @@ func (c *ComponentConfigImpl) GeneralAddOrOverride(key, value string) {
 }
 
 // RetrieveConfig retrieves the component config from Vault.
-func (c *ComponentConfigImpl) RetrieveConfig(version, environment string, components []string) (map[string]string, error) {
+func (c *ComponentConfigImpl) RetrieveConfig(version, environment string, components []string) (map[string]interface{}, error) {
 	componentID := fmt.Sprintf("%s-%s-%s", version, environment, strings.Join(components[:], "-"))
 	settings := c.cache.Retrieve(componentID)
 	if settings != nil {
 		c.logger.Debug().Str("id", componentID).Msg("Using cached settings")
-		valuesString := make(map[string]string)
-
-		for k, v := range settings {
-			valuesString[k] = v.(string)
-		}
-		for k, v := range c.overrides {
-			valuesString[k] = v
-		}
-
-		return valuesString, nil
+		return settings, nil
 	}
 
 	values := make(map[string]interface{})
-	valuesString := make(map[string]string)
 	chanComponents := make(chan map[string]interface{}, len(components)+1)
 	chanPlatform := make(chan map[string]interface{}, len(components)+1)
 	chanPlatformTerraform := make(chan map[string]interface{}, len(components)+1)
@@ -107,7 +97,6 @@ func (c *ComponentConfigImpl) RetrieveConfig(version, environment string, compon
 	for value := range chanComponents {
 		for k, v := range value {
 			values[k] = v
-			valuesString[k] = v.(string)
 		}
 	}
 
@@ -115,7 +104,6 @@ func (c *ComponentConfigImpl) RetrieveConfig(version, environment string, compon
 	for value := range chanPlatform {
 		for k, v := range value {
 			values[k] = v
-			valuesString[k] = v.(string)
 		}
 	}
 
@@ -123,16 +111,15 @@ func (c *ComponentConfigImpl) RetrieveConfig(version, environment string, compon
 	for value := range chanPlatformTerraform {
 		for k, v := range value {
 			values[k] = v
-			valuesString[k] = v.(string)
 		}
 	}
 
 	c.cache.Store(componentID, values, c.TTL)
 
 	for k, v := range c.overrides {
-		valuesString[k] = v
+		values[k] = v
 	}
-	return valuesString, nil
+	return values, nil
 }
 
 func (c *ComponentConfigImpl) fetchConfig(path, component string, chanValues chan map[string]interface{}, chanErrors chan error, wg *sync.WaitGroup) {

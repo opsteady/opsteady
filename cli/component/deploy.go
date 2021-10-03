@@ -1,17 +1,20 @@
 package component
 
 import (
+	"encoding/json"
+	"fmt"
+	"os"
+
 	"github.com/opsteady/opsteady/cli/tasks"
 )
 
 // Deploy runs the component setup and deployment.
 func (c *DefaultComponent) Deploy() {
 	c.SetCloudCredentialsToEnv()
-	c.SetVaultInfoToComponentConfig()
 	c.SetPlatformInfoToComponentConfig()
 	componentConfig := c.RetrieveComponentConfig()
 
-	executeOrder := c.DeterminOrderOfExecution()
+	executeOrder := c.DetermineOrderOfExecution()
 	if len(c.OverrideDeployOrder) != 0 {
 		executeOrder = c.OverrideDeployOrder
 	}
@@ -30,24 +33,38 @@ func (c *DefaultComponent) Deploy() {
 }
 
 // DeployTerraform uses Terrform code to deploy resources
-func (c *DefaultComponent) DeployTerraform(componentConfig map[string]string) {
-	backendStorageName := componentConfig["management_bootstrap_terraform_state_account_name"] // Always expecting this to be here
+func (c *DefaultComponent) DeployTerraform(componentConfig map[string]interface{}) {
+	backendStorageName := componentConfig["management_bootstrap_terraform_state_account_name"].(string) // Always expecting this to be here
 	terraform := tasks.NewTerraform(c.ComponentFolder, c.TerraformBackendConfigPath, backendStorageName, c.GlobalConfig.CachePath, c.Logger)
+
+	// Marshall the component configuration to a JSON tfvars file
+	tfvars, err := json.Marshal(componentConfig)
+	if err != nil {
+		c.Logger.Fatal().Err(err).Msg("Failed to marshall the component config to tfvars JSON")
+	}
+
+	varsPath := fmt.Sprintf("/tmp/%s.tfvars.json", c.ComponentName)
+
+	err = os.WriteFile(varsPath, tfvars, 0644)
+	if err != nil {
+		c.Logger.Fatal().Err(err).Msg("Failed to create tfvars JSON file")
+	}
+
 	if c.DryRun {
 		c.Logger.Info().Msg("DryRun........")
-		if err := terraform.InitAndPlan(componentConfig); err != nil {
+		if err := terraform.InitAndPlan(varsPath); err != nil {
 			c.Logger.Fatal().Err(err).Msg("could not plan")
 		}
 		return
 	}
 
-	if err := terraform.InitAndApply(componentConfig); err != nil {
+	if err := terraform.InitAndApply(varsPath); err != nil {
 		c.Logger.Fatal().Err(err).Msg("could not apply")
 	}
 }
 
 // DeployHelm deploys Helm charts to Kubernetes
-func (c *DefaultComponent) DeployHelm(componentConfig map[string]string) {
+func (c *DefaultComponent) DeployHelm(componentConfig map[string]interface{}) {
 	// TODO: Add templating to values.yaml here before executing and pass the templated values.yaml file to the Helm install
 	helm := tasks.NewHelm(c.GlobalConfig.TmpFolder, c.Logger)
 	for _, chart := range c.HelmCharts {

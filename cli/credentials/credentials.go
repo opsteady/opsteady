@@ -122,7 +122,7 @@ func (vc *VaultCredentials) AzureAD() (map[string]interface{}, error) {
 	}
 
 	vc.logger.Debug().Str("id", id).Msg("Requesting AzureAD credentials")
-	secret, err := vc.vault.Read("azuread/creds/default", nil)
+	secret, err := vc.vault.Read("azuread/creds/management", nil)
 	if err != nil {
 		return nil, errors.Wrapf(err, "failed to retrieve credentials from Vault for %s", id)
 	}

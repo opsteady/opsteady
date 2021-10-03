@@ -154,7 +154,7 @@ func (c *DefaultComponent) SetPlatformInfoToComponentConfig() {
 }
 
 // RetrieveComponentConfig returns component config
-func (c *DefaultComponent) RetrieveComponentConfig() map[string]string {
+func (c *DefaultComponent) RetrieveComponentConfig() map[string]interface{} {
 	values, err := c.ComponentConfig.RetrieveConfig(c.PlatformVersion, c.AzureIDorAwsID(), c.ComponentNameAndAllTheDependencies())
 	if err != nil {
 		c.Logger.Fatal().Err(err).Msg("could not deploy")
@@ -205,10 +205,10 @@ func (c *DefaultComponent) AddManagementCredentialsToComponentConfig() {
 }
 
 // LoginToAKSorEKS logs in to AKS or EKS
-func (c *DefaultComponent) LoginToAKSorEKS(componentConfig map[string]string) {
+func (c *DefaultComponent) LoginToAKSorEKS(componentConfig map[string]interface{}) {
 	if c.AwsID != "" {
 		aws := tasks.NewAws(c.GlobalConfig.TmpFolder, c.Logger)
-		if err := aws.LoginToEKS(componentConfig["kubernetes_aws_region"], componentConfig["kubernetes_aws_name"]); err != nil {
+		if err := aws.LoginToEKS(componentConfig["kubernetes_aws_region"].(string), componentConfig["kubernetes_aws_name"].(string)); err != nil {
 			c.Logger.Fatal().Err(err).Msg("could not login to EKS")
 		}
 	}
@@ -222,7 +222,7 @@ func (c *DefaultComponent) LoginToAKSorEKS(componentConfig map[string]string) {
 		if err := az.LoginToAzure(AKSCreds["client_id"].(string), AKSCreds["client_secret"].(string), c.GlobalConfig.TenantID); err != nil {
 			c.Logger.Fatal().Err(err).Msg("could not login to Azure")
 		}
-		clusterName := componentConfig["kubernetes_azure_name"]
+		clusterName := componentConfig["kubernetes_azure_name"].(string)
 		clusterResourceGroup := fmt.Sprintf("kubernetes-%s", clusterName)
 		// Management cluster is different therefore we override this stuff here
 		if clusterName == "management" {

@@ -54,10 +54,51 @@ resource "azurerm_monitor_diagnostic_setting" "aks" {
   log_analytics_workspace_id = azurerm_log_analytics_workspace.management.id
 
   log {
+    category = "cluster-autoscaler"
+    enabled  = false
+
+    retention_policy {
+      days    = 0
+      enabled = false
+    }
+  }
+
+  log {
+    category = "guard"
+    enabled  = false
+
+    retention_policy {
+      days    = 0
+      enabled = false
+    }
+  }
+
+  log {
     category = "kube-apiserver"
     enabled  = true
 
     retention_policy {
+      days = 0
+      enabled = false
+    }
+  }
+
+  log {
+    category = "kube-audit"
+    enabled  = false
+
+    retention_policy {
+      days    = 0
+      enabled = false
+    }
+  }
+
+  log {
+    category = "kube-audit-admin"
+    enabled  = false
+
+    retention_policy {
+      days    = 0
       enabled = false
     }
   }
@@ -67,6 +108,27 @@ resource "azurerm_monitor_diagnostic_setting" "aks" {
     enabled  = true
 
     retention_policy {
+      days = 0
+      enabled = false
+    }
+  }
+
+  log {
+    category = "kube-scheduler"
+    enabled  = false
+
+    retention_policy {
+      days    = 0
+      enabled = false
+    }
+  }
+
+  metric {
+    category = "AllMetrics"
+    enabled  = false
+
+    retention_policy {
+      days    = 0
       enabled = false
     }
   }
