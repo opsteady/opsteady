@@ -28,7 +28,7 @@ func TestWriteReadVault(t *testing.T) {
 	// Make sure the token is stored so we don't try to login
 	cache.Store("platform-admin", map[string]interface{}{"token": cluster.Cores[0].Client.Token()}, time.Hour*1)
 
-	vaultImpl, err := NewVault(cluster.Cores[0].Client.Address(), "platform-admin", true, cache, &logger)
+	vaultImpl, err := NewVault(cluster.Cores[0].Client.Address(), "platform-admin", "", true, cache, &logger)
 	if err != nil {
 		t.Fatal(err)
 	}

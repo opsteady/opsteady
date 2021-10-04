@@ -5,6 +5,7 @@ package configuration
 type GlobalConfig struct {
 	VaultAddress             string `mapstructure:"vault_address"`
 	VaultInsecure            bool   `mapstructure:"vault_insecure"`
+	VaultToken               string `mapstructure:"vault_token"`
 	CachePath                string `mapstructure:"cache_path"`
 	CacheFile                string `mapstructure:"cache_file"`
 	TmpFolder                string `mapstructure:"tmp_folder"`

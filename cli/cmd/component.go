@@ -35,7 +35,7 @@ func executeComponent(cmd *cobra.Command, executeComponent func(c component.Comp
 	logger.Trace().Msg("Initialize dependencies for the default component implementation")
 	vaultCache, configCache := initializeCacheDependency()
 
-	vaultImpl, err := vault.NewVault(globalConfig.VaultAddress, "platform-admin", globalConfig.VaultInsecure, vaultCache, &logger)
+	vaultImpl, err := vault.NewVault(globalConfig.VaultAddress, "platform-admin", globalConfig.VaultToken, globalConfig.VaultInsecure, vaultCache, &logger)
 	if err != nil {
 		logger.Fatal().Err(err).Msg("Could not initialize Vault")
 	}

@@ -31,7 +31,8 @@ type VaultImpl struct {
 }
 
 // NewVault creates Vault
-func NewVault(address, role string, insecure bool, cache cache.Cache, logger *zerolog.Logger) (Vault, error) {
+// Token can be empty, if so OIDC login method will be used
+func NewVault(address, role, token string, insecure bool, cache cache.Cache, logger *zerolog.Logger) (Vault, error) {
 	logger.Debug().Msg("Initialize Vault")
 
 	config := api.DefaultConfig()
@@ -42,17 +43,18 @@ func NewVault(address, role string, insecure bool, cache cache.Cache, logger *ze
 	}
 	client.SetAddress(address)
 
-	token := ""
-	tokenMap := cache.Retrieve(role)
-	if tokenMap == nil {
-		logger.Info().Str("role", role).Msg("Token not available in cache, logging in")
-		var err error
-		if token, err = oidcLogin(role, client, logger); err != nil {
-			return nil, err
+	if token == "" {
+		tokenMap := cache.Retrieve(role)
+		if tokenMap == nil {
+			logger.Info().Str("role", role).Msg("Token not available in cache, logging in")
+			var err error
+			if token, err = oidcLogin(role, client, logger); err != nil {
+				return nil, err
+			}
+			cache.Store(role, map[string]interface{}{"token": token}, tokenTTL)
+		} else {
+			token = tokenMap["token"].(string)
 		}
-		cache.Store(role, map[string]interface{}{"token": token}, tokenTTL)
-	} else {
-		token = tokenMap["token"].(string)
 	}
 
 	client.SetToken(token)
