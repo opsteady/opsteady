@@ -21,7 +21,7 @@ We will configure Vault with two authentication mechanisms: OIDC and JWT.
 
 The OIDC mechanism is used by human operators to access Vault. The OIDC implementation is handled by the Opsteady Azure AD. The OIDC token contains the claims that will grant access to the Vault with an appropriate policy. The primary claim which determines the level of access, is is the 'groups' claim. As an example, if you are a member of the 'platform-admin' group, you will be granted access to the Vault with full administrative privileges.
 
-The JWT mechanism is used by Github actions CI/CD. Vault will validate the presented JWT token with the Github actions issuer and allow access to the Vault with an appropriate policy for CI/CD purposes. This policy does not grant full administrative privileges and is primarly used to generate appropriate credentials and read component configuration. Currently we are using the platform-admin role for CI/CD purposes. This needs to be replaced with the above mentioned CI/CD policy.
+The JWT mechanism is used by Github actions CI/CD. Vault will validate the presented JWT token with the Github actions issuer and allow access to the Vault with an appropriate policy for CI/CD purposes. This policy does not grant full administrative privileges and is primarily used to generate appropriate credentials and read component configuration. Currently we are using the platform-admin role for CI/CD purposes. This needs to be replaced with the above mentioned CI/CD policy.
 
 Of course, the default token authentication mechanism is always activated. The above mentioned authentication mechanisms actually result in a temporary token that is presented to Vault.
 
@@ -51,7 +51,7 @@ In case of a catastrophic failure, where we lose the entire Vault cluster, we wi
 
 ### Configuration
 
-The initial configuration and defaults for the platform components are addeded manually to Vault. After bootstrapping the management environment, the Vault will be seeded with its configuration values as described in the management setup documentation. We will manually configure the components in Vault for each platform that we onboard. This might be replaced by an automated solution in the future.
+The initial configuration and defaults for the platform components are added manually to Vault. After bootstrapping the management environment, the Vault will be seeded with its configuration values as described in the management setup documentation. We will manually configure the components in Vault for each platform that we onboard. This might be replaced by an automated solution in the future.
 
 ## Consequences
 
