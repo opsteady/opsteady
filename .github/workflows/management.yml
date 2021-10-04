@@ -1,0 +1,58 @@
+name: management
+on:
+  push:
+    paths:
+      - '.github/workflows/**'
+      - 'management/**'
+jobs:
+  management:
+    runs-on: ubuntu-20.04
+    env:
+      VAULT_ADDRESS: https://vault.management.os.opsteady.com
+    permissions:
+      id-token: write
+      contents: read
+    container:
+      image: opsteadyos.azurecr.io/cicd:1.0.0
+      credentials:
+        username: ${{ secrets.acr_username }}
+        password: ${{ secrets.acr_password }}
+    steps:
+      - run: sleep 5 # Needed (for now) because of race condition with the JWT token availability
+
+      - name: Get JWT Token
+        run: |
+          VAULT_JWT=$(curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL" | jq -r '.value')
+          echo VAULT_JWT=$VAULT_JWT >> $GITHUB_ENV
+
+      - name: Authenticate to Vault
+        run: |
+          VAULT_TOKEN=$(vault write -address=${{ env.VAULT_ADDRESS }} -field=token auth/gha/login role=workflow jwt=${{ env.VAULT_JWT }})
+          echo VAULT_TOKEN=$VAULT_TOKEN >> $GITHUB_ENV
+          echo "::add-mask::$VAULT_TOKEN"
+
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Configure Opsteady CLI
+        run: |
+          cat <<EOF > config.yaml
+          tenant_id: ${{ secrets.tenant_id }}
+          management_subscription_id: ${{ secrets.management_subscription_id }}
+          EOF
+
+      - name: Deploy Management Bootstrap
+        run: |
+          go run main.go deploy --dry-run --azure-id management -c management-bootstrap --cache
+
+      - name: Deploy Management Infrastructure
+        run: |
+          go run main.go deploy --dry-run --azure-id management -c management-infra --cache
+
+      - name: Deploy Management Vault Infrastructure
+        run: |
+          go run main.go deploy --dry-run --azure-id management -c management-vault-infra --cache
+
+      - name: Deploy Management Vault Configuration
+        run: |
+          go run main.go deploy --dry-run --azure-id management -c management-vault-config --cache

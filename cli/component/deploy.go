@@ -1,9 +1,7 @@
 package component
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
 
 	"github.com/opsteady/opsteady/cli/tasks"
 )
@@ -37,21 +35,11 @@ func (c *DefaultComponent) DeployTerraform(componentConfig map[string]interface{
 	backendStorageName := componentConfig["management_bootstrap_terraform_state_account_name"].(string) // Always expecting this to be here
 	terraform := tasks.NewTerraform(c.ComponentFolder, c.TerraformBackendConfigPath, backendStorageName, c.GlobalConfig.CachePath, c.Logger)
 
-	// Marshall the component configuration to a JSON tfvars file
-	tfvars, err := json.Marshal(componentConfig)
-	if err != nil {
-		c.Logger.Fatal().Err(err).Msg("Failed to marshall the component config to tfvars JSON")
-	}
-
-	varsPath := fmt.Sprintf("/tmp/%s.tfvars.json", c.ComponentName)
-
-	err = os.WriteFile(varsPath, tfvars, 0644)
-	if err != nil {
-		c.Logger.Fatal().Err(err).Msg("Failed to create tfvars JSON file")
-	}
+	varsPath := fmt.Sprintf("%s/%s.tfvars.json", c.GlobalConfig.TmpFolder, c.ComponentName)
+	c.WriteConfigToJSON(varsPath)
 
 	if c.DryRun {
-		c.Logger.Info().Msg("DryRun........")
+		c.Logger.Info().Msg("DryRun mode activated")
 		if err := terraform.InitAndPlan(varsPath); err != nil {
 			c.Logger.Fatal().Err(err).Msg("could not plan")
 		}

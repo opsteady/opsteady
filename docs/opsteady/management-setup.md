@@ -67,7 +67,6 @@ terraform init -reconfigure -backend-config "storage_account_name=This name shou
 
 When creating the initial management infra, we provide a set of defaults for the Terraform values. They are located in `management/defaults/infra.default.tfvars.json`. To deploy the management infrastructure successfully, copy the default file to a custom tfvars file called `management/defaults/infra.tfvars.json`.
 
-In this file update the `management_infra_key_vault_ip_rules` to include your IP address in the (now) empty list. This makes sure that when Terraform needs to configure the Key Vault it can do so from your location.
 In this file also update the `management_infra_key_vault_administrators` to include your AD user object ID. You can find this in the Azure AD. This makes sure that you can administer the key vault.
 In this file also update the `management_infra_platform_admins` to include your AD user object ID. You can find this in the Azure AD. This makes sure that you can login to the Vault later on and manageme the entire platform.
 
@@ -128,7 +127,7 @@ terraform init -backend-config storage_account_name="This name should match mana
 terraform providers lock -platform=darwin_amd64 -platform=linux_amd64
 
 # Before we can apply the Terraform code, we need to grab the Vault CA certificate and put it in a well-known location, so that the Vault provider can use it.
-curl -o vault-ca.pem https://${management_vault_infra_storage_account_name}.blob.core.windows.net/vault-ca/ca.pem
+curl -o /vault-ca.pem https://${management_vault_infra_storage_account_name}.blob.core.windows.net/vault-ca/ca.pem
 
 # This command will give you some warnings about values for undeclared variables. This is expected and can be ignored.
 terraform apply -compact-warnings -var-file=../../defaults/infra.tfvars.json -var-file=../../defaults/vault-config.tfvars.json -var vault_token=$VAULT_ROOT_TOKEN_FROM_VAULT_INFRA_RUN
@@ -178,7 +177,7 @@ docker push ${management_infra_acr_name}.azurecr.io/cicd:1.0.0 .
 
 ## 03 Seed Vault with management configuration
 
-Before we can start using the CLI to manage our management environment we need to seed the Vault with our configuration data. For each of the components (management infra, vault infra and vault config) you have created a `$COMPONENT.fvars.json` file that contains the settings for Terraform. This information now needs to be stored in Vault. Please review the contents of the `tfvars.json` files in the `management/defaults` folder and make the adjustments you want (e.g. remove your IP from the key vault whitelist in infra).
+Before we can start using the CLI to manage our management environment we need to seed the Vault with our configuration data. For each of the components (management infra, vault infra and vault config) you have created a `$COMPONENT.fvars.json` file that contains the settings for Terraform. This information now needs to be stored in Vault. Please review the contents of the `tfvars.json` files in the `management/defaults` folder and make the adjustments you want.
 
 ```
 # Make sure that we are in the root of the repository

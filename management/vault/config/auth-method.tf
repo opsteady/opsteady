@@ -83,3 +83,21 @@ resource "vault_jwt_auth_backend_role" "platform_admin" {
   groups_claim = "groups"
   bound_claims = { "groups" = data.azuread_group.platform_admin.id }
 }
+
+resource "vault_jwt_auth_backend" "github_actions" {
+  path               = "gha"
+  oidc_discovery_url = "https://vstoken.actions.githubusercontent.com"
+}
+
+resource "vault_jwt_auth_backend_role" "workflow" {
+  backend        = vault_jwt_auth_backend.github_actions.path
+  role_name      = "workflow"
+  token_policies = ["platform-admin"] # TODO: Change this to a scoped CI/CD policy
+
+  bound_audiences = ["https://github.com/opsteady/opsteady"]
+  bound_claims = {
+    "repository" = "opsteady/opsteady"
+  }
+  user_claim = "actor"
+  role_type  = "jwt"
+}
