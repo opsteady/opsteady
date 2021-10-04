@@ -85,6 +85,7 @@ func initializeGlobalFlags() {
 	viper.BindEnv("vault_address")
 	viper.BindPFlag("vault_insecure", rootCmd.Flags().Lookup("vault-insecure"))
 	viper.BindEnv("vault_insecure")
+	viper.BindEnv("vault_token")
 }
 
 func initializeGlobalConfig() {

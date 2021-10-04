@@ -21,7 +21,7 @@ var (
 				logger.Fatal().Err(err).Msg("Could not initialize token cache")
 			}
 
-			if _, err := vault.NewVault(globalConfig.VaultAddress, role, globalConfig.VaultInsecure, tokenCache, &logger); err != nil {
+			if _, err := vault.NewVault(globalConfig.VaultAddress, role, "", globalConfig.VaultInsecure, tokenCache, &logger); err != nil {
 				logger.Fatal().Err(err).Msg("Could not login to Vault")
 			}
 			logger.Debug().Msg("Login successful")
