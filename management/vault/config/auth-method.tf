@@ -94,7 +94,7 @@ resource "vault_jwt_auth_backend_role" "workflow" {
   role_name      = "workflow"
   token_policies = ["platform-admin"] # TODO: Change this to a scoped CI/CD policy
 
-  bound_audiences = ["https://github.com/opsteady/opsteady"]
+  bound_audiences = ["https://github.com/opsteady"]
   bound_claims = {
     "repository" = "opsteady/opsteady"
   }

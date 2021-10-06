@@ -37,7 +37,7 @@ func NewCredentials(vault vault.Vault, cache cache.Cache, logger *zerolog.Logger
 		vault:      vault,
 		logger:     logger,
 		cache:      cache,
-		AzureSleep: 4 * time.Second,
+		AzureSleep: 20 * time.Second,
 	}
 }
 
@@ -102,7 +102,7 @@ func (vc *VaultCredentials) getAzureCreds(path string, id string) (map[string]in
 
 	// Azure API is eventually consistent with permissions, therefore we wait an arbitrary amount of time.
 	// This way we make sure that the new service principal has permissions on the subscription.
-	vc.logger.Warn().Dur("wait", vc.AzureSleep).Msg("Waiting for credentials to be processed by Azure")
+	vc.logger.Info().Dur("wait", vc.AzureSleep).Msg("Waiting for credentials to be processed by Azure")
 	time.Sleep(vc.AzureSleep)
 
 	vc.cache.Store(id, secret, DefaultTTL)
