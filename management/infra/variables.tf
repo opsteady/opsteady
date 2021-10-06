@@ -38,10 +38,6 @@ variable "management_infra_key_vault_name" {
   type = string
 }
 
-variable "management_infra_key_vault_ip_rules" {
-  type = list
-}
-
 variable "management_infra_key_vault_administrators" {
   description = "A list of principal IDs that can administer the key vault"
   type = list
@@ -55,9 +51,11 @@ variable "management_infra_platform_admins" {
 variable "management_infra_platform_admin_owners" {
   type = list(string)
 }
+
 variable "management_infra_platform_developers" {
   type = list(string)
 }
+
 variable "management_infra_platform_developer_owners" {
   type = list(string)
 }
@@ -65,6 +63,7 @@ variable "management_infra_platform_developer_owners" {
 variable "management_infra_platform_viewers" {
   type = list(string)
 }
+
 variable "management_infra_platform_viewer_owners" {
   type = list(string)
 }
@@ -72,6 +71,7 @@ variable "management_infra_platform_viewer_owners" {
 variable "management_infra_vnet_address_space" {
   type = list(any)
 }
+
 variable "management_infra_azure_subnet_pods_address_prefixes" {
   type = list(any)
 }
