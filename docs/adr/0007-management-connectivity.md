@@ -7,6 +7,7 @@ Date: 2021-08-27
 Status: Accepted on 2021-08-27
 Builds on [0006-management-environment.md](0006-management-environment.md) on 2021-08-27
 Builds on [0005-multi-cloud.md](0005-multi-cloud.md) on 2021-08-27
+Foundation for [0018-vault-setup.md](0018-vault-setup.md) on 2021-10-06
 
 ## Context
 
@@ -34,7 +35,7 @@ Although ideal in overall management simplicity, it comes with significant downs
 
 ### VPN based access
 
-To circumvent to costs and complexity of running a fully connected management network, we could opt to not have a hub-spoke model and instead connect to each platform environment when the need arises. This is a simple model that does not incur a lot of costs, since you don't pay for point-to-site VPN if you are not connected and we don't need to connect our environments to one central location. We will still be able to use private endpoints for all our services.
+To circumvent the costs and complexity of running a fully connected management network, we could opt to not have a hub-spoke model and instead connect to each platform environment when the need arises. This is a simple model that does not incur a lot of costs, since you don't pay for point-to-site VPN if you are not connected and we don't need to connect our environments to one central location. We will still be able to use private endpoints for all our services.
 
 However, this approach also has some downsides:
 

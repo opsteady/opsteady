@@ -13,9 +13,9 @@ Define how we will prevent "it works on my machine".
 
 ## Decision
 
-Everyone is allowed to use tools available on their own machine. But by providing a Docker container with all the tooling required we can achieve consistency when people work in Visual Studio code, on the terminal and while running the CI/CD process.
+Everyone is allowed to use tools available on their own machine. But by providing a Docker container with all the tooling required, we can achieve consistency when people work in Visual Studio code, both on the terminal and while running the CI/CD process.
 
-The decision is that the "only" tool I need for the project is Docker and I should be able to run everything. But the decision is also that everything run in the container should also be runnable outside the container, as long as the local tools match with the ones defined in the container.
+The decision is that the "only" tool I need for the project is Docker and which allows me to run everything. But the decision is also that everything that runs in the container should also be runnable outside the container, as long as the local tools match with the ones defined in the container.
 
 ## Consequences
 

@@ -12,7 +12,7 @@ Foundation for [0013-management-setup.md](0013-management-setup.md)) on 2021-09-
 
 ## Context
 
-We want to have one environment to do maintenance from in all other environments because it makes things much simpler. This environment can also be used to run globally available services.
+We want to have one environment to do maintenance in all other environments because it makes things much simpler. This environment can also be used to run globally available services.
 Besides that, we also need an identity provider (AD) to manage access.
 
 ## Decision
