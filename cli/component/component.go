@@ -1,6 +1,7 @@
 package component
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
@@ -157,7 +158,7 @@ func (c *DefaultComponent) SetPlatformInfoToComponentConfig() {
 func (c *DefaultComponent) RetrieveComponentConfig() map[string]interface{} {
 	values, err := c.ComponentConfig.RetrieveConfig(c.PlatformVersion, c.AzureIDorAwsID(), c.ComponentNameAndAllTheDependencies())
 	if err != nil {
-		c.Logger.Fatal().Err(err).Msg("could not deploy")
+		c.Logger.Fatal().Err(err).Msg("could not retrieve component configuration")
 	}
 	return values
 }
@@ -232,5 +233,19 @@ func (c *DefaultComponent) LoginToAKSorEKS(componentConfig map[string]interface{
 		if err := az.LoginToAKS(clusterName, clusterResourceGroup); err != nil {
 			c.Logger.Fatal().Err(err).Msg("could not login to ASK via az")
 		}
+	}
+}
+
+// WriteConfigToJSON marshalls the component configuration to JSON format and
+// writes it to a file indicated by the path parameter.
+func (c *DefaultComponent) WriteConfigToJSON(path string) {
+	config, err := json.Marshal(c.RetrieveComponentConfig())
+	if err != nil {
+		c.Logger.Fatal().Err(err).Msg("could not marshall the component configuration to JSON")
+	}
+
+	err = os.WriteFile(path, config, 0644)
+	if err != nil {
+		c.Logger.Fatal().Err(err).Msg("could not write the component configuration JSON to a file")
 	}
 }

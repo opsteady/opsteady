@@ -1,5 +1,10 @@
 package utils
 
+import (
+	"encoding/json"
+	"os"
+)
+
 // UniqueNonEmptyElementsOf makes the string list unique
 func UniqueNonEmptyElementsOf(s []string) []string {
 	unique := make(map[string]bool, len(s))
