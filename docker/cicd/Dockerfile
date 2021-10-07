@@ -4,7 +4,7 @@ FROM $ACR_NAME.azurecr.io/base:1.0.0
 USER root
 
 # Used by the Opsteady cli
-RUN install-packages golang-1.16 git
+RUN install-packages golang-1.16 git jq
 
 RUN getfile https://releases.hashicorp.com/terraform/1.0.5/terraform_1.0.5_linux_amd64.zip
 
