@@ -7,6 +7,7 @@ Date: 2021-09-26
 Status: Accepted on 2021-09-26
 Builds on [0016-cli.md](0016-cli.md) on 2021-09-26
 Builds on [0008-vault.md](0008-vault.md) on 2021-09-26
+Foundation for [0018-vault-setup.md](0018-vault-setup.md) on 2021-10-06
 
 ## Context
 

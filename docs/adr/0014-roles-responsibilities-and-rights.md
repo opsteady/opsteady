@@ -12,7 +12,7 @@ We recognize **platform-admin**, **platform-developer** and **platform-viewer** 
 
 ## Decision
 
-While building and extending the platform these responsibilities and rights might change therefore we are keeping a [track outside the ADR](../opsteady/roles-responsibilities-and-rights-matrix.md)
+While building and extending the platform these responsibilities and rights might change, therefore [track this](../opsteady/roles-responsibilities-and-rights-matrix.md) outside the ADR.
 
 At this moment we have not implemented an actual distinction between the roles. For now admin rights are needed for everything.
 

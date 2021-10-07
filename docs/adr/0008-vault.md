@@ -7,6 +7,7 @@ Date: 2021-08-27
 Status: Accepted on 2021-08-27
 Builds on [0006-management-environment.md](0006-management-environment.md) on 2021-08-27
 Foundation for [0017-component-configuration.md](0017-component-configuration.md) on 2021-09-26
+Foundation for [0018-vault-setup.md](0018-vault-setup.md) on 2021-10-06
 
 ## Context
 
