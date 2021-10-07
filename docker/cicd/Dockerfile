@@ -6,7 +6,7 @@ USER root
 # Used by the Opsteady cli
 RUN install-packages golang-1.16 git jq
 
-RUN getfile https://releases.hashicorp.com/terraform/1.0.5/terraform_1.0.5_linux_amd64.zip
+RUN getfile https://releases.hashicorp.com/terraform/1.0.8/terraform_1.0.8_linux_amd64.zip
 
 RUN getfile https://releases.hashicorp.com/vault/1.8.2/vault_1.8.2_linux_amd64.zip
 
