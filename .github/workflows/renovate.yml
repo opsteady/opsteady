@@ -1,7 +1,5 @@
 name: Renovate
 on:
-  push:
-    branches: add-renovate-workflow
   schedule:
     - cron: '0/15 * * * *'
 jobs:
