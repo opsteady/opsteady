@@ -71,7 +71,7 @@ func (c *ComponentConfigImpl) RetrieveConfig(version, environment string, compon
 	for _, component := range components {
 		wg.Add(1)
 		if strings.HasPrefix(component, "management-") {
-			// Don;t look at the platform env because it is the management env
+			// Don't look at the platform env because it is the management env
 			environment = "management"
 		}
 		path := fmt.Sprintf("config/data/%s/platform/%s/%s-default", version, environment, component)
@@ -82,7 +82,7 @@ func (c *ComponentConfigImpl) RetrieveConfig(version, environment string, compon
 	for _, component := range components {
 		wg.Add(1)
 		if strings.HasPrefix(component, "management-") {
-			// Don;t look at the platform env because it is the management env
+			// Don't look at the platform env because it is the management env
 			environment = "management"
 		}
 		path := fmt.Sprintf("config/data/%s/platform/%s/%s-tf", version, environment, component)

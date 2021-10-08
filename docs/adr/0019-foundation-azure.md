@@ -18,7 +18,7 @@ We are going to expose the Azure Key Vault endpoint on the Internet while we are
 
 Currently, we are using the management service principle for CI/CD purposes to gather information and change data in the management subscription, like the DNS. This needs to be replaced with a dedicated service principle with the least privilege access necessary.
 
-Foundation design: TODO add Azure diagram
+[Foundation design](../images/foundation-azure-0019.drawio.png)
 
 ## Consequences
 

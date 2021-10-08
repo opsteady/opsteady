@@ -38,7 +38,7 @@ As mentioned before we also need platform specific values for a component, which
 /config/platform/env555/compC
 ```
 
-The difference between the component and platform values is that component values should not be changing across the platform while the platform values do change. It doesn't mean every component has to have these values, it is possible to keep alle the values in the platform. Therefore it can happen that no values are eventually in the component path.
+The difference between the component and platform values is that component values should not be changing across the platform while the platform values do change. It doesn't mean every component has to have these values, it is possible to keep all the values in the platform. Therefore it can happen that no values are eventually in the component path.
 
 This works fine when you are always using the "master" version but we also want to know which values have been used in which deployment. Therefore, whenever we do a deployment of the same version, the same values are used while we continue editing the values for new releases. Configuration and secrets need to be immutable. To achieve this, we will prefix all the config with a main version `v0` which will be used to add and adjust values. We then deploy a new release which copies all the Vault paths to the new version and threat that path as read-only. This will look like:
 
