@@ -142,10 +142,6 @@ The Vault root token should only be used in emergencies and never in regular Vau
 ```bash
 export VAULT_TOKEN=$ROOT_TOKEN_FROM_VAULT_INIT
 
-# The VAULT_CACERT default location is not yet active, so unset it for this command to succeed.
-# We are providing the ca cert directly from the command line.
-unset VAULT_CACERT
-
 vault token revoke -ca-cert=vault-ca.pem -address=https://vault.management.${management_infra_domain} -self
 ```
 
