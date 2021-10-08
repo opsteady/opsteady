@@ -22,9 +22,9 @@ It is important to know that Vault uses paths like `/config/abcd` where `abcd` c
 Every component needs its own manual configuration that is preset by a person as a default. We will store every component in its path and every path holds all the default values for that component:
 
 ```bash
-/config/component/componentA-manual
-/config/component/componentB-manual
-/config/component/componentC-manual
+/config/component/componentA-default
+/config/component/componentB-default
+/config/component/componentC-default
 ```
 
 As mentioned before we also need platform specific values for a component, which will override the default values. We could store them as follows:
