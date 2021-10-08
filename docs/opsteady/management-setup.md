@@ -139,12 +139,8 @@ You should now be able to login via OIDC on `https://vault.management.${manageme
 
 The Vault root token should only be used in emergencies and never in regular Vault usage. The root token can always be regenerated from the recovery keys. To ensure maximum security you should revoke the root token with the following commands:
 
-```
+```bash
 export VAULT_TOKEN=$ROOT_TOKEN_FROM_VAULT_INIT
-
-# The VAULT_CACERT default location is not yet active, so unset it for this command to succeed.
-# We are providing the ca cert directly from the command line.
-unset VAULT_CACERT
 
 vault token revoke -ca-cert=vault-ca.pem -address=https://vault.management.${management_infra_domain} -self
 ```
@@ -159,16 +155,24 @@ The initial manual bootstrap for the management environment is now complete, wel
 
 The Vault CA is needed to securely connect to Vault from the CLI. The Vault CA is hosted at a well-known location that you've configured in the Vault infrastructure step. Build the Docker image again but this time add the a build argument to trigger the Vault CA download during build:
 
-```
+```bash
 cd docker/cicd
 docker build --build-arg ACR_NAME=dev-management --build-arg VAULT_CA_STORAGE_ACCOUNT=${management_vault_infra_storage_account_name} -t dev-management.azurecr.io/cicd:1.0.0 .
+```
+
+Note: If you want to work locally please add the certificate to your local machine, CLI and the browser. This works for Ubuntu:
+
+```bash
+curl -o vault-ca.pem https://$VAULT_CA_STORAGE_ACCOUNT.blob.core.windows.net/vault-ca/ca.pem
+sudo openssl x509 -in vault-ca.pem -inform PEM -out /usr/local/share/ca-certificates/vault-ca.crt
+sudo update-ca-certificates
 ```
 
 ## 02 Push the CI/CD container image to the registry
 
 After a successful build you can push the image to the registry:
 
-```
+```bash
 az login
 az account set --subscription management
 az acr login -n ${management_infra_acr_name}
@@ -179,7 +183,7 @@ docker push ${management_infra_acr_name}.azurecr.io/cicd:1.0.0 .
 
 Before we can start using the CLI to manage our management environment we need to seed the Vault with our configuration data. For each of the components (management infra, vault infra and vault config) you have created a `$COMPONENT.fvars.json` file that contains the settings for Terraform. This information now needs to be stored in Vault. Please review the contents of the `tfvars.json` files in the `management/defaults` folder and make the adjustments you want.
 
-```
+```bash
 # Make sure that we are in the root of the repository
 cd ../../
 
@@ -210,7 +214,7 @@ vault kv put config/v0/platform/management/management-vault-config-default @mana
 
 We are now ready to manage all the management components with the CLI. First we need to configure the CLI by copying the `default-config.yaml` to `config.yaml` and entering the appropriate values for the Vault location and management environment.
 
-```
+```bash
 cp default-config.yaml config.yaml
 
 # Open the config.yaml and enter the correct values for your environment
@@ -218,7 +222,7 @@ cp default-config.yaml config.yaml
 
 Now we can run the CLI for all the components and check the Terraform plan. Depending on if you made any changes to the configurations, you will see some changes but mostly it should show none.
 
-```
+```bash
 go run main.go deploy -c management-bootstrap --dry-run --azure-id management --cache
 go run main.go deploy -c management-infra --dry-run --azure-id management --cache
 go run main.go deploy -c management-vault-infra --dry-run --azure-id management --cache
