@@ -26,6 +26,10 @@ ENV PATH="/usr/lib/go-1.16/bin:${PATH}"
 ARG VAULT_CA_STORAGE_ACCOUNT
 RUN if [[ ! -z "$VAULT_CA_STORAGE_ACCOUNT" ]]; then curl -o /vault-ca.pem https://$VAULT_CA_STORAGE_ACCOUNT.blob.core.windows.net/vault-ca/ca.pem; fi
 
+# Used by Terraform
 ENV VAULT_CACERT=/vault-ca.pem
+
+RUN openssl x509 -in /vault-ca.pem -inform PEM -out /usr/local/share/ca-certificates/vault-ca.crt
+RUN update-ca-certificates
 
 USER 1000

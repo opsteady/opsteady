@@ -43,9 +43,8 @@ provider "azuread" {
 }
 
 provider "vault" {
-  address      = "https://vault.management.${var.management_infra_domain}"
-  token        = var.vault_token
-  ca_cert_file = var.management_vault_config_ca_cert_file
+  address = "https://vault.management.${var.management_infra_domain}"
+  token   = var.vault_token
 }
 
 provider "aws" {
