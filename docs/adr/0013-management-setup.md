@@ -15,7 +15,7 @@ Define the management environment resources and how it is setup.
 ## Decision
 
 Management environment design:
-![management](../images/management-1_0.drawio.svg)
+![management](../images/management-0013.drawio.png)
 
 Management environment setup requires some manual steps to get bootstrapped as it is the first environment that is created. After the initial setup, the environment can be managed the same way as others. The way the environment is setup is [described outside the ADR](../opsteady/initial-setup.md).
 
