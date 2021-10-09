@@ -61,7 +61,7 @@ func (vc *VaultCredentials) AWS(accountID string, ttl string) (map[string]interf
 	}
 
 	vc.logger.Debug().Str("id", id).Msg("Requesting AWS credentials from Vault")
-	secret, err = vc.vault.Write(fmt.Sprintf("aws/%s/sts/vault-aws-secrets", accountID), data)
+	secret, err = vc.vault.Write(fmt.Sprintf("aws/%s/sts/vault-aws-access", accountID), data)
 	if err != nil {
 		return nil, errors.Wrapf(err, "failed to retrieve credentials from Vault for %s", id)
 	}

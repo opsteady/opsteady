@@ -7,7 +7,7 @@ resource "azurerm_dns_zone" "public" {
 resource "azurerm_dns_ns_record" "public_management_delegation" {
   provider = azurerm.management
 
-  name                = var.foundation_azure_name
+  name                = var.foundation_azure_public_name
   zone_name           = data.azurerm_dns_zone.public_root.name
   resource_group_name = "management"
   ttl                 = 300

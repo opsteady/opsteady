@@ -19,17 +19,22 @@ variable "management_vault_config_subscriptions" {
   type = map(string)
 }
 
-# A map of AWS account IDs and names.
+# A list of AWS accounts
 variable "management_vault_config_accounts" {
-  type = map(string)
+  type = list(object({
+    name       = string
+    id         = string
+    access_key = string
+    secret_key = string
+  }))
 }
 
 variable "azuread_client_id" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "azuread_client_secret" {
-  type = string
+  type    = string
   default = ""
 }
