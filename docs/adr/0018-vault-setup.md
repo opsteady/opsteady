@@ -49,6 +49,8 @@ The data in Vault is crucial to manage the Opsteady platforms. As a first line o
 
 In case of a catastrophic failure, where we lose the entire Vault cluster, we will ensure that we have backups of the Vault data in a durable and secure storage location in the cloud. At the time of writing the backups have not been implemented yet. This is something that we will do as the Opsteady platform matures and we are moving towards onboarding users.
 
+Although Vault is very important we are not going to do any realtime monitoring and alerting on it for now. This Vault is not part of a runtime for any of the platforms running and is only used on the changes on the platform. We are accepting the risk that Vault may go down and we will need to repair it before being able to run the CI/CD. In case of a big emergency we can still run components locally from local Vault or from the config files without using the CLI.
+
 ### Configuration
 
 The initial configuration and defaults for the platform components are added manually to Vault. After bootstrapping the management environment, the Vault will be seeded with its configuration values as described in the management setup documentation. We will manually configure the components in Vault for each platform that we onboard. This might be replaced by an automated solution in the future.

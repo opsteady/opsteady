@@ -6,6 +6,8 @@ Date: 2021-10-08
 
 Status: Accepted on 2021-10-08
 
+Foundation for [0023-kubernetes-azure.md](0023-kubernetes-azure.md) on 2021-10-10
+
 ## Context
 
 Describe what the foundation is and any configuration decision made.

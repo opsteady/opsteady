@@ -85,7 +85,7 @@ AWS offers managed addons for EKS. These are crucial system components that we n
 
 ### Compliance
 
-**Patching**: the EKS AMIs are continuously updated by EKS but we need to active them in the node groups. A future ADR will describe the exact process of how this enforced. Until that time we will monitor the EKS AMIs and initiate an update manually to ensure we keep using the latest version.
+**Patching**: the EKS AMIs are continuously updated by EKS but we need to activate them in the node groups. A future ADR will describe the exact process of how this enforced. Until that time we will monitor the EKS AMIs and initiate an update manually to ensure we keep using the latest version.
 
 **Policies**: EKS does not support a generic policy engine (like OPA, Kyverno, etc.) out of the box. Our solution for policy enforcement will be described in a future ADR.
 
