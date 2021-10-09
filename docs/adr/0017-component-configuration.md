@@ -64,16 +64,16 @@ Besides the manual configuration, some components or "technologies" inside the s
 ```bash
 /config/v1.0.2/component/compA
 /config/v1.0.2/component/compB
-/config/v1.0.2/platform/env111/compA
+/config/v1.0.2/platform/env111/compA-default
 /config/v1.0.2/platform/env111/compA-tf
-/config/v1.0.2/platform/env111/compB
+/config/v1.0.2/platform/env111/compB-default
 /config/v1.0.2/platform/env111/compB-tf
 
 /config/v1.5.1/component/compA
 /config/v1.5.1/component/compB
-/config/v1.5.1/platform/env111/compA
+/config/v1.5.1/platform/env111/compA-default
 /config/v1.5.1/platform/env111/compA-tf
-/config/v1.5.1/platform/env111/compB
+/config/v1.5.1/platform/env111/compB-default
 /config/v1.5.1/platform/env111/compB-tf
 ```
 

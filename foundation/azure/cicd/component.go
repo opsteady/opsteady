@@ -12,6 +12,6 @@ func (f *FoundationAzure) Initialize(defaultComponent component.DefaultComponent
 	f.DefaultComponent = defaultComponent
 	f.DefaultComponent.Terraform = "" // Use root of the folder
 	f.RequiresComponents("management-infra")
-	f.DefaultComponent.AddAzureADCredentialsToComponentConfig()
 	f.DefaultComponent.AddManagementCredentialsToComponentConfig()
+	f.DefaultComponent.SetVaultInfoToComponentConfig()
 }

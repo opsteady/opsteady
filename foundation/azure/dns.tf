@@ -1,6 +1,6 @@
 # Create a unique subdomain for this platform
 resource "azurerm_dns_zone" "public" {
-  name                = "${var.foundation_azure_name}.${var.management_infra_domain}"
+  name                = "${var.foundation_azure_public_name}.${var.management_infra_domain}"
   resource_group_name = azurerm_resource_group.foundation.name
 }
 

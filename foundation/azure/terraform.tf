@@ -17,11 +17,6 @@ terraform {
   }
 }
 
-provider "azuread" {
-  client_id     = var.azuread_client_id
-  client_secret = var.azuread_client_secret
-}
-
 provider "azurerm" {
   subscription_id = var.foundation_azure_subscription_id
   features {}
@@ -35,4 +30,9 @@ provider "azurerm" {
   subscription_id = var.management_subscription_id
   tenant_id       = var.tenant_id
   features {}
+}
+
+provider "vault" {
+  address = var.vault_address
+  token   = var.vault_token
 }

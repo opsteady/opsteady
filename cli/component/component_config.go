@@ -63,7 +63,7 @@ func (c *ComponentConfigImpl) RetrieveConfig(version, environment string, compon
 	c.logger.Debug().Msg("Fetch default settings for components")
 	for _, component := range components {
 		wg.Add(1)
-		path := fmt.Sprintf("config/data/%s/component/%s-default", version, component)
+		path := fmt.Sprintf("config/data/%s/component/%s", version, component)
 		go c.fetchConfig(path, component, chanComponents, chanErrors, &wg)
 	}
 
