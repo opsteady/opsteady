@@ -18,3 +18,6 @@
 - [15. Security and Compliance](0015-security-and-compliance.md)
 - [16. CLI](0016-cli.md)
 - [17. Component configuration](0017-component-configuration.md)
+- [18. Vault setup](0018-vault-setup.md)
+- [19. Platform naming](0019-platform-naming.md)
+- [20. Foundation Azure](0020-foundation-azure.md)

@@ -38,3 +38,10 @@ provider "registry.terraform.io/hashicorp/azurerm" {
     "zh:e93a377a1e823df69718686703b07f1712046eeb742006022e982f2e8a594161",
   ]
 }
+
+provider "registry.terraform.io/hashicorp/vault" {
+  version = "2.24.1"
+  hashes = [
+    "h1:MUzJ+jOOPBoyGNWGjESE+t2rIjTobw08Y73jgU+d+EU=",
+  ]
+}

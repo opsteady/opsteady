@@ -39,7 +39,7 @@ For AWS, Vault generates a temporary access key for a role in the target account
 
 The information stored in Vault is highly sensitive and should be protected at all costs from unauthorized access. The above mentioned authentication mechanisms are the main barrier for access to the Vault but the endpoint for Vault, which is an HTTP API service, can also be shielded on the network level.
 
-We are going to expose the Vault endpoint on the Internet while we are building up the platform. Putting the endpoint on a private network complicates the CI/CD setup and overall management of the platform. We understand that this is a risk but we accept this risk for now. Once the Opsteady platform matures, and we move towards onboarding of customers, we will put Vault (and related security sensitive infrastructure like Azure Key Vault) on a private network with gated access controls (proxy) in place. The exact setup for this still needs to be determined.
+We are going to expose the Vault endpoint on the Internet while we are building up the platform. Putting the endpoint on a private network complicates the CI/CD setup and overall management of the platform. We understand that this is a risk but we accept this risk for now. Once the Opsteady platform matures, and we move towards onboarding of users, we will put Vault (and related security sensitive infrastructure like Azure Key Vault) on a private network with gated access controls (proxy) in place. The exact setup for this still needs to be determined.
 
 ### High-availability and Storage
 
@@ -47,7 +47,7 @@ Vault has several different options for persisting the data that is stored insid
 
 The data in Vault is crucial to manage the Opsteady platforms. As a first line of defense against data loss and unavailability, we run Vault in a distributed setup with three Vault servers on different virtual machines that exist in different availability zones. This allows for the failure of one Vault server and still be able to use Vault. The data will be replicated across these servers, so there is always the possibility to restore data from one of the existing Vault servers. This already gives us a high degree of data reliability. The storage disks themselves are Azure based disks that are provisioned through Kubernetes persistent volumes. They exist on their own, separately from the virtual machines.
 
-In case of a catastrophic failure, where we lose the entire Vault cluster, we will ensure that we have backups of the Vault data in a durable and secure storage location in the cloud. At the time of writing the backups have not been implemented yet. This is something that we will do as the Opsteady platform matures and we are moving towards onboarding customers.
+In case of a catastrophic failure, where we lose the entire Vault cluster, we will ensure that we have backups of the Vault data in a durable and secure storage location in the cloud. At the time of writing the backups have not been implemented yet. This is something that we will do as the Opsteady platform matures and we are moving towards onboarding users.
 
 ### Configuration
 
