@@ -1,5 +1,5 @@
 terraform {
-  required_version = "= 1.0.8"
+  required_version = "=1.0.8"
 
   required_providers {
     azurerm = {
@@ -11,20 +11,20 @@ terraform {
       version = "~> 2.24.0"
     }
 
-    azuread = {
-      version = "~> 2.5.0"
+    aws = {
+      version = "~> 3.62.0"
     }
   }
 
   backend "azurerm" {
-    resource_group_name = "terraform-state"
-    container_name      = "platform"
+    resource_group_name  = "terraform-state"
+    storage_account_name = "aiplatformmgmt"
+    container_name       = "platform"
   }
 }
 
-provider "azurerm" {
-  subscription_id = var.foundation_azure_subscription_id
-  features {}
+provider "aws" {
+  region = var.foundation_aws_region
 }
 
 provider "azurerm" {

@@ -204,10 +204,10 @@ export VAULT_ADDR=https://vault.management.${management_infra_domain}
 vault login -method=oidc role=platform-admin listenaddress=0.0.0.0
 
 # Store the component configurations
-vault kv put config/v0/platform/management/management-bootstrap-default @management/defaults/bootstrap.tfvars.json
-vault kv put config/v0/platform/management/management-infra-default @management/defaults/infra.tfvars.json
-vault kv put config/v0/platform/management/management-vault-infra-default @management/defaults/vault-infra.tfvars.json
-vault kv put config/v0/platform/management/management-vault-config-default @management/defaults/vault-config.tfvars.json
+vault kv put config/v0/platform/management/management-bootstrap @management/defaults/bootstrap.tfvars.json
+vault kv put config/v0/platform/management/management-infra @management/defaults/infra.tfvars.json
+vault kv put config/v0/platform/management/management-vault-infra @management/defaults/vault-infra.tfvars.json
+vault kv put config/v0/platform/management/management-vault-config @management/defaults/vault-config.tfvars.json
 ```
 
 ## 04 Run the CLI

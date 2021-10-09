@@ -74,7 +74,7 @@ func (c *ComponentConfigImpl) RetrieveConfig(version, environment string, compon
 			// Don't look at the platform env because it is the management env
 			environment = "management"
 		}
-		path := fmt.Sprintf("config/data/%s/platform/%s/%s-default", version, environment, component)
+		path := fmt.Sprintf("config/data/%s/platform/%s/%s", version, environment, component)
 		go c.fetchConfig(path, component, chanPlatform, chanErrors, &wg)
 	}
 

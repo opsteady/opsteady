@@ -3,6 +3,7 @@ package components
 
 import (
 	"github.com/opsteady/opsteady/cli/component"
+	foundationAWS "github.com/opsteady/opsteady/foundation/aws/cicd"
 	foundationAzure "github.com/opsteady/opsteady/foundation/azure/cicd"
 	managementBootstrap "github.com/opsteady/opsteady/management/bootstrap/cicd"
 	managementInfra "github.com/opsteady/opsteady/management/infra/cicd"
@@ -20,4 +21,5 @@ func init() {
 	Components["management-vault-infra"] = &managementVaultInfra.ManagementVaultInfra{}
 	Components["management-vault-config"] = &managementVaultConfig.ManagementVaultConfig{}
 	Components["foundation-azure"] = &foundationAzure.FoundationAzure{}
+	Components["foundation-aws"] = &foundationAWS.FoundationAWS{}
 }
