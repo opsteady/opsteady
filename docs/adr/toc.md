@@ -21,3 +21,5 @@
 - [18. Vault setup](0018-vault-setup.md)
 - [19. Platform naming](0019-platform-naming.md)
 - [20. Foundation Azure](0020-foundation-azure.md)
+- [21. Foundation AWS](0021-foundation-aws.md)
+- [22. CNI choice](0022-cni-choice.md)
