@@ -58,6 +58,13 @@ Azure needs to be split into one subnet which is spread across all Availability 
 
 In AWS we still have some IP subnets left because of the split we need to do which we can use for other load balancers or to add some other new features in the future. If for some reason we hit a problem with the ranges we could extend those with the ranges left or we could add another /19 or a smaller range depending on the needs.
 
+Azure doesn't allow to use one of the [following ranges](https://docs.microsoft.com/en-us/azure/aks/configure-azure-cni):
+
+- 169.254.0.0/16
+- 172.30.0.0/16
+- 172.31.0.0/16
+- 192.0.2.0/24
+
 ## Consequences
 
 We need to keep a register of all the IP ranges used and unused and the IP ranges left inside the /19 range.
