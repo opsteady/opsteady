@@ -5,6 +5,7 @@ import (
 	"github.com/opsteady/opsteady/cli/component"
 	foundationAWS "github.com/opsteady/opsteady/foundation/aws/cicd"
 	foundationAzure "github.com/opsteady/opsteady/foundation/azure/cicd"
+	kubernetesAWSCluster "github.com/opsteady/opsteady/kubernetes/aws/cluster/cicd"
 	managementBootstrap "github.com/opsteady/opsteady/management/bootstrap/cicd"
 	managementInfra "github.com/opsteady/opsteady/management/infra/cicd"
 	managementVaultConfig "github.com/opsteady/opsteady/management/vault/config/cicd"
@@ -22,4 +23,5 @@ func init() {
 	Components["management-vault-config"] = &managementVaultConfig.ManagementVaultConfig{}
 	Components["foundation-azure"] = &foundationAzure.FoundationAzure{}
 	Components["foundation-aws"] = &foundationAWS.FoundationAWS{}
+	Components["kubernetes-aws-cluster"] = &kubernetesAWSCluster.KubernetesAWSCluster{}
 }

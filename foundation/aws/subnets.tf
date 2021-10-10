@@ -1,3 +1,33 @@
+resource "aws_subnet" "eks_a" {
+  vpc_id            = aws_vpc.platform.id
+  cidr_block        = var.foundation_aws_subnet_eks_a
+  availability_zone = var.foundation_aws_zone_eks_a
+
+  tags = {
+    Name = "eks-a-${var.foundation_aws_name}"
+  }
+}
+
+resource "aws_subnet" "eks_b" {
+  vpc_id            = aws_vpc.platform.id
+  cidr_block        = var.foundation_aws_subnet_eks_b
+  availability_zone = var.foundation_aws_zone_eks_b
+
+  tags = {
+    Name = "eks-b-${var.foundation_aws_name}"
+  }
+}
+
+resource "aws_subnet" "eks_c" {
+  vpc_id            = aws_vpc.platform.id
+  cidr_block        = var.foundation_aws_subnet_eks_c
+  availability_zone = var.foundation_aws_zone_eks_c
+
+  tags = {
+    Name = "eks-c-${var.foundation_aws_name}"
+  }
+}
+
 resource "aws_subnet" "pods_a" {
   vpc_id            = aws_vpc.platform.id
   cidr_block        = var.foundation_aws_subnet_pods_a
