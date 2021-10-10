@@ -70,22 +70,24 @@ func (c *ComponentConfigImpl) RetrieveConfig(version, environment string, compon
 	c.logger.Debug().Msg("Fetch settings per environment per component")
 	for _, component := range components {
 		wg.Add(1)
+		env := environment
 		if strings.HasPrefix(component, "management-") {
 			// Don't look at the platform env because it is the management env
-			environment = "management"
+			env = "management"
 		}
-		path := fmt.Sprintf("config/data/%s/platform/%s/%s", version, environment, component)
+		path := fmt.Sprintf("config/data/%s/platform/%s/%s", version, env, component)
 		go c.fetchConfig(path, component, chanPlatform, chanErrors, &wg)
 	}
 
 	c.logger.Debug().Msg("Fetch Terraform output per environment per component")
 	for _, component := range components {
 		wg.Add(1)
+		env := environment
 		if strings.HasPrefix(component, "management-") {
 			// Don't look at the platform env because it is the management env
-			environment = "management"
+			env = "management"
 		}
-		path := fmt.Sprintf("config/data/%s/platform/%s/%s-tf", version, environment, component)
+		path := fmt.Sprintf("config/data/%s/platform/%s/%s-tf", version, env, component)
 		go c.fetchConfig(path, component, chanPlatformTerraform, chanErrors, &wg)
 	}
 
