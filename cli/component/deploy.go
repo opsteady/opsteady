@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/opsteady/opsteady/cli/tasks"
+	"github.com/opsteady/opsteady/cli/templating"
 )
 
 // Deploy runs the component setup and deployment.
@@ -26,6 +27,9 @@ func (c *DefaultComponent) Deploy() {
 			c.LoginToAKSorEKS(componentConfig)
 			c.LoginToHelmRegistry()
 			c.DeployHelm(componentConfig)
+		case c.Kubectl:
+			c.LoginToAKSorEKS(componentConfig)
+			c.DeployKubectl(componentConfig)
 		}
 	}
 }
@@ -33,7 +37,7 @@ func (c *DefaultComponent) Deploy() {
 // DeployTerraform uses Terrform code to deploy resources
 func (c *DefaultComponent) DeployTerraform(componentConfig map[string]interface{}) {
 	backendStorageName := componentConfig["management_bootstrap_terraform_state_account_name"].(string) // Always expecting this to be here
-	terraform := tasks.NewTerraform(c.ComponentFolder, c.TerraformBackendConfigPath, backendStorageName, c.GlobalConfig.CachePath, c.Logger)
+	terraform := tasks.NewTerraform(c.TerraformFolder(), c.TerraformBackendConfigPath, backendStorageName, c.GlobalConfig.CachePath, c.Logger)
 
 	varsPath := fmt.Sprintf("%s/%s.tfvars.json", c.GlobalConfig.TmpFolder, c.ComponentName)
 	c.WriteConfigToJSON(varsPath)
@@ -60,5 +64,19 @@ func (c *DefaultComponent) DeployHelm(componentConfig map[string]interface{}) {
 		if err := helm.Upgrade(c.GlobalConfig.ManagementHelmRepository, chart.Release, chart.Namespace, chart.Version, c.DryRun); err != nil {
 			c.Logger.Fatal().Err(err).Msg("could not install Helm chart")
 		}
+	}
+}
+
+// DeployKubectl deploys Kubernetes yaml files to Kubernetes
+func (c *DefaultComponent) DeployKubectl(componentConfig map[string]interface{}) {
+	template := templating.NewTemplating(c.Logger)
+
+	if err := template.Render(c.KubectlFolder(), c.KubectlTmpFolder(), componentConfig); err != nil {
+		c.Logger.Fatal().Err(err).Msg("could not template Kubernetes manifest files")
+	}
+
+	kubectl := tasks.NewKubectl(c.Logger)
+	if err := kubectl.Apply(c.KubectlTmpFolder(), c.DryRun); err != nil {
+		c.Logger.Fatal().Err(err).Msg("could not apply Kubernetes manifest files")
 	}
 }

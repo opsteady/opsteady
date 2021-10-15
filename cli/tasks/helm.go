@@ -12,7 +12,7 @@ type Helm struct {
 	logger    *zerolog.Logger
 }
 
-// NewHelm returns a Terraform task runner
+// NewHelm returns a Helm task runner
 func NewHelm(tmpFolder string, logger *zerolog.Logger) *Helm {
 	return &Helm{
 		tmpFolder: tmpFolder,

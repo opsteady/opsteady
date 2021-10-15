@@ -53,6 +53,6 @@ jobs:
         run: |
           go run main.go deploy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c foundation-${{ github.event.inputs.cloud }}
 
-      - name: Deploy Kubernetes
+      - name: Deploy Kubernetes cluster
         run: |
-          go run main.go deploy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c kubernetes-${{ github.event.inputs.cloud }}
+          go run main.go deploy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c kubernetes-${{ github.event.inputs.cloud }}-cluster

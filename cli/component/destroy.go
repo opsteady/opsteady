@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/opsteady/opsteady/cli/tasks"
+	"github.com/opsteady/opsteady/cli/templating"
 )
 
 // Destroy runs the component destruction.
@@ -25,6 +26,9 @@ func (c *DefaultComponent) Destroy() {
 		case c.Helm:
 			c.LoginToAKSorEKS(componentConfig)
 			c.DestroyHelm(componentConfig)
+		case c.Kubectl:
+			c.LoginToAKSorEKS(componentConfig)
+			c.DestroyKubectl(componentConfig)
 		}
 	}
 }
@@ -49,5 +53,19 @@ func (c *DefaultComponent) DestroyHelm(componentConfig map[string]interface{}) {
 		if err := helm.Delete(chart.Release, chart.Namespace, c.DryRun); err != nil {
 			c.Logger.Fatal().Err(err).Msg("could not install Helm chart")
 		}
+	}
+}
+
+// DestroyKubectl destroy Kubernetes yaml files to Kubernetes
+func (c *DefaultComponent) DestroyKubectl(componentConfig map[string]interface{}) {
+	template := templating.NewTemplating(c.Logger)
+
+	if err := template.Render(c.KubectlFolder(), c.KubectlTmpFolder(), componentConfig); err != nil {
+		c.Logger.Fatal().Err(err).Msg("could not template Kubernetes manifest files")
+	}
+
+	kubectl := tasks.NewKubectl(c.Logger)
+	if err := kubectl.Delete(c.KubectlTmpFolder(), c.DryRun); err != nil {
+		c.Logger.Fatal().Err(err).Msg("could not delete Kubernetes manifest files")
 	}
 }

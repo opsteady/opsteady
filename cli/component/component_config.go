@@ -147,8 +147,12 @@ func (c *ComponentConfigImpl) fetchConfig(path, component string, chanValues cha
 		return
 	}
 	if data, ok := secret["data"]; ok {
-		for key, value := range data.(map[string]interface{}) {
-			values[key] = value
+		// Data can be nil if it is a '-tf' secret which is automatically created and deleted
+		// when deleted the secret is still their but without any data
+		if data != nil {
+			for key, value := range data.(map[string]interface{}) {
+				values[key] = value
+			}
 		}
 	}
 
