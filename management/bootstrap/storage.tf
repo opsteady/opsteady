@@ -14,6 +14,8 @@ resource "azurerm_storage_account" "terraform_state" {
       days = 365
     }
   }
+
+  tags = {}
 }
 
 # Used for management terraform state

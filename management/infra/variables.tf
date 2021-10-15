@@ -30,6 +30,14 @@ variable "management_infra_aks_system_nodepool_node_size" {
   type = string
 }
 
+variable "management_infra_aks_platform_nodepool_node_count" {
+  type = number
+}
+
+variable "management_infra_aks_platform_nodepool_node_size" {
+  type = string
+}
+
 variable "management_infra_log_analytics_workspace_retention" {
   type = number
 }
@@ -40,7 +48,7 @@ variable "management_infra_key_vault_name" {
 
 variable "management_infra_key_vault_administrators" {
   description = "A list of principal IDs that can administer the key vault"
-  type = list
+  type        = list(any)
 }
 
 variable "management_infra_platform_admins" {
@@ -85,11 +93,16 @@ variable "management_infra_domain" {
 }
 
 variable "azuread_client_id" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "azuread_client_secret" {
-  type = string
+  type    = string
   default = ""
+}
+
+variable "management_infra_host_encryption" {
+  type    = bool
+  default = true
 }
