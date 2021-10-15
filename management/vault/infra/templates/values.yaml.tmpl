@@ -2,6 +2,9 @@ global:
   tlsDisable: false
 
 server:
+%{ if disable_affinity ~}
+  affinity: ""
+%{ endif ~}
   livenessProbe:
     enabled: true
   image:
@@ -9,8 +12,12 @@ server:
     tag: ${vault_image_tag}
   dataStorage:
     enabled: true
+    size: 2Gi
+    storageClass: azurefile-csi
   auditStorage:
     enabled: true
+    storageClass: azurefile-csi
+    size: 2Gi
   ha:
     enabled: true
     replicas: 3

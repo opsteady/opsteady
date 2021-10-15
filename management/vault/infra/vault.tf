@@ -42,6 +42,7 @@ resource "helm_release" "vault" {
       tenant_id              = data.azurerm_client_config.current.tenant_id
       domain                 = var.management_infra_domain
       loadbalancer_ip        = azurerm_public_ip.vault.ip_address
+      disable_affinity       = var.management_vault_infra_disable_affinity
     })
   ]
 

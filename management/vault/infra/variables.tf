@@ -30,12 +30,17 @@ variable "management_vault_infra_chart_version" {
   type = string
 }
 
+variable "management_vault_infra_disable_affinity" {
+  type    = bool
+  default = false
+}
+
 variable "azuread_client_id" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "azuread_client_secret" {
-  type = string
+  type    = string
   default = ""
 }

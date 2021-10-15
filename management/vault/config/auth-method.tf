@@ -86,7 +86,7 @@ resource "vault_jwt_auth_backend_role" "platform_admin" {
 
 resource "vault_jwt_auth_backend" "github_actions" {
   path               = "gha"
-  oidc_discovery_url = "https://vstoken.actions.githubusercontent.com"
+  oidc_discovery_url = "https://token.actions.githubusercontent.com"
 }
 
 resource "vault_jwt_auth_backend_role" "workflow" {
