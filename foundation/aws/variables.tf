@@ -21,6 +21,30 @@ variable "foundation_aws_vpc_cidr" {
   type = string
 }
 
+variable "foundation_aws_subnet_eks_a" {
+  type = string
+}
+
+variable "foundation_aws_subnet_eks_b" {
+  type = string
+}
+
+variable "foundation_aws_subnet_eks_c" {
+  type = string
+}
+
+variable "foundation_aws_zone_eks_a" {
+  type = string
+}
+
+variable "foundation_aws_zone_eks_b" {
+  type = string
+}
+
+variable "foundation_aws_zone_eks_c" {
+  type = string
+}
+
 variable "foundation_aws_subnet_pods_a" {
   type = string
 }
@@ -110,5 +134,14 @@ variable "platform_environment_name" {
 }
 
 variable "platform_component_name" {
+  type = string
+}
+
+# Used for creating output to Vault
+variable "vault_address" {
+  type = string
+}
+
+variable "vault_token" {
   type = string
 }
