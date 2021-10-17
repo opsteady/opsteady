@@ -20,7 +20,7 @@ require (
 	github.com/hashicorp/vault v1.8.4
 	github.com/hashicorp/vault-plugin-auth-jwt v0.10.1
 	github.com/hashicorp/vault-plugin-secrets-kv v0.9.0
-	github.com/hashicorp/vault/api v1.1.2-0.20210713235431-1fc8af4c041f
+	github.com/hashicorp/vault/api v1.2.0
 	github.com/hashicorp/vault/sdk v0.2.2-0.20211005222123-93e045565e4a
 	github.com/hashicorp/yamux v0.0.0-20210826001029-26ff87cf9493 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
