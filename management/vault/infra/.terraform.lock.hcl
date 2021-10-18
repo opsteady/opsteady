@@ -2,10 +2,20 @@
 # Manual edits may be lost in future updates.
 
 provider "registry.terraform.io/hashicorp/azuread" {
-  version     = "2.6.0"
-  constraints = "~> 2.6.0"
+  version     = "2.7.0"
+  constraints = "~> 2.7.0"
   hashes = [
-    "h1:Zmsa6HlKVe+Kyx/3tlcKHTZemiF2f9ZiVhRATmcb9hk=",
+    "h1:F3BZEnpkKsJtmz7rxvREUE2CowCZIDvo6SGO5MGDX6E=",
+    "h1:Gz35KczqpAZfc0F9emgo+HzPstbyEm2zOPeTCo+52N0=",
+    "h1:Scb3uItags0sDUUX2KxyVqoVPwzakjqZid2UfFuZnCY=",
+    "h1:SrPnmaNHspnaj3k9w4A5urZR2clJuWrwhU5pAoC659k=",
+    "h1:WQSu2lOtnMxnYFC7c2m899D1W6yQl3pJ2Ijx+HD7dis=",
+    "h1:Wp9pVYIRn1L+qj9akUZq0BfdDV+eowygVv7ezUhSy9E=",
+    "h1:cHs9/P0o8uffCgcfvYFgWp8uduqGBiYdlsH2XJ4ONvE=",
+    "h1:ejXc8LgFqJjdxpM8hwgvCACIolIkjlrra4YsI39wWDE=",
+    "h1:gxDKCnQ60QpjuHGI42sOEW7Z4cGU4ZeLtCgYGcA+KyE=",
+    "h1:mqNkBefqmDxNdTGQcXBqyWYO3TadgJq6FkP+ZXPtMTA=",
+    "h1:rs6yEu06tb2a9/Y1eHENg3qUtqTbmv5YgU3Eg0XMySQ=",
   ]
 }
 
