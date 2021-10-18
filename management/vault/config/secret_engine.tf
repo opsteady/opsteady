@@ -154,6 +154,32 @@ resource "vault_azure_secret_backend_role" "azure_owner_role" {
   depends_on = [azurerm_role_assignment.azure_secrets]
 }
 
+resource "vault_azure_secret_backend_role" "azure_kubernetes_role" {
+  for_each = var.management_vault_config_subscriptions
+
+  backend = vault_azure_secret_backend.azure.path
+  role    = "${each.key}-k8s"
+  ttl     = 3600
+  max_ttl = 14400
+
+  azure_roles {
+    role_name = "Contributor"
+    scope     = "/subscriptions/${each.value}"
+  }
+
+  azure_roles {
+    role_name = "Azure Kubernetes Service Cluster Admin Role"
+    scope     = "/subscriptions/${each.value}"
+  }
+
+  azure_roles {
+    role_name = "Azure Kubernetes Service Cluster User Role"
+    scope     = "/subscriptions/${each.value}"
+  }
+
+  depends_on = [azurerm_role_assignment.azure_secrets]
+}
+
 resource "vault_aws_secret_backend" "aws" {
   for_each = { for account in var.management_vault_config_accounts : account.name => account }
 
