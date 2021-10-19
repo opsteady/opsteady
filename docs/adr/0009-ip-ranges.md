@@ -5,7 +5,10 @@ Date: 2021-08-27
 ## Status
 
 Status: Accepted on 2021-08-27
+
 Foundation for [0022-cni-choice.md](0022-cni-choice.md) on 2021-10-10
+Foundation for [0023-kubernetes-azure.md](0023-kubernetes-azure.md) on 2021-10-10
+Foundation for [0024-kubernetes-aws.md](0024-kubernetes-aws.md) on 2021-10-10
 
 ## Context
 

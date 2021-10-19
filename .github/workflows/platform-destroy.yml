@@ -52,3 +52,7 @@ jobs:
       - name: Destroy foundation
         run: |
           go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c foundation-${{ github.event.inputs.cloud }}
+
+      - name: Destroy Kubernetes
+        run: |
+          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c kubernetes-${{ github.event.inputs.cloud }}

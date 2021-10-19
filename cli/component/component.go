@@ -223,7 +223,7 @@ func (c *DefaultComponent) LoginToAKSorEKS(componentConfig map[string]interface{
 		if err := az.LoginToAzure(AKSCreds["client_id"].(string), AKSCreds["client_secret"].(string), c.GlobalConfig.TenantID); err != nil {
 			c.Logger.Fatal().Err(err).Msg("could not login to Azure")
 		}
-		clusterName := componentConfig["kubernetes_azure_name"].(string)
+		clusterName := componentConfig["foundation_azure_name"].(string)
 		clusterResourceGroup := fmt.Sprintf("kubernetes-%s", clusterName)
 		// Management cluster is different therefore we override this stuff here
 		if clusterName == "management" {

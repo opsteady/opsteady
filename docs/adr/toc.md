@@ -23,3 +23,4 @@
 - [20. Foundation Azure](0020-foundation-azure.md)
 - [21. Foundation AWS](0021-foundation-aws.md)
 - [22. CNI choice](0022-cni-choice.md)
+- [23. Kubernetes Azure](0023-kubernetes-azure.md)
