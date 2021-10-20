@@ -17,3 +17,8 @@ provider "azurerm" {
   subscription_id = var.foundation_azure_subscription_id
   features {}
 }
+
+provider "vault" {
+  address = var.vault_address
+  token   = var.vault_token
+}

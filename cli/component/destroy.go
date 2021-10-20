@@ -11,7 +11,6 @@ import (
 func (c *DefaultComponent) Destroy() {
 	c.SetCloudCredentialsToEnv()
 	c.SetPlatformInfoToComponentConfig()
-	componentConfig := c.RetrieveComponentConfig()
 
 	executeOrder := c.DetermineOrderOfExecution()
 	if len(c.OverrideDestroyOrder) != 0 {
@@ -19,6 +18,8 @@ func (c *DefaultComponent) Destroy() {
 	}
 
 	for _, folder := range executeOrder {
+		componentConfig := c.RetrieveComponentConfig()
+
 		switch folder {
 		case c.Terraform:
 			c.PrepareTerraformBackend()

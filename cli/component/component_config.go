@@ -15,6 +15,7 @@ import (
 // ComponentConfig interface to retrieve component config from Vault.
 type ComponentConfig interface {
 	RetrieveConfig(string, string, []string) (map[string]interface{}, error)
+	RetrieveConfigWithoutCache(string, string, []string) (map[string]interface{}, error)
 	GeneralAddOrOverride(string, string)
 }
 
@@ -43,7 +44,7 @@ func (c *ComponentConfigImpl) GeneralAddOrOverride(key, value string) {
 	c.overrides[key] = value
 }
 
-// RetrieveConfig retrieves the component config from Vault.
+// RetrieveConfig retrieves the component config from Vault, using the cache if possible.
 func (c *ComponentConfigImpl) RetrieveConfig(version, environment string, components []string) (map[string]interface{}, error) {
 	componentID := fmt.Sprintf("%s-%s-%s", version, environment, strings.Join(components[:], "-"))
 	settings := c.cache.Retrieve(componentID)
@@ -52,6 +53,30 @@ func (c *ComponentConfigImpl) RetrieveConfig(version, environment string, compon
 		return settings, nil
 	}
 
+	values, err := c.retrieveConfig(version, environment, components)
+
+	c.cache.Store(componentID, values, c.TTL)
+
+	for k, v := range c.overrides {
+		values[k] = v
+	}
+
+	return values, err
+}
+
+// RetrieveConfigWithoutCache retrieves the component config from Vault, ignore the cache.
+func (c *ComponentConfigImpl) RetrieveConfigWithoutCache(version, environment string, components []string) (map[string]interface{}, error) {
+	values, err := c.retrieveConfig(version, environment, components)
+
+	for k, v := range c.overrides {
+		values[k] = v
+	}
+
+	return values, err
+}
+
+// retrieveConfig retrieves the component config from Vault.
+func (c *ComponentConfigImpl) retrieveConfig(version, environment string, components []string) (map[string]interface{}, error) {
 	values := make(map[string]interface{})
 	chanComponents := make(chan map[string]interface{}, len(components)+1)
 	chanPlatform := make(chan map[string]interface{}, len(components)+1)
@@ -124,11 +149,6 @@ func (c *ComponentConfigImpl) RetrieveConfig(version, environment string, compon
 		}
 	}
 
-	c.cache.Store(componentID, values, c.TTL)
-
-	for k, v := range c.overrides {
-		values[k] = v
-	}
 	return values, nil
 }
 
@@ -147,8 +167,8 @@ func (c *ComponentConfigImpl) fetchConfig(path, component string, chanValues cha
 		return
 	}
 	if data, ok := secret["data"]; ok {
-		// Data can be nil if it is a '-tf' secret which is automatically created and deleted
-		// when deleted the secret is still their but without any data
+		// Data can be nil if it is a '-tf' secret which is automatically created and deleted.
+		// When deleted the secret is still there but without any data.
 		if data != nil {
 			for key, value := range data.(map[string]interface{}) {
 				values[key] = value

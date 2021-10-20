@@ -162,6 +162,15 @@ func (c *DefaultComponent) RetrieveComponentConfig() map[string]interface{} {
 	return values
 }
 
+// RetrieveComponentConfigWithoutCache returns the component config without using the cache
+func (c *DefaultComponent) RetrieveComponentConfigWithoutCache() map[string]interface{} {
+	values, err := c.ComponentConfig.RetrieveConfigWithoutCache(c.PlatformVersion, c.AzureIDorAwsID(), c.ComponentNameAndAllTheDependencies())
+	if err != nil {
+		c.Logger.Fatal().Err(err).Msg("could not retrieve component configuration")
+	}
+	return values
+}
+
 // AddAzureADCredentialsToComponentConfig adds Azure AD credentials to component config to be used elsewhere
 func (c *DefaultComponent) AddAzureADCredentialsToComponentConfig() {
 	azureAD, err := c.Credentials.AzureAD()
@@ -171,6 +180,7 @@ func (c *DefaultComponent) AddAzureADCredentialsToComponentConfig() {
 
 	c.ComponentConfig.GeneralAddOrOverride("azuread_client_id", azureAD["client_id"].(string))
 	c.ComponentConfig.GeneralAddOrOverride("azuread_client_secret", azureAD["client_secret"].(string))
+	c.ComponentConfig.GeneralAddOrOverride("azuread_tenant_id", c.GlobalConfig.TenantID)
 }
 
 // AddManagementCredentialsToComponentConfig adds management credentials to component config to be used elsewhere
@@ -190,7 +200,8 @@ func (c *DefaultComponent) AddManagementCredentialsToComponentConfig() {
 func (c *DefaultComponent) LoginToAKSorEKS(componentConfig map[string]interface{}) {
 	if c.AwsID != "" {
 		aws := tasks.NewAws(c.GlobalConfig.TmpFolder, c.Logger)
-		if err := aws.LoginToEKS(componentConfig["kubernetes_aws_region"].(string), componentConfig["kubernetes_aws_name"].(string)); err != nil {
+
+		if err := aws.LoginToEKS(componentConfig["foundation_aws_region"].(string), componentConfig["kubernetes_aws_cluster_name"].(string)); err != nil {
 			c.Logger.Fatal().Err(err).Msg("could not login to EKS")
 		}
 	}
@@ -204,7 +215,7 @@ func (c *DefaultComponent) LoginToAKSorEKS(componentConfig map[string]interface{
 		if err := az.LoginToAzure(AKSCreds["client_id"].(string), AKSCreds["client_secret"].(string), c.GlobalConfig.TenantID); err != nil {
 			c.Logger.Fatal().Err(err).Msg("could not login to Azure")
 		}
-		clusterName := componentConfig["foundation_azure_name"].(string)
+		clusterName := componentConfig["kubernetes_azure_cluster_name"].(string)
 		clusterResourceGroup := fmt.Sprintf("kubernetes-%s", clusterName)
 		// Management cluster is different therefore we override this stuff here
 		if clusterName == "management" {

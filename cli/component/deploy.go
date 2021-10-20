@@ -11,7 +11,6 @@ import (
 func (c *DefaultComponent) Deploy() {
 	c.SetCloudCredentialsToEnv()
 	c.SetPlatformInfoToComponentConfig()
-	componentConfig := c.RetrieveComponentConfig()
 
 	executeOrder := c.DetermineOrderOfExecution()
 	if len(c.OverrideDeployOrder) != 0 {
@@ -19,6 +18,8 @@ func (c *DefaultComponent) Deploy() {
 	}
 
 	for _, folder := range executeOrder {
+		componentConfig := c.RetrieveComponentConfig()
+
 		switch folder {
 		case c.Terraform:
 			c.PrepareTerraformBackend()
@@ -53,6 +54,8 @@ func (c *DefaultComponent) DeployTerraform(componentConfig map[string]interface{
 	if err := terraform.InitAndApply(varsPath); err != nil {
 		c.Logger.Fatal().Err(err).Msg("could not apply")
 	}
+
+	c.RetrieveComponentConfigWithoutCache() // We might have changed some outputs
 }
 
 // DeployHelm deploys Helm charts to Kubernetes

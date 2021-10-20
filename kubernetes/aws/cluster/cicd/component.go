@@ -12,4 +12,5 @@ func (k *KubernetesAWSCluster) Initialize(defaultComponent component.DefaultComp
 	k.DefaultComponent = defaultComponent
 	k.DefaultComponent.Terraform = "" // Use root of the folder
 	k.DefaultComponent.RequiresComponents("foundation-aws")
+	k.DefaultComponent.SetVaultInfoToComponentConfig()
 }
