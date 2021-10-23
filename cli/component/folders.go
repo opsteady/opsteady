@@ -34,6 +34,15 @@ func (c *DefaultComponent) HelmFolder() string {
 	return fmt.Sprintf("%s/%s", c.ComponentFolder, c.Helm)
 }
 
+// HelmTmpFolder creates (if needed) and returns the helm folder inside the tmp folder including the component folder
+func (c *DefaultComponent) HelmTmpFolder(chartName string) string {
+	tmpFolder := fmt.Sprintf("%s/%s/%s/%s", c.GlobalConfig.TmpFolder, c.ComponentFolder, c.Helm, chartName)
+	if err := os.MkdirAll(tmpFolder, os.ModePerm); err != nil {
+		c.Logger.Fatal().Err(err).Msg("could not create helm tmp folder")
+	}
+	return tmpFolder
+}
+
 // KubectlFolder returns the kubectl folder inside the component including the component folder
 func (c *DefaultComponent) KubectlFolder() string {
 	return fmt.Sprintf("%s/%s", c.ComponentFolder, c.Kubectl)

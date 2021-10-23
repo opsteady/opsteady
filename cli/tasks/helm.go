@@ -8,26 +8,25 @@ import (
 
 // Helm contains information to deploy the chart
 type Helm struct {
-	tmpFolder string
-	logger    *zerolog.Logger
+	logger *zerolog.Logger
 }
 
 // NewHelm returns a Helm task runner
-func NewHelm(tmpFolder string, logger *zerolog.Logger) *Helm {
+func NewHelm(logger *zerolog.Logger) *Helm {
 	return &Helm{
-		tmpFolder: tmpFolder,
-		logger:    logger,
+		logger: logger,
 	}
 }
 
 // Upgrade installs or upgrades Helm releases
-// TODO function not tested yet with OCI https://github.com/helm/helm/pull/9782
-func (h *Helm) Upgrade(url, name, namespace, version string, dryRun bool) error {
+func (h *Helm) Upgrade(valuesFolder, url, name, namespace, version string, dryRun bool) error {
 	h.logger.Info().Str("release", url).Msg("Running Helm upgrade for release")
 
-	command := NewCommand("helm", h.tmpFolder)
+	command := NewCommand("helm", valuesFolder)
 	command.AddArgs(
 		"upgrade",
+		name,
+		fmt.Sprintf("oci://%s/helm/%s", url, name),
 		"--install",
 		"--atomic",
 		fmt.Sprintf("--dry-run=%t", dryRun),
@@ -35,7 +34,8 @@ func (h *Helm) Upgrade(url, name, namespace, version string, dryRun bool) error 
 		namespace,
 		"--version",
 		version,
-		url,
+		"--values",
+		fmt.Sprintf("%s/values.yaml", valuesFolder),
 	)
 	command.AddEnv("HELM_EXPERIMENTAL_OCI", "1")
 
@@ -43,10 +43,10 @@ func (h *Helm) Upgrade(url, name, namespace, version string, dryRun bool) error 
 }
 
 // Delete deletes the release
-func (h *Helm) Delete(name, namespace string, dryRun bool) error {
+func (h *Helm) Delete(valuesFolder, name, namespace string, dryRun bool) error {
 	h.logger.Info().Str("release", name).Msg("Remove release")
 
-	command := NewCommand("helm", h.tmpFolder)
+	command := NewCommand("helm", valuesFolder)
 	command.AddArgs(
 		"uninstall",
 		fmt.Sprintf("--dry-run=%t", dryRun),
@@ -85,6 +85,23 @@ func (h *Helm) Push(path, url string) error {
 		"push",
 		url,
 	)
+
+	return command.Run()
+}
+
+// LoginToHelmRegistry logs to a registry
+func (h *Helm) LoginToHelmRegistry(user, pass, registry, tmpFolder string) error {
+	h.logger.Debug().Msg("Logging in to Helm repository")
+	command := NewCommand("helm", tmpFolder)
+	command.AddArgs(
+		"registry",
+		"login",
+		registry,
+		"--username",
+		user,
+		"--password",
+		pass)
+	command.AddEnv("HELM_EXPERIMENTAL_OCI", "1")
 
 	return command.Run()
 }

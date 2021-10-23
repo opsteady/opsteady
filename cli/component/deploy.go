@@ -57,12 +57,16 @@ func (c *DefaultComponent) DeployTerraform(componentConfig map[string]interface{
 
 // DeployHelm deploys Helm charts to Kubernetes
 func (c *DefaultComponent) DeployHelm(componentConfig map[string]interface{}) {
-	// TODO: Add templating to values.yaml here before executing and pass the templated values.yaml file to the Helm install
-	helm := tasks.NewHelm(c.GlobalConfig.TmpFolder, c.Logger)
+	template := templating.NewTemplating(c.Logger)
+
+	helm := tasks.NewHelm(c.Logger)
 	for _, chart := range c.HelmCharts {
-		// TODO: this is just an example, not tested yet
-		if err := helm.Upgrade(c.GlobalConfig.ManagementHelmRepository, chart.Release, chart.Namespace, chart.Version, c.DryRun); err != nil {
-			c.Logger.Fatal().Err(err).Msg("could not install Helm chart")
+		if err := template.Render(c.HelmFolder(), c.HelmTmpFolder(chart.Release), componentConfig); err != nil {
+			c.Logger.Fatal().Err(err).Str("chart", chart.Release).Msg("could not template Kubernetes manifest files")
+		}
+
+		if err := helm.Upgrade(c.HelmTmpFolder(chart.Release), c.GlobalConfig.ManagementHelmRepository, chart.Release, chart.Namespace, chart.Version, c.DryRun); err != nil {
+			c.Logger.Fatal().Err(err).Str("chart", chart.Release).Msg("could not install Helm chart")
 		}
 	}
 }

@@ -48,9 +48,9 @@ func (c *DefaultComponent) DestroyTerraform(values map[string]interface{}) {
 
 // DestroyHelm removes Helm charts from Kubernetes
 func (c *DefaultComponent) DestroyHelm(componentConfig map[string]interface{}) {
-	helm := tasks.NewHelm(c.GlobalConfig.TmpFolder, c.Logger)
+	helm := tasks.NewHelm(c.Logger)
 	for _, chart := range c.HelmCharts {
-		if err := helm.Delete(chart.Release, chart.Namespace, c.DryRun); err != nil {
+		if err := helm.Delete(c.HelmTmpFolder(chart.Release), chart.Release, chart.Namespace, c.DryRun); err != nil {
 			c.Logger.Fatal().Err(err).Msg("could not install Helm chart")
 		}
 	}

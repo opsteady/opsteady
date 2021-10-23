@@ -35,20 +35,11 @@ func (c *DefaultComponent) LoginToHelmRegistry() {
 	if err != nil {
 		c.Logger.Fatal().Err(err).Msg("could not get management credentials to prepare helm")
 	}
+	user := mgmtCreds["client_id"].(string)
+	pass := mgmtCreds["client_secret"].(string)
 
-	c.Logger.Debug().Msg("Logging in to Helm repository")
-	command := tasks.NewCommand("helm", c.GlobalConfig.TmpFolder)
-	command.AddArgs(
-		"registry",
-		"login",
-		c.GlobalConfig.ManagementHelmRepository,
-		"--username",
-		mgmtCreds["client_id"].(string),
-		"--password",
-		mgmtCreds["client_secret"].(string))
-	command.AddEnv("HELM_EXPERIMENTAL_OCI", "1")
-
-	if err := command.Run(); err != nil {
+	login := tasks.NewHelm(c.Logger)
+	if err := login.LoginToHelmRegistry(user, pass, c.GlobalConfig.ManagementHelmRepository, c.GlobalConfig.TmpFolder); err != nil {
 		c.Logger.Fatal().Err(err).Msg("could not login to helm registry")
 	}
 }
