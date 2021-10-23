@@ -10,7 +10,7 @@ RUN getfile https://releases.hashicorp.com/terraform/1.0.9/terraform_1.0.9_linux
 
 RUN getfile https://releases.hashicorp.com/vault/1.8.2/vault_1.8.2_linux_amd64.zip
 
-RUN getfile https://get.helm.sh/helm-v3.6.3-linux-amd64.tar.gz
+RUN getfile https://get.helm.sh/helm-v3.7.1-linux-amd64.tar.gz
 
 RUN getfile https://storage.googleapis.com/kubernetes-release/release/v1.22.1/bin/linux/amd64/kubectl
 

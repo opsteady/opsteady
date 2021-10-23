@@ -2,3 +2,4 @@
 .terraform
 config.yaml
 ./opsteady
+local-test-component

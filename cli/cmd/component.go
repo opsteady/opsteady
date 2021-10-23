@@ -24,6 +24,8 @@ var (
 
 func executeComponent(cmd *cobra.Command, executeComponent func(c component.Component)) {
 	stopWhenAwsOrAzureIdNotSpecified(cmd)
+	// Cleaning the TMP folder is very important because it stores rendered files
+	// If not cleaned you might apply wrong settings or files to wrong environments
 	ensureTmpFolderExistsAndIsEmpty()
 
 	logger.Debug().Msg("Find the component")
@@ -56,7 +58,7 @@ func executeComponent(cmd *cobra.Command, executeComponent func(c component.Comp
 		PlatformVersion:            platformVersionFlag,
 		Terraform:                  "terraform",
 		Helm:                       "helm",
-		Kubectl:                    "kubernetes",
+		Kubectl:                    "kubectl",
 	}
 
 	logger.Debug().Msg("Run the the component")
@@ -75,7 +77,9 @@ func stopWhenAwsOrAzureIdNotSpecified(cmd *cobra.Command) {
 
 func ensureTmpFolderExistsAndIsEmpty() {
 	logger.Debug().Msg("Cleanup TMP dir")
-	os.RemoveAll(globalConfig.TmpFolder)
+	if err := os.RemoveAll(globalConfig.TmpFolder); err != nil {
+		logger.Fatal().Err(err).Msg("could not clean up the TMP dir")
+	}
 	logger.Trace().Msg("Create TMP dir")
 	if err := os.Mkdir(globalConfig.TmpFolder, 0700); err != nil {
 		logger.Fatal().Err(err).Str("dir", globalConfig.TmpFolder).Msg("could not create temporary directory")
