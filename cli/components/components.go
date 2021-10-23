@@ -3,6 +3,7 @@ package components
 
 import (
 	"github.com/opsteady/opsteady/cli/component"
+	dockerBase "github.com/opsteady/opsteady/docker/base/cicd"
 	foundationAWS "github.com/opsteady/opsteady/foundation/aws/cicd"
 	foundationAzure "github.com/opsteady/opsteady/foundation/azure/cicd"
 	kubernetesAWSCluster "github.com/opsteady/opsteady/kubernetes/aws/cluster/cicd"
@@ -28,4 +29,5 @@ func init() {
 	Components["kubernetes-aws-cluster"] = &kubernetesAWSCluster.KubernetesAWSCluster{}
 	Components["kubernetes-azure-cluster"] = &kubernetesAzureCluster.KubernetesAzure{}
 	Components["kubernetes-bootstrap"] = &kubernetesBootstrap.KubernetesBootstrap{}
+	Components["docker-base"] = &dockerBase.DockerBase{}
 }

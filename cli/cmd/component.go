@@ -59,6 +59,7 @@ func executeComponent(cmd *cobra.Command, executeComponent func(c component.Comp
 		Terraform:                  "terraform",
 		Helm:                       "helm",
 		Kubectl:                    "kubectl",
+		Docker:                     "docker",
 	}
 
 	logger.Debug().Msg("Run the the component")
@@ -189,13 +190,13 @@ var buildCmd = &cobra.Command{
 	},
 }
 
-var releaseCmd = &cobra.Command{
-	Use:   "release",
-	Short: "Release the component",
-	Long:  `Release the component`,
+var publishCmd = &cobra.Command{
+	Use:   "publish",
+	Short: "Publish the component",
+	Long:  `Publish the component`,
 	Run: func(cmd *cobra.Command, args []string) {
 		executeComponent(cmd, func(c component.Component) {
-			c.Release()
+			c.Publish()
 		})
 	},
 }

@@ -12,4 +12,5 @@ type GlobalConfig struct {
 	TenantID                 string `mapstructure:"tenant_id"`
 	ManagementSubscriptionID string `mapstructure:"management_subscription_id"`
 	ManagementHelmRepository string `mapstructure:"management_helm_repository"`
+	ManagementDockerRegistry string `mapstructure:"management_docker_registry"`
 }
