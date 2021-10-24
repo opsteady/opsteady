@@ -33,3 +33,10 @@ func (d *Docker) Push(workingDir, fullImageName string) error {
 	command.AddArgs("push", fullImageName)
 	return command.Run()
 }
+
+func (d *Docker) Validate(workingDir string) error {
+	d.logger.Info().Msg("Validate docker image")
+	command := NewCommand("hadolint", workingDir)
+	command.AddArgs("--failure-threshold", "error", "Dockerfile")
+	return command.Run()
+}

@@ -4,7 +4,6 @@ import "github.com/opsteady/opsteady/cli/tasks"
 
 // Validate validates the Terraform code
 func (c *DefaultComponent) Validate() {
-
 	executeOrder := c.DetermineOrderOfExecution()
 	if len(c.OverrideValidateOrder) != 0 {
 		executeOrder = c.OverrideValidateOrder
@@ -14,6 +13,8 @@ func (c *DefaultComponent) Validate() {
 		switch folder {
 		case c.Terraform:
 			c.ValidateTerraform()
+		case c.Docker:
+			c.ValidateDocker()
 		}
 	}
 }
@@ -23,6 +24,14 @@ func (c *DefaultComponent) ValidateTerraform() {
 	terraform := tasks.NewTerraform(c.ComponentFolder, c.TerraformBackendConfigPath, "", c.GlobalConfig.CachePath, c.Logger)
 
 	if err := terraform.FmtCheck(); err != nil {
-		c.Logger.Fatal().Err(err).Msg("validation failed")
+		c.Logger.Fatal().Err(err).Msg("terraform validation failed")
+	}
+}
+
+func (c *DefaultComponent) ValidateDocker() {
+	docker := tasks.NewDocker(c.Logger)
+
+	if err := docker.Validate(c.DockerFolder()); err != nil {
+		c.Logger.Fatal().Err(err).Msg("docker validation failed")
 	}
 }
