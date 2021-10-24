@@ -129,8 +129,9 @@ github.com/DataDog/datadog-go v3.2.0+incompatible/go.mod h1:LButxg5PwREeZtORoXG3
 github.com/Jeffail/gabs v1.1.1 h1:V0uzR08Hj22EX8+8QMhyI9sX2hwRu+/RJhJUmnwda/E=
 github.com/Jeffail/gabs v1.1.1/go.mod h1:6xMvQMK4k33lb7GUUpaAPh6nKMmemQeg5d4gn7/bOXc=
 github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible/go.mod h1:r7JcOSlj0wfOMncg0iLm8Leh48TZaKVeNIfJntJ2wa0=
-github.com/Masterminds/goutils v1.1.0 h1:zukEsf/1JZwCMgHiK3GZftabmxiCw4apj3a28RPBiVg=
 github.com/Masterminds/goutils v1.1.0/go.mod h1:8cTjp+g8YejhMuvIA5y2vz3BpJxksy863GQaJW2MFNU=
+github.com/Masterminds/goutils v1.1.1 h1:5nUrii3FMTL5diU80unEVvNevw1nH4+ZV4DSLVJLSYI=
+github.com/Masterminds/goutils v1.1.1/go.mod h1:8cTjp+g8YejhMuvIA5y2vz3BpJxksy863GQaJW2MFNU=
 github.com/Masterminds/semver v1.4.2/go.mod h1:MB6lktGJrhw8PrUyiEoblNEGEQ+RzHPF078ddwwvV3Y=
 github.com/Masterminds/semver v1.5.0 h1:H65muMkzWKEuNDnfl9d70GUjFniHKHRbFPGBuZ3QEww=
 github.com/Masterminds/semver v1.5.0/go.mod h1:MB6lktGJrhw8PrUyiEoblNEGEQ+RzHPF078ddwwvV3Y=
@@ -767,7 +768,6 @@ github.com/hashicorp/vault-plugin-auth-cf v0.9.0/go.mod h1:exPUMj8yNohKM7yRiHa7O
 github.com/hashicorp/vault-plugin-auth-gcp v0.5.1/go.mod h1:eLj92eX8MPI4vY1jaazVLF2sVbSAJ3LRHLRhF/pUmlI=
 github.com/hashicorp/vault-plugin-auth-gcp v0.10.0 h1:EBvgbyiPXqmmEQqIwkorLLEjvv4GPl6DQ1LdE0zJkh0=
 github.com/hashicorp/vault-plugin-auth-gcp v0.10.0/go.mod h1:Z+mj9fAqzXfDNxLmMoSS8NheVK7ugLvD8sTHO1GXfCA=
-github.com/hashicorp/vault-plugin-auth-jwt v0.10.1 h1:7hvGSiICXpmp7Ras5glxVVxTDg2dZL+l/jWeBQ6bzr0=
 github.com/hashicorp/vault-plugin-auth-jwt v0.10.1/go.mod h1:3KxfehLIM7zH19+O8jHJ/QJsLGRzSKRqjsesOJmBuoI=
 github.com/hashicorp/vault-plugin-auth-jwt v0.11.0 h1:hKV88DJVLcpuyeMZFp93BVo5ltPwrZbVKqw6J1J+0eg=
 github.com/hashicorp/vault-plugin-auth-jwt v0.11.0/go.mod h1:jKwUcQLgquENzwaCDYTmz7gJageUFUSTOOoXNRIlDE0=
@@ -811,7 +811,6 @@ github.com/hashicorp/vault/api v1.0.5-0.20200215224050-f6547fa8e820/go.mod h1:3f
 github.com/hashicorp/vault/api v1.0.5-0.20200519221902-385fac77e20f/go.mod h1:euTFbi2YJgwcju3imEt919lhJKF68nN1cQPq3aA+kBE=
 github.com/hashicorp/vault/api v1.0.5-0.20200826195146-c03009a7e370/go.mod h1:R3Umvhlxi2TN7Ex2hzOowyeNb+SfbVWI973N+ctaFMk=
 github.com/hashicorp/vault/api v1.1.1/go.mod h1:29UXcn/1cLOPHQNMWA7bCz2By4PSd0VKPAydKXS5yN0=
-github.com/hashicorp/vault/api v1.1.2-0.20210713235431-1fc8af4c041f h1:85dGMkdyO8G5IJP34vX7Y+xdaW9ocXRg6tbtKNIstH8=
 github.com/hashicorp/vault/api v1.1.2-0.20210713235431-1fc8af4c041f/go.mod h1:N6fPyoC9nPsXqpQ4ebYIIE0iC25gpWvUoS9dMfZG2BM=
 github.com/hashicorp/vault/api v1.2.0 h1:ysGFc6XRGbv05NsWPzuO5VTv68Lj8jtwATxRLFOpP9s=
 github.com/hashicorp/vault/api v1.2.0/go.mod h1:dAjw0T5shMnrfH7Q/Mst+LrcTKvStZBVs1PICEDpUqY=
