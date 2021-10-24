@@ -65,7 +65,7 @@ func (c *DefaultComponent) DeployHelm(componentConfig map[string]interface{}) {
 	helm := tasks.NewHelm(c.Logger)
 	for _, chart := range c.HelmCharts {
 		if err := template.Render(c.HelmFolder(), c.HelmTmpFolder(chart.Release), componentConfig); err != nil {
-			c.Logger.Fatal().Err(err).Str("chart", chart.Release).Msg("could not template Kubernetes manifest files")
+			c.Logger.Fatal().Err(err).Str("chart", chart.Release).Msg("could not template Helm values files")
 		}
 
 		if err := helm.Upgrade(c.HelmTmpFolder(chart.Release), c.GlobalConfig.ManagementHelmRepository, chart.Release, chart.Namespace, chart.Version, c.DryRun); err != nil {

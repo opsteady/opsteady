@@ -35,6 +35,7 @@ resource "aws_subnet" "pods_a" {
 
   tags = {
     Name = "pods-a-${var.foundation_aws_name}"
+    "kubernetes.io/role/internal-elb": "1"
   }
 }
 
@@ -45,6 +46,7 @@ resource "aws_subnet" "pods_b" {
 
   tags = {
     Name = "pods-b-${var.foundation_aws_name}"
+    "kubernetes.io/role/internal-elb": "1"
   }
 }
 
@@ -55,6 +57,7 @@ resource "aws_subnet" "pods_c" {
 
   tags = {
     Name = "pods-c-${var.foundation_aws_name}"
+    "kubernetes.io/role/internal-elb": "1"
   }
 }
 
@@ -65,6 +68,7 @@ resource "aws_subnet" "pub_a" {
 
   tags = {
     Name = "pub-a-${var.foundation_aws_name}"
+    "kubernetes.io/role/elb": "1"
   }
 }
 
@@ -75,6 +79,7 @@ resource "aws_subnet" "pub_b" {
 
   tags = {
     Name = "pub-b-${var.foundation_aws_name}"
+    "kubernetes.io/role/elb": "1"
   }
 }
 
@@ -85,5 +90,6 @@ resource "aws_subnet" "pub_c" {
 
   tags = {
     Name = "pub-c-${var.foundation_aws_name}"
+    "kubernetes.io/role/elb": "1"
   }
 }
