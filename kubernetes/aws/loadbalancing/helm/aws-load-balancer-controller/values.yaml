@@ -1,0 +1,13 @@
+---
+clusterName: {{ .kubernetes_aws_cluster_name }}
+
+serviceAccount:
+  create: true
+  name: aws-load-balancer-controller
+  annotations:
+    eks.amazonaws.com/role-arn: {{ .kubernetes_aws_loadbalancing_iam_role_arn }}
+
+podDisruptionBudget:
+  maxUnavailable: 1
+
+watchNamespace: platform

@@ -7,7 +7,9 @@ resource "vault_generic_secret" "outputs" {
 
   data_json = <<EOT
 {
-  "${local.component_name_underscores}_name": "${aws_eks_cluster.platform.id}"
+  "${local.component_name_underscores}_name": "${aws_eks_cluster.platform.id}",
+  "${local.component_name_underscores}_openid_connect_provider_platform_arn": "${aws_iam_openid_connect_provider.platform.arn}",
+  "${local.component_name_underscores}_openid_connect_provider_platform_url": "${aws_iam_openid_connect_provider.platform.url}"
 }
 EOT
 }

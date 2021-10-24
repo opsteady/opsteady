@@ -8,6 +8,7 @@ import (
 	foundationAWS "github.com/opsteady/opsteady/foundation/aws/cicd"
 	foundationAzure "github.com/opsteady/opsteady/foundation/azure/cicd"
 	kubernetesAWSCluster "github.com/opsteady/opsteady/kubernetes/aws/cluster/cicd"
+	kubernetesAWSLoadbalancing "github.com/opsteady/opsteady/kubernetes/aws/loadbalancing/cicd"
 	kubernetesAzureCluster "github.com/opsteady/opsteady/kubernetes/azure/cluster/cicd"
 	kubernetesBootstrap "github.com/opsteady/opsteady/kubernetes/bootstrap/cicd"
 	managementBootstrap "github.com/opsteady/opsteady/management/bootstrap/cicd"
@@ -28,6 +29,7 @@ func init() {
 	Components["foundation-azure"] = &foundationAzure.FoundationAzure{}
 	Components["foundation-aws"] = &foundationAWS.FoundationAWS{}
 	Components["kubernetes-aws-cluster"] = &kubernetesAWSCluster.KubernetesAWSCluster{}
+	Components["kubernetes-aws-loadbalancing"] = &kubernetesAWSLoadbalancing.KubernetesAWSLoadbalancing{}
 	Components["kubernetes-azure-cluster"] = &kubernetesAzureCluster.KubernetesAzure{}
 	Components["kubernetes-bootstrap"] = &kubernetesBootstrap.KubernetesBootstrap{}
 	Components["docker-base"] = &dockerBase.DockerBase{}
