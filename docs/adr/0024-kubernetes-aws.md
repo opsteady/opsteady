@@ -5,7 +5,9 @@ Date: 2021-10-15
 ## Status
 
 Status: Accepted on 2021-10-15
+
 Builds on [0009-ip-ranges.md](0009-ip-ranges.md) on 2021-10-15
+Foundation for [0025-kubernetes-bootstrap.md](0025-kubernetes-bootstrap.md) on 2021-10-21
 
 ## Context
 

@@ -65,3 +65,23 @@ variable "kubernetes_aws_cluster_system_node_group_instance_types" {
 variable "kubernetes_aws_cluster_service_ipv4_cidr" {
   type = string
 }
+
+variable "platform_version" {
+  type = string
+}
+
+variable "platform_environment_name" {
+  type = string
+}
+
+variable "platform_component_name" {
+  type = string
+}
+
+variable "vault_address" {
+  type = string
+}
+
+variable "vault_token" {
+  type = string
+}

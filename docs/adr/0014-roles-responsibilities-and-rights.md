@@ -6,6 +6,8 @@ Date: 2021-09-10
 
 Status: Accepted on 2021-09-10
 
+Foundation for [0025-kubernetes-bootstrap.md](0025-kubernetes-bootstrap.md) on 2021-10-21
+
 ## Context
 
 We recognize **platform-admin**, **platform-developer** and **platform-viewer** as roles on our platform. We however need to define detailed responsibilities and rights per role.
