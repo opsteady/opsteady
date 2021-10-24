@@ -5,7 +5,7 @@ go 1.16
 require (
 	cloud.google.com/go/kms v0.2.0 // indirect
 	cloud.google.com/go/monitoring v0.2.0 // indirect
-	github.com/Masterminds/sprig v2.22.0+incompatible // indirect
+	github.com/Masterminds/sprig v2.22.0+incompatible
 	github.com/armon/go-metrics v0.3.9 // indirect
 	github.com/cenkalti/backoff/v3 v3.2.2 // indirect
 	github.com/coreos/go-oidc/v3 v3.1.0 // indirect
@@ -17,7 +17,7 @@ require (
 	github.com/hashicorp/go-retryablehttp v0.7.0 // indirect
 	github.com/hashicorp/go-version v1.3.0 // indirect
 	github.com/hashicorp/vault v1.8.4
-	github.com/hashicorp/vault-plugin-auth-jwt v0.10.1
+	github.com/hashicorp/vault-plugin-auth-jwt v0.11.0
 	github.com/hashicorp/vault-plugin-secrets-kv v0.9.0
 	github.com/hashicorp/vault/api v1.2.0
 	github.com/hashicorp/vault/sdk v0.2.2-0.20211005222123-93e045565e4a

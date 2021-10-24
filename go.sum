@@ -694,6 +694,8 @@ github.com/hashicorp/go-rootcerts v1.0.2 h1:jzhAVGtqPKbwpyCPELlgNWhE1znq+qwJtW5O
 github.com/hashicorp/go-rootcerts v1.0.2/go.mod h1:pqUvnprVnM5bf7AOirdbb01K4ccR319Vf4pU3K5EGc8=
 github.com/hashicorp/go-secure-stdlib/awsutil v0.1.2 h1:AEcLbDoaRC9JMmtZXsuCykztH53rvHsQFnwhoKtpNQM=
 github.com/hashicorp/go-secure-stdlib/awsutil v0.1.2/go.mod h1:QRJZ7siKie+SZJB9jLbfKrs0Gd0yPWMtbneg0iU1PrY=
+github.com/hashicorp/go-secure-stdlib/base62 v0.1.1 h1:6KMBnfEv0/kLAz0O76sliN5mXbCDcLfs2kP7ssP7+DQ=
+github.com/hashicorp/go-secure-stdlib/base62 v0.1.1/go.mod h1:EdWO6czbmthiwZ3/PUsDV+UD1D5IRU4ActiaWGwt0Yw=
 github.com/hashicorp/go-secure-stdlib/parseutil v0.1.1 h1:78ki3QBevHwYrVxnyVeaEz+7WtifHhauYF23es/0KlI=
 github.com/hashicorp/go-secure-stdlib/parseutil v0.1.1/go.mod h1:QmrqtbKuxxSWTN3ETMPuB+VtEiBJ/A9XhoYGv8E1uD8=
 github.com/hashicorp/go-secure-stdlib/strutil v0.1.1 h1:nd0HIW15E6FG1MsnArYaHfuw9C2zgzM8LxkG5Ty/788=
@@ -767,6 +769,8 @@ github.com/hashicorp/vault-plugin-auth-gcp v0.10.0 h1:EBvgbyiPXqmmEQqIwkorLLEjvv
 github.com/hashicorp/vault-plugin-auth-gcp v0.10.0/go.mod h1:Z+mj9fAqzXfDNxLmMoSS8NheVK7ugLvD8sTHO1GXfCA=
 github.com/hashicorp/vault-plugin-auth-jwt v0.10.1 h1:7hvGSiICXpmp7Ras5glxVVxTDg2dZL+l/jWeBQ6bzr0=
 github.com/hashicorp/vault-plugin-auth-jwt v0.10.1/go.mod h1:3KxfehLIM7zH19+O8jHJ/QJsLGRzSKRqjsesOJmBuoI=
+github.com/hashicorp/vault-plugin-auth-jwt v0.11.0 h1:hKV88DJVLcpuyeMZFp93BVo5ltPwrZbVKqw6J1J+0eg=
+github.com/hashicorp/vault-plugin-auth-jwt v0.11.0/go.mod h1:jKwUcQLgquENzwaCDYTmz7gJageUFUSTOOoXNRIlDE0=
 github.com/hashicorp/vault-plugin-auth-kerberos v0.4.0 h1:7M7/DbFsUoOMBd2/R48ZNj4PM3Gdsg0dGcbMOdt5z1Q=
 github.com/hashicorp/vault-plugin-auth-kerberos v0.4.0/go.mod h1:h+7pLm4Z2EeKHOGPefX0bGzdUQCMBUlvM/BpSMNgTFw=
 github.com/hashicorp/vault-plugin-auth-kubernetes v0.10.1 h1:7c2ufXt5oXSUISNHpO07W956fpgn00nT1IQFPEP5XQE=
