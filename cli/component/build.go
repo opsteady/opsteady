@@ -23,7 +23,7 @@ func (c *DefaultComponent) Build() {
 func (c *DefaultComponent) BuildDocker() {
 	docker := tasks.NewDocker(c.Logger)
 
-	if err := docker.Build(c.DockerFolder(), c.DockerBuildInfo.FullUrl(c.GlobalConfig.ManagementDockerRegistry)); err != nil {
+	if err := docker.Build(c.DockerFolder(), c.DockerBuildInfo.FullUrl(c.GlobalConfig.ManagementDockerRegistry), c.DockerBuildInfo.BuildArgs); err != nil {
 		c.Logger.Fatal().Err(err).Msg("could not build Docker container")
 	}
 }

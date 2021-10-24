@@ -1,5 +1,5 @@
-ARG ACR_NAME
-FROM $ACR_NAME.azurecr.io/base:1.0.0
+ARG FROM_IMAGE
+FROM $FROM_IMAGE
 
 USER root
 
@@ -32,5 +32,9 @@ RUN if [[ ! -z "$VAULT_CA_STORAGE_ACCOUNT" ]]; then curl -o /vault-ca.pem https:
 
 RUN openssl x509 -in /vault-ca.pem -inform PEM -out /usr/local/share/ca-certificates/vault-ca.crt
 RUN update-ca-certificates
+
+RUN install-packages docker-ce-cli
+
+RUN getfile -n hadolint https://github.com/hadolint/hadolint/releases/download/v2.7.0/hadolint-Linux-x86_64
 
 USER 1000

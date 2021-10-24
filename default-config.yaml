@@ -6,3 +6,4 @@
 #management_subscription_id: "this is the Azure subscription ID of the management environment"
 #management_helm_repository: "The management Helm repository"
 #management_docker_registry: "The management Docker registry"
+#vault_ca_storage_account_name: "Name of the storage account to fetch the ca from"

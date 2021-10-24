@@ -12,6 +12,7 @@ docker run -it --rm \
   -v $(pwd):/data \
   -v ${HOME}/.cache:/home/platform/.cache \
   -v ${HOME}/.cache/opsteady-go:/home/platform/go \
+  -v /var/run/docker.sock:/var/run/docker.sock \
   dev-management.azurecr.io/cicd:1.0.0 /bin/bash
 go run . help
 ```

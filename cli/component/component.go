@@ -74,10 +74,11 @@ func (c *DefaultComponent) RequiresComponents(dependencies ...string) {
 }
 
 // RequiresComponents sets other components this component requires on.
-func (c *DefaultComponent) SetDockerBuildInfo(name, version string) {
+func (c *DefaultComponent) SetDockerBuildInfo(name, version string, buildArgs map[string]string) {
 	c.DockerBuildInfo = &DockerBuildInfo{
-		Name:    name,
-		Version: version,
+		Name:      name,
+		Version:   version,
+		BuildArgs: buildArgs,
 	}
 }
 

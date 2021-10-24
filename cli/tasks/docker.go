@@ -1,6 +1,10 @@
 package tasks
 
-import "github.com/rs/zerolog"
+import (
+	"fmt"
+
+	"github.com/rs/zerolog"
+)
 
 type Docker struct {
 	logger *zerolog.Logger
@@ -13,10 +17,13 @@ func NewDocker(logger *zerolog.Logger) *Docker {
 	}
 }
 
-func (d *Docker) Build(workingDir, fullImageName string) error {
+func (d *Docker) Build(workingDir, fullImageName string, args map[string]string) error {
 	d.logger.Info().Msg("Running docker build")
 	command := NewCommand("docker", workingDir)
 	command.AddArgs("build", "-t", fullImageName, ".")
+	for k, v := range args {
+		command.AddArgs("--build-arg", fmt.Sprintf("%s=%s", k, v))
+	}
 	return command.Run()
 }
 

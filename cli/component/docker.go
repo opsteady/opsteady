@@ -4,8 +4,9 @@ import "fmt"
 
 // DockerBuildInfo containts information about the docker image to to be created
 type DockerBuildInfo struct {
-	Name    string
-	Version string
+	Name      string
+	Version   string
+	BuildArgs map[string]string
 }
 
 func (d *DockerBuildInfo) FullUrl(registry string) string {
