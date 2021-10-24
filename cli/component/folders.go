@@ -21,6 +21,9 @@ func (c *DefaultComponent) DetermineOrderOfExecution() []string {
 	if _, err := os.Stat(c.KubectlFolder()); !errors.Is(err, os.ErrNotExist) {
 		folders = append(folders, c.Kubectl)
 	}
+	if _, err := os.Stat(c.DockerFolder()); !errors.Is(err, os.ErrNotExist) {
+		folders = append(folders, c.Docker)
+	}
 	return folders
 }
 
@@ -55,4 +58,9 @@ func (c *DefaultComponent) KubectlTmpFolder() string {
 		c.Logger.Fatal().Err(err).Msg("could not create kubectl tmp folder")
 	}
 	return tmpFolder
+}
+
+// DockerFolder returns the docker folder inside the component including the component folder
+func (c *DefaultComponent) DockerFolder() string {
+	return fmt.Sprintf("%s/%s", c.ComponentFolder, c.Docker)
 }

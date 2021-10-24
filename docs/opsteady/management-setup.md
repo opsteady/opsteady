@@ -26,7 +26,7 @@ You can do the initial setup from your local machine using your own tools but as
 cd docker/base
 docker build -t dev-management.azurecr.io/base:1.0.0 .
 cd ../cicd
-docker build --build-arg ACR_NAME=dev-management -t dev-management.azurecr.io/cicd:1.0.0 .
+docker build --build-arg FROM_IMAGE=dev-management.azurecr.io/base:1.0.0 -t dev-management.azurecr.io/cicd:1.0.0 .
 cd ../..
 ```
 
@@ -157,7 +157,7 @@ The Vault CA is needed to securely connect to Vault from the CLI. The Vault CA i
 
 ```bash
 cd docker/cicd
-docker build --build-arg ACR_NAME=dev-management --build-arg VAULT_CA_STORAGE_ACCOUNT=${management_vault_infra_storage_account_name} -t dev-management.azurecr.io/cicd:1.0.0 .
+docker build --build-arg FROM_IMAGE=dev-management.azurecr.io/base:1.0.0 --build-arg VAULT_CA_STORAGE_ACCOUNT=${management_vault_infra_storage_account_name} -t dev-management.azurecr.io/cicd:1.0.0 .
 ```
 
 Note: If you want to work locally please add the certificate to your local machine, CLI and the browser. This works for Ubuntu:
