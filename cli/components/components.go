@@ -9,6 +9,9 @@ import (
 	foundationAzure "github.com/opsteady/opsteady/foundation/azure/cicd"
 	kubernetesAWSCluster "github.com/opsteady/opsteady/kubernetes/aws/cluster/cicd"
 	kubernetesAWSLoadbalancing "github.com/opsteady/opsteady/kubernetes/aws/loadbalancing/cicd"
+	kubernetesAWSNetworkPolicies "github.com/opsteady/opsteady/kubernetes/aws/network-policies/cicd"
+	kubernetesAWSStorageEBS "github.com/opsteady/opsteady/kubernetes/aws/storage/ebs/cicd"
+	kubernetesAWSStorageEFS "github.com/opsteady/opsteady/kubernetes/aws/storage/efs/cicd"
 	kubernetesAzureCluster "github.com/opsteady/opsteady/kubernetes/azure/cluster/cicd"
 	kubernetesAzurePodIdentity "github.com/opsteady/opsteady/kubernetes/azure/pod-identity/cicd"
 	kubernetesBootstrap "github.com/opsteady/opsteady/kubernetes/bootstrap/cicd"
@@ -30,6 +33,9 @@ func init() {
 	Components["foundation-azure"] = &foundationAzure.FoundationAzure{}
 	Components["foundation-aws"] = &foundationAWS.FoundationAWS{}
 	Components["kubernetes-aws-cluster"] = &kubernetesAWSCluster.KubernetesAWSCluster{}
+	Components["kubernetes-aws-storage-ebs"] = &kubernetesAWSStorageEBS.KubernetesAWSStorageEBS{}
+	Components["kubernetes-aws-storage-efs"] = &kubernetesAWSStorageEFS.KubernetesAWSStorageEFS{}
+	Components["kubernetes-aws-network-policies"] = &kubernetesAWSNetworkPolicies.KubernetesAWSNetworkPolicies{}
 	Components["kubernetes-aws-loadbalancing"] = &kubernetesAWSLoadbalancing.KubernetesAWSLoadbalancing{}
 	Components["kubernetes-azure-cluster"] = &kubernetesAzureCluster.KubernetesAzure{}
 	Components["kubernetes-bootstrap"] = &kubernetesBootstrap.KubernetesBootstrap{}

@@ -1,0 +1,39 @@
+---
+controller:
+  nodeSelector:
+    name: system
+
+  # TODO: determine why the affinity setting prevents scheduling: https://github.com/opsteady/opsteady/issues/91
+  # affinity:
+  #   podAntiAffinity:
+  #     requiredDuringSchedulingIgnoredDuringExecution:
+  #     - labelSelector:
+  #         matchExpressions:
+  #         - key: app.kubernetes.io/name
+  #           operator: In
+  #           values:
+  #           - aws-efs-csi-driver
+  #       topologyKey: "kubernetes.io/hostname"
+
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: {{ .kubernetes_aws_storage_efs_iam_role_arn }}
+
+node:
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: {{ .kubernetes_aws_storage_efs_iam_role_arn }}
+
+storageClasses:
+- name: efs
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+  parameters:
+    provisioningMode: efs-ap
+    fileSystemId: {{ .kubernetes_aws_storage_efs_filesystem_id }}
+    directoryPerms: "700"
+    gidRangeStart: "1000"
+    gidRangeEnd: "2000"
+    basePath: "/data"
+  reclaimPolicy: Delete
+  volumeBindingMode: Immediate
