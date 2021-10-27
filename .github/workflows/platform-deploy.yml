@@ -56,3 +56,12 @@ jobs:
       - name: Deploy Kubernetes cluster
         run: |
           go run main.go deploy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c kubernetes-${{ github.event.inputs.cloud }}-cluster
+
+      - name: Deploy Kubernetes bootstrap
+        run: |
+          go run main.go deploy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c kubernetes-${{ github.event.inputs.cloud }}-bootstrap
+
+      - name: Deploy Kubernetes AAD pod identity
+        if: github.event.inputs.cloud == azure
+        run: |
+          go run main.go deploy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c kubernetes-${{ github.event.inputs.cloud }}-pod-identity

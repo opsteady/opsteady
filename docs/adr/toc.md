@@ -24,3 +24,5 @@
 - [21. Foundation AWS](0021-foundation-aws.md)
 - [22. CNI choice](0022-cni-choice.md)
 - [23. Kubernetes Azure](0023-kubernetes-azure.md)
+- [24. Kubernetes AWS](0024-kubernetes-aws.md)
+- [25. Kubernetes Azure pod identity](0026-kubernetes-azure-pod-identity.md)

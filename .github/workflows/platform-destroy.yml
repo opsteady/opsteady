@@ -49,10 +49,19 @@ jobs:
           management_subscription_id: ${{ secrets.management_subscription_id }}
           EOF
 
-      - name: Destroy foundation
+      - name: Deploy Kubernetes AAD pod identity
+        if: github.event.inputs.cloud == azure
         run: |
-          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c foundation-${{ github.event.inputs.cloud }}
+          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c kubernetes-${{ github.event.inputs.cloud }}-pod-identity
+
+      - name: Destroy Kubernetes bootstrap
+        run: |
+          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c kubernetes-${{ github.event.inputs.cloud }}-bootstrap
 
       - name: Destroy Kubernetes
         run: |
-          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c kubernetes-${{ github.event.inputs.cloud }}
+          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c kubernetes-${{ github.event.inputs.cloud }}-cluster
+
+      - name: Destroy foundation
+        run: |
+          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c foundation-${{ github.event.inputs.cloud }}

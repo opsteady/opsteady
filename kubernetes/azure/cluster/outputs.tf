@@ -7,7 +7,9 @@ resource "vault_generic_secret" "outputs" {
 
   data_json = <<EOT
 {
-  "${local.component_name_underscores}_name": "${azurerm_kubernetes_cluster.platform.name}"
+  "${local.component_name_underscores}_name": "${azurerm_kubernetes_cluster.platform.name}",
+  "${local.component_name_underscores}_nodes_resource_group_name": "${azurerm_kubernetes_cluster.platform.node_resource_group}",
+  "${local.component_name_underscores}_kubelet_identity_object_id": "${azurerm_kubernetes_cluster.platform.kubelet_identity.0.object_id}"
 }
 EOT
 }
