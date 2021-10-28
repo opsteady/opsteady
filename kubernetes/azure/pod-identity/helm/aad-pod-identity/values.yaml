@@ -1,0 +1,20 @@
+forceNamespaced: true
+
+mic:
+  priorityClassName: system-cluster-critical
+  nodeSelector:
+    kubernetes.azure.com/mode: system
+
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app.kubernetes.io/component: mic
+
+  podDisruptionBudget:
+    minAvailable: 1
+
+nmi:
+  priorityClassName: system-cluster-critical

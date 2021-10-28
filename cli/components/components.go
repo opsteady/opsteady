@@ -9,6 +9,7 @@ import (
 	foundationAzure "github.com/opsteady/opsteady/foundation/azure/cicd"
 	kubernetesAWSCluster "github.com/opsteady/opsteady/kubernetes/aws/cluster/cicd"
 	kubernetesAzureCluster "github.com/opsteady/opsteady/kubernetes/azure/cluster/cicd"
+	kubernetesAzurePodIdentity "github.com/opsteady/opsteady/kubernetes/azure/pod-identity/cicd"
 	kubernetesBootstrap "github.com/opsteady/opsteady/kubernetes/bootstrap/cicd"
 	managementBootstrap "github.com/opsteady/opsteady/management/bootstrap/cicd"
 	managementInfra "github.com/opsteady/opsteady/management/infra/cicd"
@@ -32,4 +33,5 @@ func init() {
 	Components["kubernetes-bootstrap"] = &kubernetesBootstrap.KubernetesBootstrap{}
 	Components["docker-base"] = &dockerBase.DockerBase{}
 	Components["docker-cicd"] = &dockerCicd.DockerCicd{}
+	Components["kubernetes-azure-pod-identity"] = &kubernetesAzurePodIdentity.KubernetesAzurePodIdentity{}
 }
