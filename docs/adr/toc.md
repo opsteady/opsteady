@@ -25,4 +25,6 @@
 - [22. CNI choice](0022-cni-choice.md)
 - [23. Kubernetes Azure](0023-kubernetes-azure.md)
 - [24. Kubernetes AWS](0024-kubernetes-aws.md)
-- [25. Kubernetes Azure pod identity](0026-kubernetes-azure-pod-identity.md)
+- [25. Kubernetes bootstrap](0025-kubernetes-bootstrap.md)
+- [26. Kubernetes Azure pod identity](0026-kubernetes-azure-pod-identity.md)
+- [27. Kubernetes Azure storage](0027-azure-storage.md)
