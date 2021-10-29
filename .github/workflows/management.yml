@@ -1,10 +1,12 @@
 name: Management
 on:
   push:
+    branches:
+      - main
     paths:
-      - '.github/workflows/**'
-      - 'management/**'
-      - 'internal/modules/**'
+      - ".github/workflows/management.yml"
+      - "management/**"
+      - "internal/modules/**"
 jobs:
   management:
     runs-on: ubuntu-20.04
