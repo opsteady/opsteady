@@ -1,0 +1,31 @@
+---
+controller:
+  nodeSelector:
+    name: system
+
+  topologySpreadConstraints:
+  - maxSkew: 1
+    topologyKey: kubernetes.io/hostname
+    whenUnsatisfiable: DoNotSchedule
+
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: {{ .kubernetes_aws_storage_ebs_iam_role_arn }}
+
+node:
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: {{ .kubernetes_aws_storage_ebs_iam_role_arn }}
+
+storageClasses:
+- name: ebs
+  volumeBindingMode: WaitForFirstConsumer
+  reclaimPolicy: Retain
+  parameters:
+    encrypted: "true"

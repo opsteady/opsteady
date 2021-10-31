@@ -20,7 +20,7 @@ func NewHelm(logger *zerolog.Logger) *Helm {
 
 // Upgrade installs or upgrades Helm releases
 func (h *Helm) Upgrade(valuesFolder, url, name, namespace, version string, dryRun bool) error {
-	h.logger.Info().Str("release", url).Msg("Running Helm upgrade for release")
+	h.logger.Info().Str("release", name).Msg("Running Helm upgrade for release")
 
 	command := NewCommand("helm", valuesFolder)
 	command.AddArgs(

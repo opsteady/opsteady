@@ -1,0 +1,39 @@
+---
+clusterName: {{ .kubernetes_aws_cluster_name }}
+
+vpcId: {{ .foundation_aws_vpc_id }}
+
+region: {{ .foundation_aws_region }}
+
+serviceAccount:
+  create: true
+  name: aws-load-balancer-controller
+  annotations:
+    eks.amazonaws.com/role-arn: {{ .kubernetes_aws_loadbalancing_iam_role_arn }}
+
+podDisruptionBudget:
+  maxUnavailable: 1
+
+watchNamespace: platform
+
+nodeSelector:
+  name: system
+
+enableShield: false
+
+enableWaf: false
+
+enableWafv2: false
+
+enableEndpointSlices: true
+
+affinity:
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+    - labelSelector:
+        matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: In
+          values:
+          - aws-load-balancer-controller
+      topologyKey: "kubernetes.io/hostname"

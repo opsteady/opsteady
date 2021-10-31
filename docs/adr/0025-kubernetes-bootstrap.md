@@ -4,7 +4,7 @@ Date: 2021-10-21
 
 ## Status
 
-Status: Proposed on 2021-10-21
+Status: Accepted on 2021-10-21
 
 Builds on [0014-roles-responsibilities.md](0014-roles-responsibilities.md) on 2021-10-15
 Builds on [0023-kubernetes-azure.md](0023-kubernetes-azure.md) on 2021-10-21

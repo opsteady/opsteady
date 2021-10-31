@@ -48,6 +48,9 @@ resource "aws_eks_node_group" "system" {
   node_group_name = "system"
   instance_types  = var.kubernetes_aws_cluster_system_node_group_instance_types
   node_role_arn   = aws_iam_role.eks_system_node_group.arn
+  labels = {
+    name = "system"
+  }
 
   subnet_ids = [
     var.foundation_aws_pods_a_subnet_id,
@@ -155,7 +158,7 @@ resource "aws_launch_template" "system" {
     device_name = "/dev/xvda"
 
     ebs {
-      encrypted   = false
+      encrypted = false
       # kms_key_id  = aws_kms_key.system.arn
       volume_type = "gp2"
       volume_size = 20
