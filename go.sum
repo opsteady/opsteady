@@ -713,6 +713,8 @@ github.com/hashicorp/go-secure-stdlib/mlock v0.1.1 h1:cCRo8gK7oq6A2L6LICkUZ+/a5r
 github.com/hashicorp/go-secure-stdlib/mlock v0.1.1/go.mod h1:zq93CJChV6L9QTfGKtfBxKqD7BqqXx5O04A/ns2p5+I=
 github.com/hashicorp/go-secure-stdlib/parseutil v0.1.1 h1:78ki3QBevHwYrVxnyVeaEz+7WtifHhauYF23es/0KlI=
 github.com/hashicorp/go-secure-stdlib/parseutil v0.1.1/go.mod h1:QmrqtbKuxxSWTN3ETMPuB+VtEiBJ/A9XhoYGv8E1uD8=
+github.com/hashicorp/go-secure-stdlib/parseutil v0.1.2 h1:Tz6v3Jb2DRnDCfifRSjYKG0m8dLdNq6bcDkB41en7nw=
+github.com/hashicorp/go-secure-stdlib/parseutil v0.1.2/go.mod h1:QmrqtbKuxxSWTN3ETMPuB+VtEiBJ/A9XhoYGv8E1uD8=
 github.com/hashicorp/go-secure-stdlib/password v0.1.1/go.mod h1:9hH302QllNwu1o2TGYtSk8I8kTAN0ca1EHpwhm5Mmzo=
 github.com/hashicorp/go-secure-stdlib/strutil v0.1.1 h1:nd0HIW15E6FG1MsnArYaHfuw9C2zgzM8LxkG5Ty/788=
 github.com/hashicorp/go-secure-stdlib/strutil v0.1.1/go.mod h1:gKOamz3EwoIoJq7mlMIRBpVTAUn8qPCrEclOKKWhD3U=
@@ -817,6 +819,7 @@ github.com/hashicorp/vault-plugin-secrets-gcpkms v0.9.0 h1:7a0iWuFA/YNinQ1xXogyZ
 github.com/hashicorp/vault-plugin-secrets-gcpkms v0.9.0/go.mod h1:hhwps56f2ATeC4Smgghrc5JH9dXR31b4ehSf1HblP5Q=
 github.com/hashicorp/vault-plugin-secrets-kv v0.9.0 h1:nCw2IfWw2bWUGFZsNk8BvTEg9k7jDpRn48+VAqjdQ3s=
 github.com/hashicorp/vault-plugin-secrets-kv v0.9.0/go.mod h1:B/Cybh5aVF7LNAMHwVBxY8t7r2eL0C6HVGgTyP4nKK4=
+github.com/hashicorp/vault-plugin-secrets-kv v0.10.1/go.mod h1:TNPRoB53Twd9tYvlhqqEhMsQPiVN604kZw9jr2zUzDk=
 github.com/hashicorp/vault-plugin-secrets-mongodbatlas v0.4.0 h1:6ve+7hZmGn7OpML81iZUxYj2AaJptwys323S5XsvVas=
 github.com/hashicorp/vault-plugin-secrets-mongodbatlas v0.4.0/go.mod h1:4mdgPqlkO+vfFX1cFAWcxkeqz6JAtZgKxL/67q/58Oo=
 github.com/hashicorp/vault-plugin-secrets-openldap v0.5.2 h1:5f3Gh/gcsC2sbn5PhE3YbeXB0cfC3TlZpkrBUSf90p4=
