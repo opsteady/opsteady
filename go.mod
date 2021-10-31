@@ -19,7 +19,7 @@ require (
 	github.com/hashicorp/go-version v1.3.0 // indirect
 	github.com/hashicorp/vault v1.8.4
 	github.com/hashicorp/vault-plugin-auth-jwt v0.11.1
-	github.com/hashicorp/vault-plugin-secrets-kv v0.9.0
+	github.com/hashicorp/vault-plugin-secrets-kv v0.10.1
 	github.com/hashicorp/vault/api v1.3.0
 	github.com/hashicorp/vault/sdk v0.3.0
 	github.com/hashicorp/yamux v0.0.0-20210826001029-26ff87cf9493 // indirect
