@@ -1,13 +1,15 @@
-name: Docker validate
+name: Docker publish
 on:
   push:
     branches:
       - main
     paths:
       - "docker/**"
+      - ".github/workflows/docker-validate.yml"
+      - ".github/workflows/docker-publish.yml"
 
 jobs:
-  management:
+  publish:
     runs-on: ubuntu-20.04
     env:
       VAULT_ADDRESS: https://vault.management.os.opsteady.com

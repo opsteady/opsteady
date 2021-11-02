@@ -19,5 +19,5 @@ func (d *DockerCicd) Initialize(defaultComponent component.DefaultComponent) {
 		"FROM_IMAGE":               fmt.Sprintf("%s/%s", d.GlobalConfig.ManagementDockerRegistry, "base:1.0.0"),
 		"VAULT_CA_STORAGE_ACCOUNT": d.GlobalConfig.VaultCaStorageAccountName,
 	}
-	d.SetDockerBuildInfo("cicd", "1.1.0", buildArgs)
+	d.SetDockerBuildInfo("cicd", "1.2.0", buildArgs)
 }
