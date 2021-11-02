@@ -1,7 +1,14 @@
 name: Renovate
 on:
   schedule:
-    - cron: '0/15 * * * *'
+    - cron: "0/15 * * * *"
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Reason"
+        required: false
+        default: "Check the versions"
+
 jobs:
   renovate:
     runs-on: ubuntu-latest
