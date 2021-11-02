@@ -3,9 +3,11 @@ on:
   pull_request:
     paths:
       - "docker/**"
+      - ".github/workflows/docker-validate.yml"
+      - ".github/workflows/docker-publish.yml"
 
 jobs:
-  management:
+  validate:
     runs-on: ubuntu-20.04
     env:
       VAULT_ADDRESS: https://vault.management.os.opsteady.com
