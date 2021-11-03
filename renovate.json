@@ -1,6 +1,7 @@
 {
+  "username": "renovate-opsteady[bot]",
+  "gitAuthor": "Self-hosted Renovate Bot <93674738+renovate-opsteady[bot]@users.noreply.github.com>",
   "branchPrefix": "deps/",
-  "gitAuthor": "Renovate Bot <renovate-bot@opsteady.com>",
   "onboarding": false,
   "repositories": ["opsteady/opsteady"],
   "regexManagers": [
