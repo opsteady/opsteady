@@ -3,7 +3,7 @@
 This document is the implementation of the [ADR Security and Compliance](../adr/0015-security-and-compliance.md).
 
 | Description                                                      | ADR                                                 |
-| -----------------------------------------------------------------| ----------------------------------------------------|
+| ---------------------------------------------------------------- | --------------------------------------------------- |
 | Terraform state storage not using custom key                     |                                                     |
 | Kubernetes API available online                                  | [0007](../adr/0007-management-connectivity.md)      |
 | Vault API available online                                       | [0018](../adr/0018-vault-setup.md)                  |
@@ -30,4 +30,5 @@ This document is the implementation of the [ADR Security and Compliance](../adr/
 | AKS/EKS host encryption enabled                                  | [0023](../adr/0023-kubernetes-azure.md)             |
 |                                                                  | [0024](../adr/0024-kubernetes-aws.md)               |
 | No WAF enabled on the load balancer                              | [0025](../adr/0026-kubernetes-aws-loadbalancing.md) |
-| SSL policies on load balancer set to default (permissive)        |                                                     |
+| SSL policies on load balancer set to default (permissive)        | [0025](../adr/0026-kubernetes-aws-loadbalancing.md) |
+| Default Azure Files storage is not customer key encrypted        | [0025](../adr/0027-azure-storage.md)                |

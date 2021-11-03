@@ -28,3 +28,7 @@
 - [25. Kubernetes bootstrap](0025-kubernetes-bootstrap.md)
 - [26. Kubernetes Azure pod identity](0026-kubernetes-azure-pod-identity.md)
 - [27. Kubernetes Azure storage](0027-azure-storage.md)
+- [28. Kubernetes AWS loadbalancing](0028-kubernetes-aws-loadbalancing.md)
+- [29. Kubernetes AWS storage EBS](0029-kubernetes-aws-storage-ebs.md)
+- [30. Kubernetes AWS storage EFS](0030-kubernetes-aws-storage-efs.md)
+- [31. Kubernetes AWS network policies](0031-kubernetes-aws-network-policies.md)
