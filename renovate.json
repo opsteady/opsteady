@@ -7,8 +7,9 @@
   "regexManagers": [
     {
       "fileMatch": ["^Dockerfile$"],
+      "matchStringsStrategy": "any",
       "matchStrings": [
-        "datasource=(?<datasource>.*?) depName=(?<depName>.*?) (versioning=(?<versioning>.*?)\n)ENV .*?_VERSION=(?<currentValue>.*)"
+        "datasource=(?<datasource>.*?) depName=(?<depName>.*?) versioning=(?<versioning>.*?)\nENV .*?_VERSION=(?<currentValue>.*)"
       ]
     }
   ]
