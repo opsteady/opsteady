@@ -6,7 +6,7 @@
   "repositories": ["opsteady/opsteady"],
   "regexManagers": [
     {
-      "fileMatch": ["^Dockerfile$"],
+      "fileMatch": ["(^|/|\\.)Dockerfile$", "(^|/)Dockerfile\\.[^/]*$"],
       "matchStringsStrategy": "any",
       "matchStrings": [
         "datasource=(?<datasource>.*?) depName=(?<depName>.*?) versioning=(?<versioning>.*?)\nENV .*?_VERSION=(?<currentValue>.*)"
