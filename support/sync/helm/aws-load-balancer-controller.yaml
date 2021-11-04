@@ -1,0 +1,12 @@
+source:
+  repo:
+    kind: HELM
+    url: https://aws.github.io/eks-charts
+target:
+  containerRegistry: opsteadyos.azurecr.io
+  containerRepository: aws-load-balancer-controller
+  repo:
+    kind: OCI
+    url: https://opsteadyos.azurecr.io/helm
+charts:
+  - aws-load-balancer-controller

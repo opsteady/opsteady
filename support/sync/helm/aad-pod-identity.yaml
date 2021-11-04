@@ -1,0 +1,12 @@
+source:
+  repo:
+    kind: HELM
+    url: https://raw.githubusercontent.com/Azure/aad-pod-identity/master/charts
+target:
+  containerRegistry: opsteadyos.azurecr.io
+  containerRepository: aad-pod-identity
+  repo:
+    kind: OCI
+    url: https://opsteadyos.azurecr.io/helm
+charts:
+  - aad-pod-identity

@@ -1,0 +1,36 @@
+name: Helm Sync
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  helm-sync:
+    env:
+      CHARTS_SYNCER_VERSION: 0.9.1
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v2
+
+    - uses: robinraju/release-downloader@v1.2
+      with:
+        repository: "bitnami-labs/charts-syncer"
+        tag: "v${{ env.CHARTS_SYNCER_VERSION }}"
+        fileName: charts-syncer_${{ env.CHARTS_SYNCER_VERSION }}_linux_x86_64.tar.gz
+        out-file-path: "release"
+
+    - name: Sync
+      shell: bash
+      run: |
+        tar xf ${GITHUB_WORKSPACE}/release/charts-syncer_${{ env.CHARTS_SYNCER_VERSION }}_linux_x86_64.tar.gz
+
+        for chart in support/sync/helm/*.yaml; do
+
+          # The 'true' is necessary because sometimes a 'file exists' error occurs for some unknown reason.
+          # We just want to continue with the next chart.
+          ./charts-syncer -v9 -c $chart sync || true
+
+        done
+      env:
+        TARGET_AUTH_USERNAME: ${{ secrets.acr_username }}
+        TARGET_AUTH_PASSWORD: ${{ secrets.acr_password }}
