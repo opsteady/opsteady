@@ -1,0 +1,12 @@
+source:
+  repo:
+    kind: HELM
+    url: https://kubernetes-sigs.github.io/aws-efs-csi-driver/
+target:
+  containerRegistry: opsteadyos.azurecr.io
+  containerRepository: aws-efs-csi-driver
+  repo:
+    kind: OCI
+    url: https://opsteadyos.azurecr.io/helm
+charts:
+  - aws-efs-csi-driver
