@@ -32,22 +32,23 @@ A /19 gives us around 8000 IP addresses to use which need to be divided into dif
 
 AWS needs to be split up into subnet per Availability Zone (three by default) for Pods which need the most IP addresses, the load-balancer for external access, and the EKS itself as the best practice.
 
-| Subnet address | Useable IPs | Used for     |
-| -------------- | ----------- | ------------ |
-| 10.0.0.0/21    | 2046        | Pod subnet A |
-| 10.0.8.0/21    | 2046        | Pod subnet B |
-| 10.0.16.0/21   | 2046        | Pod subnet C |
-| 10.0.24.0/24   | 254         | LB subnet A  |
-| 10.0.25.0/24   | 254         | LB subnet B  |
-| 10.0.26.0/24   | 254         | LB subnet C  |
-| 10.0.27.0/28   | 14          | EKS          |
-| 10.0.27.16/28  | 14          | EKS          |
-| 10.0.27.32/28  | 14          | EKS          |
-| 10.0.27.48/28  | 14          | left         |
-| 10.0.27.64/26  | 62          | left         |
-| 10.0.27.128/25 | 126         | left         |
-| 10.0.27.0/23   | 510         | left         |
-| 10.0.27.0/23   | 510         | left         |
+| Subnet address | Useable IPs | Used for            |
+| -------------- | ----------- | --------------------|
+| 10.0.0.0/21    | 2046        | Pod subnet A        |
+| 10.0.8.0/21    | 2046        | Pod subnet B        |
+| 10.0.16.0/21   | 2046        | Pod subnet C        |
+| 10.0.24.0/24   | 254         | Public LB subnet A  |
+| 10.0.25.0/24   | 254         | Public LB subnet B  |
+| 10.0.26.0/24   | 254         | Public LB subnet C  |
+| 10.0.27.0/28   | 14          | Private LB subnet A |
+| 10.0.27.16/28  | 14          | Private LB subnet B |
+| 10.0.27.32/28  | 14          | Private LB subnet C |
+| 10.0.27.48/28  | 14          | EKS                 |
+| 10.0.27.64/28  | 14          | EKS                 |
+| 10.0.27.80/28  | 14          | EKS                 |
+| 10.0.27.96/27  | 30          | left                |
+| 10.0.27.128/25 | 126         | left                |
+| 10.0.28.0/22   | 1022        | left                |
 
 Azure needs to be split into one subnet which is spread across all Availability zones for Pods that need the most IP addresses and the load-balancer for external access.
 

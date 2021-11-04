@@ -81,6 +81,18 @@ variable "foundation_aws_subnet_pub_c" {
   type = string
 }
 
+variable "foundation_aws_subnet_prv_a" {
+  type = string
+}
+
+variable "foundation_aws_subnet_prv_b" {
+  type = string
+}
+
+variable "foundation_aws_subnet_prv_c" {
+  type = string
+}
+
 variable "foundation_aws_zone_pub_a" {
   type = string
 }
@@ -90,6 +102,18 @@ variable "foundation_aws_zone_pub_b" {
 }
 
 variable "foundation_aws_zone_pub_c" {
+  type = string
+}
+
+variable "foundation_aws_zone_prv_a" {
+  type = string
+}
+
+variable "foundation_aws_zone_prv_b" {
+  type = string
+}
+
+variable "foundation_aws_zone_prv_c" {
   type = string
 }
 
