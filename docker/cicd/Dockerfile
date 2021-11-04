@@ -11,7 +11,7 @@ ENV TERRAFORM_VERSION=1.0.10
 RUN getfile https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 
 # renovate: datasource=github-releases depName=hashicorp/vault versioning=semver
-ENV VAULT_VERSION=v1.8.5
+ENV VAULT_VERSION=1.8.5
 RUN getfile https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip
 
 # renovate: datasource=github-releases depName=helm/helm versioning=semver
@@ -50,5 +50,10 @@ RUN install-packages docker-ce-cli
 # renovate: datasource=github-releases depName=hadolint/hadolint versioning=semver
 ENV HADOLINT_VERSION=v2.7.0
 RUN getfile -n hadolint https://github.com/hadolint/hadolint/releases/download/${HADOLINT_VERSION}/hadolint-Linux-x86_64
+
+# renovate: datasource=github-releases depName=golangci/golangci-lint versioning=semver
+ENV GOLINT_VERSION=1.43.0
+RUN getfile https://github.com/golangci/golangci-lint/releases/download/v${GOLINT_VERSION}/golangci-lint-${GOLINT_VERSION}-linux-amd64.tar.gz
+RUN install-packages libc-dev gcc
 
 USER 1000
