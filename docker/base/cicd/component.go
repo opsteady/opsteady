@@ -13,3 +13,11 @@ func (d *DockerBase) Initialize(defaultComponent component.DefaultComponent) {
 	d.Docker = "" // Use root of the folder
 	d.SetDockerBuildInfo("base", "1.0.0", nil)
 }
+
+func (c *DockerBase) Deploy() {
+	c.Logger.Info().Msg("Deploy not supported for this component")
+}
+
+func (c *DockerBase) Destroy() {
+	c.Logger.Info().Msg("Destroy not supported for this component")
+}

@@ -19,5 +19,13 @@ func (d *DockerCicd) Initialize(defaultComponent component.DefaultComponent) {
 		"FROM_IMAGE":               fmt.Sprintf("%s/%s", d.GlobalConfig.ManagementDockerRegistry, "base:1.0.0"),
 		"VAULT_CA_STORAGE_ACCOUNT": d.GlobalConfig.VaultCaStorageAccountName,
 	}
-	d.SetDockerBuildInfo("cicd", "1.2.0", buildArgs)
+	d.SetDockerBuildInfo("cicd", "1.3.1", buildArgs)
+}
+
+func (c *DockerCicd) Deploy() {
+	c.Logger.Info().Msg("Deploy not supported for this component")
+}
+
+func (c *DockerCicd) Destroy() {
+	c.Logger.Info().Msg("Destroy not supported for this component")
 }

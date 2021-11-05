@@ -1,14 +1,11 @@
-name: Management
-on:
-  push:
-    branches:
-      - main
-    paths:
-      - ".github/workflows/management.yml"
-      - "management/**"
-      - "internal/modules/**"
+name: PR validation
+on: [pull_request]
+
+permissions:
+  contents: read
+
 jobs:
-  management:
+  validate:
     runs-on: ubuntu-20.04
     env:
       VAULT_ADDRESS: https://vault.management.os.opsteady.com
@@ -43,20 +40,17 @@ jobs:
           cat <<EOF > config.yaml
           tenant_id: ${{ secrets.tenant_id }}
           management_subscription_id: ${{ secrets.management_subscription_id }}
+          management_docker_registry: opsteadyos.azurecr.io
+          vault_ca_storage_account_name: opsteadyosvault
           EOF
 
-      - name: Deploy Management Bootstrap
+      - name: Validate go code
         run: |
-          go run main.go deploy --dry-run --azure-id management -c management-bootstrap --cache
+          go run main.go validate -c cli --cache
 
-      - name: Deploy Management Infrastructure
-        run: |
-          go run main.go deploy --dry-run --azure-id management -c management-infra --cache
-
-      - name: Deploy Management Vault Infrastructure
-        run: |
-          go run main.go deploy --dry-run --azure-id management -c management-vault-infra --cache
-
-      - name: Deploy Management Vault Configuration
-        run: |
-          go run main.go deploy --dry-run --azure-id management -c management-vault-config --cache
+      # Added to show info in the PR, don't need to check the logs
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          version: latest
+          args: --issues-exit-code=0 --timeout 10m

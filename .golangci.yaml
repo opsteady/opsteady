@@ -1,0 +1,16 @@
+linters:
+  enable-all: true
+  disable:
+    - gochecknoglobals # We use this in cmd
+    - godot # We don't need the dot
+    - maligned # Deprecated
+    - golint # Deprecated
+    - interfacer # Deprecated
+    - scopelint # Deprecated
+
+issues:
+  # https://github.com/golangci/golangci-lint/issues/826
+  exclude-rules:
+    - path: cicd/component\.go
+      linters:
+        - typecheck

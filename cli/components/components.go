@@ -2,6 +2,7 @@
 package components
 
 import (
+	cli "github.com/opsteady/opsteady/cicd"
 	"github.com/opsteady/opsteady/cli/component"
 	dockerBase "github.com/opsteady/opsteady/docker/base/cicd"
 	dockerCicd "github.com/opsteady/opsteady/docker/cicd/cicd"
@@ -42,4 +43,5 @@ func init() {
 	Components["docker-base"] = &dockerBase.DockerBase{}
 	Components["docker-cicd"] = &dockerCicd.DockerCicd{}
 	Components["kubernetes-azure-pod-identity"] = &kubernetesAzurePodIdentity.KubernetesAzurePodIdentity{}
+	Components["cli"] = &cli.OpsteadyCli{}
 }
