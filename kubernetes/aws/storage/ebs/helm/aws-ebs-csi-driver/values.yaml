@@ -1,4 +1,30 @@
 ---
+image:
+  repository: opsteadyos.azurecr.io/provider-aws/aws-ebs-csi-driver
+
+imagePullSecrets:
+- management-acr
+
+sidecars:
+  provisioner:
+    image:
+      repository: opsteadyos.azurecr.io/sig-storage/csi-provisioner
+  attacher:
+    image:
+      repository: opsteadyos.azurecr.io/sig-storage/csi-attacher
+  snapshotter:
+    image:
+      repository: opsteadyos.azurecr.io/sig-storage/csi-snapshotter
+  livenessProbe:
+    image:
+      repository: opsteadyos.azurecr.io/sig-storage/livenessprobe
+  resizer:
+    image:
+      repository: opsteadyos.azurecr.io/sig-storage/csi-resizer
+  nodeDriverRegistrar:
+    image:
+      repository: opsteadyos.azurecr.io/sig-storage/csi-node-driver-registrar
+
 controller:
   nodeSelector:
     name: system

@@ -1,5 +1,8 @@
 forceNamespaced: true
 
+image:
+  repository: opsteadyos.azurecr.io/oss/azure/aad-pod-identity
+
 mic:
   priorityClassName: system-cluster-critical
   nodeSelector:

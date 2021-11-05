@@ -1,5 +1,12 @@
 name: Helm Sync
 on:
+  push: {}
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Reason'
+        required: false
+        default: 'Sync charts'
   schedule:
     - cron: "0 0 * * *"
 

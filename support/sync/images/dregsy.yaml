@@ -1,0 +1,82 @@
+relay: skopeo
+
+skopeo:
+  binary: skopeo
+  certs-dir: /etc/skopeo/certs.d
+
+# settings for image matching (see below)
+lister:
+  maxItems: 100
+  cacheDuration: 1h
+
+tasks:
+  - name: quay.io
+    verbose: true
+    source:
+      registry: quay.io
+    target:
+      registry: opsteadyos.azurecr.io
+    mappings:
+      - from: tigera/operator
+        tags: ["v1.20.3"]
+
+  - name: docker.io
+    verbose: true
+    source:
+      registry: docker.io
+    target:
+      registry: opsteadyos.azurecr.io
+    mappings:
+      - from: calico/ctl
+        tags: ["v3.20.2"]
+      - from: amazon/aws-efs-csi-driver
+        tags: ["v1.3.4"]
+
+  - name: mcr.microsoft.com
+    verbose: true
+    source:
+      registry: mcr.microsoft.com
+    target:
+      registry: opsteadyos.azurecr.io
+    mappings:
+      - from: oss/azure/aad-pod-identity/mic
+        tags: ["v1.8.5"]
+      - from: oss/azure/aad-pod-identity/nmi
+        tags: ["v1.8.5"]
+
+  - name: k8s.gcr.io
+    verbose: true
+    source:
+      registry: k8s.gcr.io
+      auth: none
+    target:
+      registry: opsteadyos.azurecr.io
+    mappings:
+      - from: sig-storage/csi-provisioner
+        tags: ["v2.1.1"]
+      - from: sig-storage/csi-attacher
+        tags: ["v3.1.0"]
+      - from: sig-storage/csi-snapshotter
+        tags: ["v3.0.3"]
+      - from: sig-storage/livenessprobe
+        tags: ["v2.2.0"]
+      - from: sig-storage/csi-resizer
+        tags: ["v1.0.0"]
+      - from: sig-storage/csi-node-driver-registrar
+        tags: ["v2.1.0"]
+      - from: provider-aws/aws-ebs-csi-driver
+        tags: ["v1.4.0"]
+
+  - name: public.ecr.aws
+    verbose: true
+    source:
+      registry: public.ecr.aws
+    target:
+      registry: opsteadyos.azurecr.io
+    mappings:
+      - from: eks-distro/kubernetes-csi/livenessprobe
+        tags: ["v2.2.0-eks-1-18-2"]
+      - from: eks-distro/kubernetes-csi/node-driver-registrar
+        tags: ["v2.1.0-eks-1-18-2"]
+      - from: eks-distro/kubernetes-csi/external-provisioner
+        tags: ["v2.1.1-eks-1-18-2"]
