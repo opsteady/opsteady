@@ -11,6 +11,13 @@
       "matchStrings": [
         "datasource=(?<datasource>.*?) depName=(?<depName>.*?) versioning=(?<versioning>.*?)\nENV .*?_VERSION=(?<currentValue>.*)"
       ]
+    },
+    {
+      "fileMatch": ["(^|/)component.go$"],
+      "matchStringsStrategy": "any",
+      "matchStrings": [
+        "\\w+:\\s+\"(?<currentValue>.*?)\".+\/\/ renovate: datasource=(?<datasource>.*?)\\s+registryUrl=(?<registryUrl>.*?)\\s+depName=(?<depName>.*?)\\s+versioning=(?<versioning>.*?)\\s+"
+      ]
     }
   ]
 }
