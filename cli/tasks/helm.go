@@ -46,7 +46,26 @@ func (h *Helm) Upgrade(valuesFolder, url, name, namespace, version string, dryRu
 func (h *Helm) Delete(valuesFolder, name, namespace string, dryRun bool) error {
 	h.logger.Info().Str("release", name).Msg("Remove release")
 
+	// Check if the Helm release exists
 	command := NewCommand("helm", valuesFolder)
+	command.AddArgs(
+		"status",
+		"--namespace",
+		namespace,
+		name,
+	)
+
+	if err := command.Run(); err != nil {
+		// Helm status did not succeed, we assume the release is already gone.
+		// It would be better to check the stdout/stderror for a 'not found'
+		// message. Unfortunately we don't have access to that information here,
+		// so we just assume that the Helm status command could not find the release.
+		// The console output will indicate what the error was, so the information is
+		// not entirely lost in case you want to debug the command the failure.
+		return nil
+	}
+
+	command = NewCommand("helm", valuesFolder)
 	command.AddArgs(
 		"uninstall",
 		fmt.Sprintf("--dry-run=%t", dryRun),
