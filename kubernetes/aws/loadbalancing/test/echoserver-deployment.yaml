@@ -14,8 +14,8 @@ spec:
         app: echoserver
     spec:
       containers:
-      - image: gcr.io/google_containers/echoserver:1.4
-        imagePullPolicy: Always
-        name: echoserver
-        ports:
-        - containerPort: 8080
+        - image: gcr.io/google_containers/echoserver:1.4
+          imagePullPolicy: Always
+          name: echoserver
+          ports:
+            - containerPort: 8080

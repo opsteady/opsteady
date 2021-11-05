@@ -11,7 +11,7 @@ type DockerBase struct {
 func (d *DockerBase) Initialize(defaultComponent component.DefaultComponent) {
 	d.DefaultComponent = defaultComponent
 	d.Docker = "" // Use root of the folder
-	d.SetDockerBuildInfo("base", "1.0.0", nil)
+	d.SetDockerBuildInfo("base", "2.0.0", nil)
 }
 
 func (c *DockerBase) Deploy() {

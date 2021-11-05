@@ -1,9 +1,8 @@
----
 tigeraOperator:
-  registry: quay.io # TODO: change to Opsteady ACR (https://github.com/opsteady/opsteady/issues/134)
+  registry: quay.io # TODO: https://github.com/opsteady/opsteady/issues/134
 
 calicoctl:
-  image: quay.io/docker.io/calico/ctl # TODO: change to Opsteady ACR (https://github.com/opsteady/opsteady/issues/134)
+  image: quay.io/docker.io/calico/ctl # TODO: https://github.com/opsteady/opsteady/issues/134
 
 installation:
   kubernetesProvider: EKS
