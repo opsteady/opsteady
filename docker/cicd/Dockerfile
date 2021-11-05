@@ -48,7 +48,7 @@ RUN update-ca-certificates
 RUN install-packages docker-ce-cli
 
 # renovate: datasource=github-releases depName=hadolint/hadolint versioning=semver
-ENV HADOLINT_VERSION=v2.7.0
+ENV HADOLINT_VERSION=v2.8.0
 RUN getfile -n hadolint https://github.com/hadolint/hadolint/releases/download/${HADOLINT_VERSION}/hadolint-Linux-x86_64
 
 # renovate: datasource=github-releases depName=golangci/golangci-lint versioning=semver
