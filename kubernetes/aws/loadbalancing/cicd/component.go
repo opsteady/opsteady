@@ -12,9 +12,8 @@ func (k *KubernetesAWSLoadbalancing) Initialize(defaultComponent component.Defau
 	k.DefaultComponent = defaultComponent
 	k.DefaultComponent.RequiresComponents("foundation-aws", "kubernetes-aws-cluster")
 	k.DefaultComponent.SetVaultInfoToComponentConfig()
-	k.DefaultComponent.UseHelm(&component.HelmChart{
-		Release:   "aws-load-balancer-controller",
-		Version:   "1.3.1", // renovate: datasource=helm registryUrl=https://aws.github.io/eks-charts depName=aws-load-balancer-controller versioning=semver
-		Namespace: "platform",
-	})
+	k.DefaultComponent.UseHelm(component.NewHelmChart(
+		"aws-load-balancer-controller",
+		"1.3.1", // renovate: datasource=helm registryUrl=https://aws.github.io/eks-charts depName=aws-load-balancer-controller versioning=semver
+  ))
 }
