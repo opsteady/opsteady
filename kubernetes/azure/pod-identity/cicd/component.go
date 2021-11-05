@@ -11,5 +11,8 @@ type KubernetesAzurePodIdentity struct {
 func (k *KubernetesAzurePodIdentity) Initialize(defaultComponent component.DefaultComponent) {
 	k.DefaultComponent = defaultComponent
 	k.RequiresComponents("foundation-azure", "kubernetes-azure-cluster")
-	k.DefaultComponent.UseHelm(component.NewHelmChart("aad-pod-identity", "4.1.6"))
+	k.DefaultComponent.UseHelm(component.NewHelmChart(
+		"aad-pod-identity",
+		"4.1.6", // renovate: datasource=helm registryUrl=https://raw.githubusercontent.com/Azure/aad-pod-identity/master/charts depName=aad-pod-identity versioning=semver
+	))
 }
