@@ -1,0 +1,16 @@
+name: Images Sync
+on: [push, workflow_dispatch]
+
+jobs:
+  images-sync:
+    runs-on: ubuntu-latest
+    container:
+      image: xelalex/dregsy:0.4.1-alpine
+    steps:
+
+    - name: Check out repository code
+      uses: actions/checkout@v2
+
+    - name: Sync
+      run: |
+        dregsy -config=support/sync/images/dregsy.yaml

@@ -1,0 +1,23 @@
+relay: skopeo
+
+skopeo:
+  binary: skopeo
+  certs-dir: /etc/skopeo/certs.d
+
+# settings for image matching (see below)
+lister:
+  maxItems: 100
+  cacheDuration: 1h
+
+tasks:
+
+  - name: aws-load-balancer-controller/aws-load-balancer-controller
+    verbose: true
+    source:
+      registry: docker.io
+    target:
+      registry: opsteadyos.azurecr.io
+
+    mappings:
+      - from: aws-load-balancer-controller/aws-load-balancer-controller
+        tags: ['v2.3.0']
