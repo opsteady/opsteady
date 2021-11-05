@@ -4,6 +4,7 @@ source:
     url: https://kubernetes-sigs.github.io/aws-efs-csi-driver/
 target:
   containerRegistry: opsteadyos.azurecr.io
+  containerRepository: opsteadyos.azurecr.io/amazon
   containerRepository: aws-efs-csi-driver
   repo:
     kind: OCI

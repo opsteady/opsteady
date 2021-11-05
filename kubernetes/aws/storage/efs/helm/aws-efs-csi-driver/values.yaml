@@ -1,4 +1,21 @@
 ---
+image:
+  repository: opsteadyos.azurecr.io/amazon/aws-efs-csi-driver
+
+imagePullSecrets:
+- management-acr
+
+sidecars:
+  livenessProbe:
+    image:
+      repository: opsteadyos.azurecr.io/eks-distro/kubernetes-csi/livenessprobe
+  nodeDriverRegistrar:
+    image:
+      repository: opsteadyos.azurecr.io/eks-distro/kubernetes-csi/node-driver-registrar
+  csiProvisioner:
+    image:
+      repository: opsteadyos.azurecr.io/eks-distro/kubernetes-csi/external-provisioner
+
 controller:
   nodeSelector:
     name: system

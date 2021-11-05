@@ -4,7 +4,7 @@ source:
     url: https://raw.githubusercontent.com/Azure/aad-pod-identity/master/charts
 target:
   containerRegistry: opsteadyos.azurecr.io
-  containerRepository: aad-pod-identity
+  containerRepository: opsteadyos.azurecr.io/oss/azure
   repo:
     kind: OCI
     url: https://opsteadyos.azurecr.io/helm
