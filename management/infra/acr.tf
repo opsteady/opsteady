@@ -48,8 +48,15 @@ module "acr_management" {
   name   = "management-acr"
 }
 
-resource "azurerm_role_assignment" "acr_management" {
+resource "azurerm_role_assignment" "acr_management_pull" {
   role_definition_name             = "AcrPull"
+  scope                            = azurerm_container_registry.management.id
+  principal_id                     = module.acr_management.azuread_service_principal_object_id
+  skip_service_principal_aad_check = true # skip the Azure Active Directory check which may fail due to replication lag
+}
+
+resource "azurerm_role_assignment" "acr_management_push" {
+  role_definition_name             = "AcrPush"
   scope                            = azurerm_container_registry.management.id
   principal_id                     = module.acr_management.azuread_service_principal_object_id
   skip_service_principal_aad_check = true # skip the Azure Active Directory check which may fail due to replication lag
