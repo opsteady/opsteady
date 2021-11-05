@@ -5,7 +5,6 @@ source:
 target:
   containerRegistry: opsteadyos.azurecr.io
   containerRepository: opsteadyos.azurecr.io/amazon
-  containerRepository: aws-efs-csi-driver
   repo:
     kind: OCI
     url: https://opsteadyos.azurecr.io/helm

@@ -1,9 +1,8 @@
----
 image:
   repository: opsteadyos.azurecr.io/provider-aws/aws-ebs-csi-driver
 
 imagePullSecrets:
-- management-acr
+  - management-acr
 
 sidecars:
   provisioner:
@@ -30,9 +29,9 @@ controller:
     name: system
 
   topologySpreadConstraints:
-  - maxSkew: 1
-    topologyKey: kubernetes.io/hostname
-    whenUnsatisfiable: DoNotSchedule
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
 
   updateStrategy:
     type: RollingUpdate
@@ -50,8 +49,8 @@ node:
       eks.amazonaws.com/role-arn: {{ .kubernetes_aws_storage_ebs_iam_role_arn }}
 
 storageClasses:
-- name: ebs
-  volumeBindingMode: WaitForFirstConsumer
-  reclaimPolicy: Retain
-  parameters:
-    encrypted: "true"
+  - name: ebs
+    volumeBindingMode: WaitForFirstConsumer
+    reclaimPolicy: Retain
+    parameters:
+      encrypted: "true"

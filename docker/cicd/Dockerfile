@@ -4,7 +4,8 @@ FROM $FROM_IMAGE
 USER root
 
 # Used by the Opsteady cli
-RUN install-packages golang-1.16 git jq
+RUN install-packages git jq
+RUN install-packages golang-1.17
 
 # renovate: datasource=github-releases depName=hashicorp/terraform versioning=semver
 ENV TERRAFORM_VERSION=1.0.10
@@ -37,7 +38,7 @@ ENV AZURECLI_VERSION=2.27.2
 RUN DEBIAN_FRONTEND=noninteractive install-packages python3-pip
 RUN pip install azure-cli==${AZURECLI_VERSION}
 
-ENV PATH="/usr/lib/go-1.16/bin:${PATH}"
+ENV PATH="/usr/lib/go-1.17/bin:${PATH}"
 
 ARG VAULT_CA_STORAGE_ACCOUNT
 RUN if [[ ! -z "$VAULT_CA_STORAGE_ACCOUNT" ]]; then curl -o /vault-ca.pem https://$VAULT_CA_STORAGE_ACCOUNT.blob.core.windows.net/vault-ca/ca.pem; fi
@@ -55,5 +56,7 @@ RUN getfile -n hadolint https://github.com/hadolint/hadolint/releases/download/$
 ENV GOLINT_VERSION=1.43.0
 RUN getfile https://github.com/golangci/golangci-lint/releases/download/v${GOLINT_VERSION}/golangci-lint-${GOLINT_VERSION}-linux-amd64.tar.gz
 RUN install-packages libc-dev gcc
+
+RUN install-packages yamllint
 
 USER 1000

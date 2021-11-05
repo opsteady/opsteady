@@ -1,13 +1,12 @@
 name: Images Sync
 
 on:
-  push: {}
   workflow_dispatch:
     inputs:
       name:
-        description: 'Reason'
+        description: "Reason"
         required: false
-        default: 'Sync images'
+        default: "Sync images"
   schedule:
     - cron: "0 0 * * *"
 
@@ -17,13 +16,12 @@ jobs:
     container:
       image: xelalex/dregsy:0.4.1-alpine
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
 
-    - name: Check out repository code
-      uses: actions/checkout@v2
-
-    - name: Sync
-      run: |
-        skopeo login -u ${{ secrets.acr_username }} -p ${{ secrets.acr_password }} opsteadyos.azurecr.io
-        dregsy -config=support/sync/images/dregsy.yaml
-      env:
-        LOG_LEVEL: trace
+      - name: Sync
+        run: |
+          skopeo login -u ${{ secrets.acr_username }} -p ${{ secrets.acr_password }} opsteadyos.azurecr.io
+          dregsy -config=support/sync/images/dregsy.yaml
+        env:
+          LOG_LEVEL: trace

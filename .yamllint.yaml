@@ -1,0 +1,26 @@
+---
+extends: default
+
+ignore: |
+  .github
+  local-test-component
+
+# We don't want to add --- in every yaml
+rules:
+  document-start:
+    ignore: |
+      *
+  braces:
+    forbid: false
+    min-spaces-inside: 0
+    max-spaces-inside: 2
+    min-spaces-inside-empty: -1
+    max-spaces-inside-empty: -1
+  comments:
+    require-starting-space: true
+    ignore-shebangs: true
+    min-spaces-from-content: 1
+  line-length:
+    max: 120
+    allow-non-breakable-words: true
+    allow-non-breakable-inline-mappings: false

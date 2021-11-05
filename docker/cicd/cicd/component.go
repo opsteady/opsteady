@@ -16,10 +16,10 @@ func (d *DockerCicd) Initialize(defaultComponent component.DefaultComponent) {
 	d.DefaultComponent = defaultComponent
 	d.Docker = "" // Use root of the folder
 	buildArgs := map[string]string{
-		"FROM_IMAGE":               fmt.Sprintf("%s/%s", d.GlobalConfig.ManagementDockerRegistry, "base:1.0.0"),
+		"FROM_IMAGE":               fmt.Sprintf("%s/%s", d.GlobalConfig.ManagementDockerRegistry, "base:2.0.0"),
 		"VAULT_CA_STORAGE_ACCOUNT": d.GlobalConfig.VaultCaStorageAccountName,
 	}
-	d.SetDockerBuildInfo("cicd", "1.3.1", buildArgs)
+	d.SetDockerBuildInfo("cicd", "2.0.0", buildArgs)
 }
 
 func (c *DockerCicd) Deploy() {

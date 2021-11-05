@@ -17,6 +17,12 @@ func (c *DefaultComponent) Validate() {
 			c.ValidateDocker()
 		}
 	}
+
+	// Always execute YAML linting
+	yaml := tasks.NewYaml(c.Logger)
+	if err := yaml.Lint(c.ComponentFolder); err != nil {
+		c.Logger.Fatal().Err(err).Msg("YAML linting failed")
+	}
 }
 
 func (c *DefaultComponent) ValidateTerraform() {
