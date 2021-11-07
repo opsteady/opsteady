@@ -11,7 +11,9 @@ resource "vault_generic_secret" "outputs" {
   "${local.component_name_underscores}_pods_subnet_id": "${azurerm_subnet.pods.id}",
   "${local.component_name_underscores}_key_vault_id": "${azurerm_key_vault.platform.id}",
   "${local.component_name_underscores}_public_ip_prefix_id": "${azurerm_public_ip_prefix.pub.id}",
-  "${local.component_name_underscores}_log_analytics_id": "${azurerm_log_analytics_workspace.platform.id}"
+  "${local.component_name_underscores}_log_analytics_id": "${azurerm_log_analytics_workspace.platform.id}",
+  "${local.component_name_underscores}_public_zone_name": "${azurerm_dns_zone.public.name}",
+  "${local.component_name_underscores}_public_zone_id": "${azurerm_dns_zone.public.id}"
 }
 EOT
 }

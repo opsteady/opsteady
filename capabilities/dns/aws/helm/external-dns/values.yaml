@@ -1,0 +1,39 @@
+---
+image:
+  repository: opsteadyos.azurecr.io/external-dns/external-dns
+
+provider: aws
+
+imagePullSecrets:
+  - name: management-acr
+
+serviceAccount:
+  create: true
+  annotations:
+    eks.amazonaws.com/role-arn: {{ .capabilities_dns_aws_iam_role_arn }}
+
+priorityClassName: "system-cluster-critical"
+
+nodeSelector:
+  name: system
+
+affinity:
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+                - external-dns
+        topologyKey: "kubernetes.io/hostname"
+
+logLevel: debug
+logFormat: json
+
+policy: sync
+registry: txt
+txtOwnerId: {{ .foundation_aws_public_zone_id }}
+
+domainFilters:
+  - {{ .foundation_aws_public_zone_name }}

@@ -16,7 +16,9 @@ resource "vault_generic_secret" "outputs" {
   "${local.component_name_underscores}_pods_c_subnet_id": "${aws_subnet.pods_c.id}",
   "${local.component_name_underscores}_pods_a_cidr_block": "${aws_subnet.pods_a.cidr_block}",
   "${local.component_name_underscores}_pods_b_cidr_block": "${aws_subnet.pods_b.cidr_block}",
-  "${local.component_name_underscores}_pods_c_cidr_block": "${aws_subnet.pods_c.cidr_block}"
+  "${local.component_name_underscores}_pods_c_cidr_block": "${aws_subnet.pods_c.cidr_block}",
+  "${local.component_name_underscores}_public_zone_name": "${aws_route53_zone.public.name}",
+  "${local.component_name_underscores}_public_zone_id": "${aws_route53_zone.public.zone_id}"
 }
 EOT
 }

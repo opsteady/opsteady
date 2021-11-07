@@ -2,6 +2,8 @@
 package components
 
 import (
+	capabilitiesDNSAWS "github.com/opsteady/opsteady/capabilities/dns/aws/cicd"
+	capabilitiesDNSAzure "github.com/opsteady/opsteady/capabilities/dns/azure/cicd"
 	cli "github.com/opsteady/opsteady/cicd"
 	"github.com/opsteady/opsteady/cli/component"
 	dockerBase "github.com/opsteady/opsteady/docker/base/cicd"
@@ -34,14 +36,16 @@ func init() {
 	Components["foundation-azure"] = &foundationAzure.FoundationAzure{}
 	Components["foundation-aws"] = &foundationAWS.FoundationAWS{}
 	Components["kubernetes-aws-cluster"] = &kubernetesAWSCluster.KubernetesAWSCluster{}
+	Components["kubernetes-bootstrap"] = &kubernetesBootstrap.KubernetesBootstrap{}
 	Components["kubernetes-aws-storage-ebs"] = &kubernetesAWSStorageEBS.KubernetesAWSStorageEBS{}
 	Components["kubernetes-aws-storage-efs"] = &kubernetesAWSStorageEFS.KubernetesAWSStorageEFS{}
 	Components["kubernetes-aws-network-policies"] = &kubernetesAWSNetworkPolicies.KubernetesAWSNetworkPolicies{}
 	Components["kubernetes-aws-loadbalancing"] = &kubernetesAWSLoadbalancing.KubernetesAWSLoadbalancing{}
+	Components["kubernetes-azure-pod-identity"] = &kubernetesAzurePodIdentity.KubernetesAzurePodIdentity{}
 	Components["kubernetes-azure-cluster"] = &kubernetesAzureCluster.KubernetesAzure{}
-	Components["kubernetes-bootstrap"] = &kubernetesBootstrap.KubernetesBootstrap{}
+	Components["capabilities-dns-aws"] = &capabilitiesDNSAWS.CapabilitiesDNSAWS{}
+	Components["capabilities-dns-azure"] = &capabilitiesDNSAzure.CapabilitiesDNSAzure{}
 	Components["docker-base"] = &dockerBase.DockerBase{}
 	Components["docker-cicd"] = &dockerCicd.DockerCicd{}
-	Components["kubernetes-azure-pod-identity"] = &kubernetesAzurePodIdentity.KubernetesAzurePodIdentity{}
 	Components["cli"] = &cli.OpsteadyCli{}
 }

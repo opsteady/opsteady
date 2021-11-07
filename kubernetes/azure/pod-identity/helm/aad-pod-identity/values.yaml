@@ -3,6 +3,9 @@ forceNamespaced: true
 image:
   repository: opsteadyos.azurecr.io/oss/azure/aad-pod-identity
 
+imagePullSecrets:
+  - name: management-acr
+
 mic:
   priorityClassName: system-cluster-critical
   nodeSelector:

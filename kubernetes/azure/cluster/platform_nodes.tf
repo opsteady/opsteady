@@ -7,4 +7,5 @@ resource "azurerm_kubernetes_cluster_node_pool" "platform" {
   enable_host_encryption = true
   mode                   = "System"
   availability_zones     = ["1", "2", "3"]
+  node_labels            = { name : "system" }
 }
