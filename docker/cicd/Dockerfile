@@ -32,7 +32,7 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWSCLI_VERSION}
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # renovate: datasource=pypi depName=azure-cli versioning=semver
-ENV AZURECLI_VERSION=2.27.2
+ENV AZURECLI_VERSION=2.30.0
 # https://docs.microsoft.com/en-us/cli/azure/release-notes-azure-cli?tabs=azure-cli
 # Ubuntu 21.04 has months old version therefore using pip to install it
 RUN DEBIAN_FRONTEND=noninteractive install-packages python3-pip
