@@ -16,7 +16,11 @@ func (d *DockerCicd) Initialize(defaultComponent component.DefaultComponent) {
 	d.DefaultComponent = defaultComponent
 	d.Docker = "" // Use root of the folder
 	buildArgs := map[string]string{
-		"FROM_IMAGE":               fmt.Sprintf("%s/%s", d.GlobalConfig.ManagementDockerRegistry, "base:2.0.0"),
+		"FROM_IMAGE": fmt.Sprintf("%s/%s:%s",
+			d.GlobalConfig.ManagementDockerRegistry,
+			"base",
+			"2.0.0", // renovate: datasource=docker registryUrl=opsteadyos.azurecr.io depName=opsteadyos.azurecr.io/base versioning=semver
+		),
 		"VAULT_CA_STORAGE_ACCOUNT": d.GlobalConfig.VaultCaStorageAccountName,
 	}
 	d.SetDockerBuildInfo("cicd", "2.0.0", buildArgs)
