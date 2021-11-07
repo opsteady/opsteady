@@ -6,3 +6,5 @@
 - [Roles and Responsibilities](roles-responsibilities-and-permissions-matrix.md)
 - [Management Setup](management-setup.md)
 - [Frequently Asked Questions](faq.md)
+- [Platform features](features.md)
+- [Used IP ranges](ip-ranges.md)
