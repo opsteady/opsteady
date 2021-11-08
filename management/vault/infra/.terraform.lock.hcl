@@ -38,10 +38,20 @@ provider "registry.terraform.io/hashicorp/azurerm" {
 }
 
 provider "registry.terraform.io/hashicorp/helm" {
-  version     = "2.3.0"
-  constraints = "~> 2.3.0"
+  version     = "2.4.0"
+  constraints = "~> 2.4.0"
   hashes = [
-    "h1:qo08yDJAnkE8H2CNuI2fVP2W+J3bOCrXWRvAerQpgc8=",
+    "h1:/qcO1W2O2Awnlp68/cyQYqMqhf/y9xXoYXzm7+/s4MI=",
+    "h1:3gsh0LzdeqhTbSIS0IoJPZ28V5wn6v0+KXy8/iKl6uc=",
+    "h1:9HBYShkNgExj7GwC+y/JuMyoZAlRH8DoNhy/xO+ohZM=",
+    "h1:F0134WKVLPVACnZCfu2fypfGWyZLjOi7mmdY/xqz4eo=",
+    "h1:HWdHxbvjiPpzFOIBRSh5uTolFAXYpnK1FjQz0cq2D3c=",
+    "h1:MBEkc1f5f3x7SFKpIm8wCNNB0YE4F1MvZeGiEcEe7l0=",
+    "h1:jnEyyuOBUjXAT8JjvnecmAncCiFuvkXUKQzAJBoH4WA=",
+    "h1:mTSBUGcPPQzrFdiFJ+H0QiuNLjBlfKin/3oo2jjfnZU=",
+    "h1:nOl2KlYaI6qIk54LCiXDwU6AV5H8gqOwEG5Q9nqhgy0=",
+    "h1:ow4JkwXNM6KgAL+2cKa6anARwP8759FlivfZ5yQt31A=",
+    "h1:wE6GAUhmfUoLUGSTTMjxSl/v0+ydfi9uYQeXNB/sye8=",
   ]
 }
 
