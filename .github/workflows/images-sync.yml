@@ -14,7 +14,7 @@ jobs:
   images-sync:
     runs-on: ubuntu-latest
     container:
-      image: xelalex/dregsy:0.4.1-alpine
+      image: xelalex/dregsy:0.4.1-alpine # versioning=docker datasource=docker
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2

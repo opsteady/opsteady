@@ -16,8 +16,28 @@
       "fileMatch": ["(^|/)component.go$"],
       "matchStringsStrategy": "any",
       "matchStrings": [
-        "\\s+\"(?<currentValue>.*?)\".+\/\/ renovate: datasource=(?<datasource>.*?)\\s+registryUrl=(?<registryUrl>.*?)\\s+depName=(?<depName>.*?)\\s+versioning=(?<versioning>.*?)\\s+"
+        "\\s+\"(?<currentValue>.*?)\".+// renovate: datasource=(?<datasource>.*?)\\s+registryUrl=(?<registryUrl>.*?)\\s+depName=(?<depName>.*?)\\s+versioning=(?<versioning>.*?)\\s+"
+      ]
+    },
+    {
+      "fileMatch": ["(^|/).github.*.yml$"],
+      "matchStringsStrategy": "any",
+      "matchStrings": [
+        ".*image: (?<depName>.*?):(?<currentValue>.*?) # versioning=(?<versioning>.*?) datasource=(?<datasource>.*?)\n"
+      ]
+    },
+    {
+      "fileMatch": ["(^|/)devcontainer.json$"],
+      "matchStringsStrategy": "any",
+      "matchStrings": [
+        ".*_renovate.*versioning=(?<versioning>.*?) datasource=(?<datasource>.*?).,\n.*image....(?<depName>.*?):(?<currentValue>.*?).,"
       ]
     }
-  ]
+  ],
+  "allowedPostUpgradeCommands": [".*"],
+  "postUpgradeTasks": {
+    "commands": ["./hack/update-version-docker-go.sh"],
+    "fileFilters": ["**/*.go"],
+    "executionMode": "branch"
+  }
 }

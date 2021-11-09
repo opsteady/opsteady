@@ -30,3 +30,4 @@ jobs:
           token: "x-access-token:${{ steps.get_token.outputs.app_token }}"
         env:
           LOG_LEVEL: "debug"
+          RENOVATE_HOST_RULES: '[{"hostType": "docker", "hostName": "opsteadyos.azurecr.io", "username": "${{ secrets.ACR_USERNAME }}", "password": "${{ secrets.ACR_PASSWORD }}"}]'
