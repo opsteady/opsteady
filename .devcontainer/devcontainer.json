@@ -1,6 +1,6 @@
 {
   "_renovate": "versioning=semver datasource=docker",
-  "image": "opsteadyos.azurecr.io/cicd:2.0.0",
+  "image": "opsteadyos.azurecr.io/cicd:2.1.0",
   "forwardPorts": [8250],
   "mounts": [
     "source=${localEnv:HOME}/.cache,target=/home/platform/.cache,type=bind,consistency=cached",
