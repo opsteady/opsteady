@@ -1,13 +1,13 @@
 resource "azurerm_kubernetes_cluster" "platform" {
-  name                      = var.foundation_azure_name
-  dns_prefix                = var.foundation_azure_name
-  node_resource_group       = "platform-nodes-${var.foundation_azure_name}"
-  location                  = azurerm_resource_group.kubernetes.location
-  resource_group_name       = azurerm_resource_group.kubernetes.name
-  sku_tier                  = "Free"
-  kubernetes_version        = var.kubernetes_azure_cluster_kubernetes_version
-  private_cluster_enabled   = false
-  disk_encryption_set_id    = azurerm_disk_encryption_set.platform.id
+  name                    = var.foundation_azure_name
+  dns_prefix              = var.foundation_azure_name
+  node_resource_group     = "platform-nodes-${var.foundation_azure_name}"
+  location                = azurerm_resource_group.kubernetes.location
+  resource_group_name     = azurerm_resource_group.kubernetes.name
+  sku_tier                = "Free"
+  kubernetes_version      = var.kubernetes_azure_cluster_kubernetes_version
+  private_cluster_enabled = false
+  disk_encryption_set_id  = azurerm_disk_encryption_set.platform.id
 
   default_node_pool {
     name                   = "system"
@@ -18,6 +18,7 @@ resource "azurerm_kubernetes_cluster" "platform" {
     enable_auto_scaling    = false
     availability_zones     = ["1", "2", "3"]
     enable_host_encryption = true
+    node_labels            = { name : "system" }
   }
 
   network_profile {

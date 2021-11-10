@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: azure-dns-config
+  namespace: platform
+type: Opaque
+data:
+  azure.json: {{ .capabilities_dns_azure_azure_dns_config }}

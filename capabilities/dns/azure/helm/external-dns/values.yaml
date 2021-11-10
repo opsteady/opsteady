@@ -1,0 +1,37 @@
+image:
+  repository: opsteadyos.azurecr.io/external-dns/external-dns
+  tag: v0.9.0
+
+provider: azure
+
+imagePullSecrets:
+  - name: management-acr
+
+podLabels:
+  aadpodidbinding: dns
+
+priorityClassName: "system-cluster-critical"
+
+nodeSelector:
+  name: system
+
+logLevel: debug
+logFormat: json
+policy: sync
+registry: txt
+
+extraArgs:
+  - --azure-resource-group={{ .foundation_azure_resource_group }}
+
+domainFilters:
+  - {{ .foundation_azure_public_zone_name }}
+
+extraVolumes:
+  - name: azure-dns-config
+    secret:
+      secretName: azure-dns-config
+
+extraVolumeMounts:
+  - name: azure-dns-config
+    mountPath: /etc/kubernetes/
+    readOnly: true
