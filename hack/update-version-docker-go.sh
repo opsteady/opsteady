@@ -35,4 +35,4 @@ minor=$((minor+1))
 NEW_VERSION="${ver[0]}.$minor.${ver[2]}"
 
 echo "New version $NEW_VERSION"
-sed -i "s/$ORIGINAL_VERSION/$NEW_VERSION/" $SOURCE_FILE
+sed -i "/SetDockerBuildInfo/ s/$ORIGINAL_VERSION/$NEW_VERSION/" $SOURCE_FILE
