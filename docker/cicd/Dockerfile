@@ -7,6 +7,9 @@ USER root
 RUN install-packages git jq
 RUN install-packages golang-1.17
 
+# Can't do substituions and other things if using /bin/sh in RUN
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # renovate: datasource=github-releases depName=hashicorp/terraform versioning=semver
 ENV TERRAFORM_VERSION=v1.0.11
 RUN getfile https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION:1}/terraform_${TERRAFORM_VERSION:1}_linux_amd64.zip
@@ -28,8 +31,6 @@ ENV AWSCLI_VERSION=2.3.5
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWSCLI_VERSION}.zip" -o "awscliv2.zip" && \
     unzip awscliv2.zip && \
     ./aws/install
-
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # renovate: datasource=pypi depName=azure-cli versioning=semver
 ENV AZURECLI_VERSION=2.30.0
