@@ -9,7 +9,7 @@ RUN install-packages golang-1.17
 
 # renovate: datasource=github-releases depName=hashicorp/terraform versioning=semver
 ENV TERRAFORM_VERSION=v1.0.11
-RUN getfile https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+RUN getfile https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION:1}/terraform_${TERRAFORM_VERSION:1}_linux_amd64.zip
 
 # renovate: datasource=github-releases depName=hashicorp/vault versioning=semver
 ENV VAULT_VERSION=1.8.5
