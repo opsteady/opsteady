@@ -51,39 +51,43 @@ jobs:
           management_helm_repository: opsteadyos.azurecr.io
           EOF
 
+      - name: Destroy DNS capability
+        run: |
+          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c capabilities-dns-${{ github.event.inputs.cloud }} --cache
+
       - name: Destroy Kubernetes AAD pod identity
         if: github.event.inputs.cloud == 'azure'
         run: |
-          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c kubernetes-${{ github.event.inputs.cloud }}-pod-identity
+          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c kubernetes-${{ github.event.inputs.cloud }}-pod-identity --cache
 
       - name: Destroy Kubernetes AWS load balancer controller
         if: github.event.inputs.cloud == 'aws'
         run: |
-          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c kubernetes-${{ github.event.inputs.cloud }}-loadbalancing
+          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c kubernetes-${{ github.event.inputs.cloud }}-loadbalancing --cache
 
       - name: Destroy Kubernetes AWS storage EBS
         if: github.event.inputs.cloud == 'aws'
         run: |
-          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c kubernetes-${{ github.event.inputs.cloud }}-storage-ebs
+          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c kubernetes-${{ github.event.inputs.cloud }}-storage-ebs --cache
 
       - name: Destroy Kubernetes AWS storage EFS
         if: github.event.inputs.cloud == 'aws'
         run: |
-          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c kubernetes-${{ github.event.inputs.cloud }}-storage-efs
+          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c kubernetes-${{ github.event.inputs.cloud }}-storage-efs --cache
 
       - name: Destroy Kubernetes AWS network policies
         if: github.event.inputs.cloud == 'aws'
         run: |
-          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c kubernetes-${{ github.event.inputs.cloud }}-network-policies
+          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c kubernetes-${{ github.event.inputs.cloud }}-network-policies --cache
 
       - name: Destroy Kubernetes bootstrap
         run: |
-          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c kubernetes-bootstrap
+          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c kubernetes-bootstrap --cache
 
       - name: Destroy Kubernetes
         run: |
-          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c kubernetes-${{ github.event.inputs.cloud }}-cluster
+          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c kubernetes-${{ github.event.inputs.cloud }}-cluster --cache
 
       - name: Destroy foundation
         run: |
-          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c foundation-${{ github.event.inputs.cloud }}
+          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c foundation-${{ github.event.inputs.cloud }} --cache
