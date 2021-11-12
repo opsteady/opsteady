@@ -37,7 +37,7 @@ func (k *Kubectl) Delete(manifestFolder string, dryRun bool) error {
 	command := NewCommand("kubectl", manifestFolder)
 	command.AddArgs("delete")
 	if dryRun {
-		command.AddArgs("--dry-run=client", "-oyaml")
+		command.AddArgs("--ignore-not-found=true", "--dry-run=client", "-oyaml")
 	}
 	command.AddArgs("-f", ".")
 
