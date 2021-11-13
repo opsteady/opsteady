@@ -54,8 +54,6 @@ func (c *DefaultComponent) DeployTerraform(componentConfig map[string]interface{
 	if err := terraform.InitAndApply(varsPath); err != nil {
 		c.Logger.Fatal().Err(err).Msg("could not apply")
 	}
-
-	c.RetrieveComponentConfigWithoutCache() // We might have changed some outputs
 }
 
 // DeployHelm deploys Helm charts to Kubernetes
