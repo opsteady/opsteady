@@ -95,13 +95,7 @@ func calculateComponentFolder(comp component.Initialize) string {
 
 func initializeCacheDependency() (cache.Cache, cache.Cache) {
 	logger.Info().Msg("Initialize cache")
-	if cacheAllFlag {
-		cacheAll, err := cache.NewFileCache(globalConfig.CacheFile, &logger)
-		if err != nil {
-			logger.Fatal().Err(err)
-		}
-		return cacheAll, cacheAll
-	} else if cacheFlag {
+	if cacheFlag {
 		fileCache, err := cache.NewFileCache(globalConfig.CacheFile, &logger)
 		if err != nil {
 			logger.Fatal().Err(err)

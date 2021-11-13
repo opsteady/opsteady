@@ -33,7 +33,6 @@ var (
 
 	// Root flags (some are not configurable from config & ENV, maybe later)
 	cacheFlag         bool
-	cacheAllFlag      bool
 	verboseFlag       bool
 	traceFlag         bool
 	vaultFlag         string
@@ -74,7 +73,6 @@ func setDefaults() {
 
 func initializeGlobalFlags() {
 	rootCmd.PersistentFlags().BoolVarP(&cacheFlag, "cache", "", cacheFlag, "Cache the passwords to reduce credential fetching overhead")
-	rootCmd.PersistentFlags().BoolVarP(&cacheAllFlag, "cache-all", "", cacheAllFlag, "Cache all Vault calls")
 	rootCmd.PersistentFlags().StringVarP(&vaultFlag, "vault-address", "", vaultFlag, "Vault address")
 	rootCmd.PersistentFlags().BoolVarP(&vaultInsecureFlag, "vault-insecure", "", vaultInsecureFlag, "Allow insecure Vault connection")
 	rootCmd.PersistentFlags().BoolVarP(&verboseFlag, "verbose", "", verboseFlag, "Verbose output")

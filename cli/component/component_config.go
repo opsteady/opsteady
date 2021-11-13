@@ -15,7 +15,6 @@ import (
 // ComponentConfig interface to retrieve component config from Vault.
 type ComponentConfig interface {
 	RetrieveConfig(string, string, []string) (map[string]interface{}, error)
-	RetrieveConfigWithoutCache(string, string, []string) (map[string]interface{}, error)
 	GeneralAddOrOverride(string, string)
 }
 
@@ -44,28 +43,8 @@ func (c *ComponentConfigImpl) GeneralAddOrOverride(key, value string) {
 	c.overrides[key] = value
 }
 
-// RetrieveConfig retrieves the component config from Vault, using the cache if possible.
+// RetrieveConfig retrieves the component config from Vault.
 func (c *ComponentConfigImpl) RetrieveConfig(version, environment string, components []string) (map[string]interface{}, error) {
-	componentID := fmt.Sprintf("%s-%s-%s", version, environment, strings.Join(components[:], "-"))
-	settings := c.cache.Retrieve(componentID)
-	if settings != nil {
-		c.logger.Debug().Str("id", componentID).Msg("Using cached settings")
-		return settings, nil
-	}
-
-	values, err := c.retrieveConfig(version, environment, components)
-
-	c.cache.Store(componentID, values, c.TTL)
-
-	for k, v := range c.overrides {
-		values[k] = v
-	}
-
-	return values, err
-}
-
-// RetrieveConfigWithoutCache retrieves the component config from Vault, ignore the cache.
-func (c *ComponentConfigImpl) RetrieveConfigWithoutCache(version, environment string, components []string) (map[string]interface{}, error) {
 	values, err := c.retrieveConfig(version, environment, components)
 
 	for k, v := range c.overrides {
