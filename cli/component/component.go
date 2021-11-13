@@ -163,15 +163,6 @@ func (c *DefaultComponent) RetrieveComponentConfig() map[string]interface{} {
 	return values
 }
 
-// RetrieveComponentConfigWithoutCache returns the component config without using the cache
-func (c *DefaultComponent) RetrieveComponentConfigWithoutCache() map[string]interface{} {
-	values, err := c.ComponentConfig.RetrieveConfigWithoutCache(c.PlatformVersion, c.AzureIDorAwsID(), c.ComponentNameAndAllTheDependencies())
-	if err != nil {
-		c.Logger.Fatal().Err(err).Msg("could not retrieve component configuration")
-	}
-	return values
-}
-
 // AddAzureADCredentialsToComponentConfig adds Azure AD credentials to component config to be used elsewhere
 func (c *DefaultComponent) AddAzureADCredentialsToComponentConfig() {
 	azureAD, err := c.Credentials.AzureAD()

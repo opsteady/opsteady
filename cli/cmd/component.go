@@ -94,24 +94,23 @@ func calculateComponentFolder(comp component.Initialize) string {
 }
 
 func initializeCacheDependency() (cache.Cache, cache.Cache) {
+
+	passThroughCache := cache.NewPassThroughCache(&logger)
+
 	logger.Info().Msg("Initialize cache")
 	if cacheAllFlag {
 		cacheAll, err := cache.NewFileCache(globalConfig.CacheFile, &logger)
 		if err != nil {
 			logger.Fatal().Err(err)
 		}
-		return cacheAll, cacheAll
+		return passThroughCache, cacheAll
 	} else if cacheFlag {
-		fileCache, err := cache.NewFileCache(globalConfig.CacheFile, &logger)
-		if err != nil {
-			logger.Fatal().Err(err)
-		}
 		cacheConfig, err := cache.NewCache(&logger)
 		if err != nil {
 			logger.Fatal().Err(err)
 
 		}
-		return fileCache, cacheConfig
+		return passThroughCache, cacheConfig
 	}
 
 	cache, err := cache.NewCache(&logger)
@@ -119,7 +118,7 @@ func initializeCacheDependency() (cache.Cache, cache.Cache) {
 		logger.Fatal().Err(err)
 
 	}
-	return cache, cache
+	return passThroughCache, cache
 }
 
 // initComponentFlags initializes the flags used by all component commands like build/test/deploy/etc...

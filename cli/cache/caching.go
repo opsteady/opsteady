@@ -20,7 +20,8 @@ import (
 
 const creationTimeName = "creationTime"
 
-// Cache is used to store and retrieve data from memory or file
+// Cache is used to store and retrieve data from memory, file or
+// straight from the source system (pass-through).
 type Cache interface {
 	Store(string, map[string]interface{}, time.Duration)
 	Retrieve(string) map[string]interface{}
@@ -33,6 +34,23 @@ type CacheImpl struct {
 	filePath    string
 	logger      *zerolog.Logger
 	storeToFile bool
+	passThrough bool
+}
+
+// NewPassThroughCache returns a pass-through cache, meaning that nothing
+// will be cached. This is useful to differentiate between caching
+// different kinds of information. For example, Vault configuration
+// might get updated during execution. In that case we want to retrieve
+// the new values and not use a cache, while still using caching For
+// other kinds of information.
+func NewPassThroughCache(logger *zerolog.Logger) Cache {
+	return &CacheImpl{
+		data:        make(map[string]map[string]interface{}),
+		logger:      logger,
+		filePath:    "",
+		storeToFile: false,
+		passThrough: true,
+	}
 }
 
 // NewCache returns cache in memory only
@@ -48,6 +66,7 @@ func NewFileCache(filePath string, logger *zerolog.Logger) (Cache, error) {
 		logger:      logger,
 		filePath:    filePath,
 		storeToFile: false,
+		passThrough: false,
 	}
 
 	if filePath != "" {
@@ -65,6 +84,13 @@ func NewFileCache(filePath string, logger *zerolog.Logger) (Cache, error) {
 // Store data to the cache (memory or file)
 // Set the creation time to now
 func (c *CacheImpl) Store(id string, data map[string]interface{}, ttl time.Duration) {
+
+	// Don't store anything if pass-through is enabled.
+	if c.passThrough {
+		c.logger.Trace().Msg("Pass-through enabled, not storing anything in the cache.")
+		return
+	}
+
 	c.logger.Debug().Msg("Add creation time to the data")
 	data[creationTimeName] = time.Now().UTC().Add(ttl).Format(time.RFC3339)
 
@@ -88,6 +114,13 @@ func (c *CacheImpl) Store(id string, data map[string]interface{}, ttl time.Durat
 // Also check if the data will be still valid for 10 minutes
 // The creation time should always be available, if not data is considered invalid
 func (c *CacheImpl) Retrieve(id string) map[string]interface{} {
+
+	// Treat the data as uncached in case of pass-through configuration.
+	if c.passThrough {
+		c.logger.Trace().Msg("Pass-through enabled, returning an empty cache.")
+		return nil
+	}
+
 	c.logger.Debug().Str("id", id).Msg("Retrieving cached object")
 	c.lock.Lock()
 	data, ok := c.data[id]
