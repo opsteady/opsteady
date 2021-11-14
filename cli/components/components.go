@@ -2,6 +2,8 @@
 package components
 
 import (
+	capabilitiesCertificatesAWS "github.com/opsteady/opsteady/capabilities/certificates/aws/cicd"
+	capabilitiesCertificatesAzure "github.com/opsteady/opsteady/capabilities/certificates/azure/cicd"
 	capabilitiesDNSAWS "github.com/opsteady/opsteady/capabilities/dns/aws/cicd"
 	capabilitiesDNSAzure "github.com/opsteady/opsteady/capabilities/dns/azure/cicd"
 	cli "github.com/opsteady/opsteady/cicd"
@@ -45,6 +47,8 @@ func init() {
 	Components["kubernetes-azure-cluster"] = &kubernetesAzureCluster.KubernetesAzure{}
 	Components["capabilities-dns-aws"] = &capabilitiesDNSAWS.CapabilitiesDNSAWS{}
 	Components["capabilities-dns-azure"] = &capabilitiesDNSAzure.CapabilitiesDNSAzure{}
+	Components["capabilities-certificates-aws"] = &capabilitiesCertificatesAWS.CapabilitiesCertificatesAWS{}
+	Components["capabilities-certificates-azure"] = &capabilitiesCertificatesAzure.CapabilitiesCertificatesAzure{}
 	Components["docker-base"] = &dockerBase.DockerBase{}
 	Components["docker-cicd"] = &dockerCicd.DockerCicd{}
 	Components["cli"] = &cli.OpsteadyCli{}
