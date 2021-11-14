@@ -2,6 +2,10 @@ variable "foundation_aws_name" {
   type = string
 }
 
+variable "foundation_aws_region" {
+  type = string
+}
+
 variable "foundation_aws_public_zone_id" {
   type = string
 }
