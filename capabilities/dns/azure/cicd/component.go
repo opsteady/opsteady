@@ -16,5 +16,4 @@ func (c *CapabilitiesDNSAzure) Initialize(defaultComponent component.DefaultComp
 		"external-dns",
 		"1.6.0", // renovate: datasource=helm registryUrl=https://kubernetes-sigs.github.io/external-dns depName=external-dns versioning=semver
 	))
-	c.DefaultComponent.OverrideDeployOrder = []string{"terraform", "kubectl", "helm"}
 }

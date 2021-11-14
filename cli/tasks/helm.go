@@ -19,6 +19,7 @@ func NewHelm(logger *zerolog.Logger) *Helm {
 }
 
 // Upgrade installs or upgrades Helm releases
+// Does not install CRDs if present in the Helm chart
 func (h *Helm) Upgrade(valuesFolder, url, name, namespace, version string, dryRun bool) error {
 	h.logger.Info().Str("release", name).Msg("Running Helm upgrade for release")
 
@@ -28,6 +29,7 @@ func (h *Helm) Upgrade(valuesFolder, url, name, namespace, version string, dryRu
 		name,
 		fmt.Sprintf("oci://%s/helm/%s", url, name),
 		"--install",
+		"--skip-crds",
 		"--atomic",
 		fmt.Sprintf("--dry-run=%t", dryRun),
 		"--namespace",

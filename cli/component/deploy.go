@@ -24,13 +24,19 @@ func (c *DefaultComponent) Deploy() {
 		case c.Terraform:
 			c.PrepareTerraformBackend()
 			c.DeployTerraform(componentConfig)
+		case c.CRD:
+			c.LoginToAKSorEKS(componentConfig)
+			c.DeployCRD(componentConfig)
+		case c.KubeSetup:
+			c.LoginToAKSorEKS(componentConfig)
+			c.DeployKubeSetup(componentConfig)
 		case c.Helm:
 			c.LoginToAKSorEKS(componentConfig)
 			c.LoginToHelmRegistry()
 			c.DeployHelm(componentConfig)
-		case c.Kubectl:
+		case c.KubePostSetup:
 			c.LoginToAKSorEKS(componentConfig)
-			c.DeployKubectl(componentConfig)
+			c.DeployKubePostSetup(componentConfig)
 		}
 	}
 }
@@ -72,16 +78,38 @@ func (c *DefaultComponent) DeployHelm(componentConfig map[string]interface{}) {
 	}
 }
 
-// DeployKubectl deploys Kubernetes yaml files to Kubernetes
-func (c *DefaultComponent) DeployKubectl(componentConfig map[string]interface{}) {
+// DeployKubeSetup deploys Kubernetes yaml files to Kubernetes
+func (c *DefaultComponent) DeployKubeSetup(componentConfig map[string]interface{}) {
 	template := templating.NewTemplating(c.Logger)
 
-	if err := template.Render(c.KubectlFolder(), c.KubectlTmpFolder(), componentConfig); err != nil {
-		c.Logger.Fatal().Err(err).Msg("could not template Kubernetes manifest files")
+	if err := template.Render(c.KubeSetupFolder(), c.KubeSetupTmpFolder(), componentConfig); err != nil {
+		c.Logger.Fatal().Err(err).Msg("could not template kube_setup manifest files")
 	}
 
 	kubectl := tasks.NewKubectl(c.Logger)
-	if err := kubectl.Apply(c.KubectlTmpFolder(), c.DryRun); err != nil {
-		c.Logger.Fatal().Err(err).Msg("could not apply Kubernetes manifest files")
+	if err := kubectl.Apply(c.KubeSetupTmpFolder(), c.DryRun); err != nil {
+		c.Logger.Fatal().Err(err).Msg("could not apply kube_setup manifest files")
+	}
+}
+
+// DeployKubePostSetup deploys Kubernetes yaml files to Kubernetes
+func (c *DefaultComponent) DeployKubePostSetup(componentConfig map[string]interface{}) {
+	template := templating.NewTemplating(c.Logger)
+
+	if err := template.Render(c.KubePostSetupFolder(), c.KubePostSetupTmpFolder(), componentConfig); err != nil {
+		c.Logger.Fatal().Err(err).Msg("could not template kube_post_setup manifest files")
+	}
+
+	kubectl := tasks.NewKubectl(c.Logger)
+	if err := kubectl.Apply(c.KubePostSetupTmpFolder(), c.DryRun); err != nil {
+		c.Logger.Fatal().Err(err).Msg("could not apply kube_post_setup manifest files")
+	}
+}
+
+// DeployCRD deploys Kubernetes yaml files to Kubernetes
+func (c *DefaultComponent) DeployCRD(componentConfig map[string]interface{}) {
+	kubectl := tasks.NewKubectl(c.Logger)
+	if err := kubectl.Apply(c.CRDFolder(), c.DryRun); err != nil {
+		c.Logger.Fatal().Err(err).Msg("could not apply CRD manifest files")
 	}
 }

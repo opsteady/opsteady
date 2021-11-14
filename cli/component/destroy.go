@@ -5,14 +5,20 @@ import (
 
 	"github.com/opsteady/opsteady/cli/tasks"
 	"github.com/opsteady/opsteady/cli/templating"
+	"github.com/opsteady/opsteady/cli/utils"
 )
 
 // Destroy runs the component destruction.
+// Run the destroy in the opposite direction than the deploy
+// OverrideDestroyOrder is used as is if set
 func (c *DefaultComponent) Destroy() {
 	c.SetCloudCredentialsToEnv()
 	c.SetPlatformInfoToComponentConfig()
 
-	executeOrder := c.DetermineOrderOfExecution()
+	executeOrder := utils.ReverseStringArray(c.DetermineOrderOfExecution())
+	if len(c.OverrideDeployOrder) != 0 {
+		executeOrder = utils.ReverseStringArray(c.OverrideDeployOrder)
+	}
 	if len(c.OverrideDestroyOrder) != 0 {
 		executeOrder = c.OverrideDestroyOrder
 	}
@@ -24,12 +30,18 @@ func (c *DefaultComponent) Destroy() {
 		case c.Terraform:
 			c.PrepareTerraformBackend()
 			c.DestroyTerraform(componentConfig)
+		case c.CRD:
+			c.LoginToAKSorEKS(componentConfig)
+			c.DestroyCRD(componentConfig)
+		case c.KubeSetup:
+			c.LoginToAKSorEKS(componentConfig)
+			c.DestroyKubeSetup(componentConfig)
 		case c.Helm:
 			c.LoginToAKSorEKS(componentConfig)
 			c.DestroyHelm(componentConfig)
-		case c.Kubectl:
+		case c.KubePostSetup:
 			c.LoginToAKSorEKS(componentConfig)
-			c.DestroyKubectl(componentConfig)
+			c.DestroyKubePostSetup(componentConfig)
 		}
 	}
 }
@@ -57,16 +69,38 @@ func (c *DefaultComponent) DestroyHelm(componentConfig map[string]interface{}) {
 	}
 }
 
-// DestroyKubectl destroy Kubernetes yaml files to Kubernetes
-func (c *DefaultComponent) DestroyKubectl(componentConfig map[string]interface{}) {
+// DestroyKubeSetup destroy Kubernetes yaml files to Kubernetes
+func (c *DefaultComponent) DestroyKubeSetup(componentConfig map[string]interface{}) {
 	template := templating.NewTemplating(c.Logger)
 
-	if err := template.Render(c.KubectlFolder(), c.KubectlTmpFolder(), componentConfig); err != nil {
+	if err := template.Render(c.KubeSetupFolder(), c.KubeSetupTmpFolder(), componentConfig); err != nil {
 		c.Logger.Fatal().Err(err).Msg("could not template Kubernetes manifest files")
 	}
 
 	kubectl := tasks.NewKubectl(c.Logger)
-	if err := kubectl.Delete(c.KubectlTmpFolder(), c.DryRun); err != nil {
+	if err := kubectl.Delete(c.KubeSetupTmpFolder(), c.DryRun); err != nil {
 		c.Logger.Fatal().Err(err).Msg("could not delete Kubernetes manifest files")
+	}
+}
+
+// DestroyKubePostSetup destroy Kubernetes yaml files to Kubernetes
+func (c *DefaultComponent) DestroyKubePostSetup(componentConfig map[string]interface{}) {
+	template := templating.NewTemplating(c.Logger)
+
+	if err := template.Render(c.KubePostSetupFolder(), c.KubePostSetupTmpFolder(), componentConfig); err != nil {
+		c.Logger.Fatal().Err(err).Msg("could not template Kubernetes manifest files")
+	}
+
+	kubectl := tasks.NewKubectl(c.Logger)
+	if err := kubectl.Delete(c.KubePostSetupTmpFolder(), c.DryRun); err != nil {
+		c.Logger.Fatal().Err(err).Msg("could not delete Kubernetes manifest files")
+	}
+}
+
+// DestroyCRD destroy CRD yaml files to Kubernetes
+func (c *DefaultComponent) DestroyCRD(componentConfig map[string]interface{}) {
+	kubectl := tasks.NewKubectl(c.Logger)
+	if err := kubectl.Delete(c.CRDFolder(), c.DryRun); err != nil {
+		c.Logger.Fatal().Err(err).Msg("could not delete CRD manifest files")
 	}
 }
