@@ -19,6 +19,14 @@ tasks:
     mappings:
       - from: tigera/operator
         tags: ["v1.20.3"]
+      - from: jetstack/cert-manager-controller
+        tags: ["v1.6.0"]
+      - from: jetstack/cert-manager-webhook
+        tags: ["v1.6.0"]
+      - from: jetstack/cert-manager-cainjector
+        tags: ["v1.6.0"]
+      - from: jetstack/cert-manager-ctl
+        tags: ["v1.6.0"]
 
   - name: docker.io
     verbose: true

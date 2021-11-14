@@ -1,0 +1,12 @@
+source:
+  repo:
+    kind: HELM
+    url: https://charts.jetstack.io
+target:
+  containerRegistry: opsteadyos.azurecr.io
+  containerRepository: opsteadyos.azurecr.io
+  repo:
+    kind: OCI
+    url: https://opsteadyos.azurecr.io/helm
+charts:
+  - cert-manager
