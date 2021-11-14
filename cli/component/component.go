@@ -53,10 +53,12 @@ type DefaultComponent struct {
 	HelmCharts            []*HelmChart     // We expect all charts to be comming from management ACR
 	DockerBuildInfo       *DockerBuildInfo // We expect all docker images to be saved to ACR
 	// Names of the folders a component uses which will determin what will be executed, order can be adjusted
-	Terraform string
-	Helm      string
-	Kubectl   string
-	Docker    string
+	Terraform     string
+	CRD           string
+	KubeSetup     string
+	Helm          string
+	KubePostSetup string
+	Docker        string
 	// Override order
 	OverrideDeployOrder   []string
 	OverrideDestroyOrder  []string

@@ -57,8 +57,10 @@ func executeComponent(cmd *cobra.Command, executeComponent func(c component.Comp
 		AzureID:                    azureIDFlag,
 		PlatformVersion:            platformVersionFlag,
 		Terraform:                  "terraform",
+		CRD:                        "crd",
+		KubeSetup:                  "kube_setup",
 		Helm:                       "helm",
-		Kubectl:                    "kubectl",
+		KubePostSetup:              "kube_post_setup",
 		Docker:                     "docker",
 	}
 
