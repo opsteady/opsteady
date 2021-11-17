@@ -23,7 +23,7 @@ ENV HELM_VERSION=v3.7.1
 RUN getfile https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz
 
 # renovate: datasource=github-releases depName=kubernetes/kubernetes versioning=semver
-ENV KUBERENTES_VERSION=v1.22.3
+ENV KUBERENTES_VERSION=v1.22.4
 RUN getfile https://storage.googleapis.com/kubernetes-release/release/${KUBERENTES_VERSION}/bin/linux/amd64/kubectl
 
 # renovate: datasource=github-tags depName=aws/aws-cli versioning=semver
