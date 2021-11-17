@@ -7,7 +7,7 @@ terraform {
     }
 
     vault = {
-      version = "~> 2.24.0"
+      version = "~> 3.0.0"
     }
 
     azuread = {
