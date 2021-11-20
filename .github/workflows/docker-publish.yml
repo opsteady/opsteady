@@ -17,7 +17,7 @@ jobs:
       id-token: write
       contents: read
     container:
-      image: opsteadyos.azurecr.io/cicd:2.3.0 # versioning=semver datasource=docker
+      image: opsteadyos.azurecr.io/cicd:2.4.0 # versioning=semver datasource=docker
       options: --user root
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
