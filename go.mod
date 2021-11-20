@@ -21,7 +21,7 @@ require (
 	github.com/hashicorp/go-plugin v1.4.3 // indirect
 	github.com/hashicorp/go-retryablehttp v0.7.0 // indirect
 	github.com/hashicorp/go-version v1.3.0 // indirect
-	github.com/hashicorp/vault v1.8.5
+	github.com/hashicorp/vault v1.9.0
 	github.com/hashicorp/vault-plugin-auth-jwt v0.11.2
 	github.com/hashicorp/vault-plugin-secrets-kv v0.10.1
 	github.com/hashicorp/vault/api v1.3.0
