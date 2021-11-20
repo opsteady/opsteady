@@ -5,7 +5,7 @@ go 1.16
 require (
 	cloud.google.com/go/kms v0.2.0 // indirect
 	cloud.google.com/go/monitoring v0.2.0 // indirect
-	github.com/Azure/azure-sdk-for-go v59.2.0+incompatible
+	github.com/Azure/azure-sdk-for-go v59.3.0+incompatible
 	github.com/Azure/go-autorest/autorest v0.11.22 // indirect
 	github.com/Azure/go-autorest/autorest/azure/auth v0.5.9
 	github.com/Masterminds/goutils v1.1.1 // indirect
