@@ -2,7 +2,6 @@ package tasks
 
 import (
 	"fmt"
-	"io"
 	"os"
 	"os/exec"
 
@@ -23,7 +22,6 @@ type CommandImpl struct {
 	Args       []string          // The args to pass to the command
 	WorkingDir string            // The working directory
 	Env        map[string]string // Additional environment variables to set
-	writer     io.Writer
 }
 
 // NewCommand creates the CommandImpl

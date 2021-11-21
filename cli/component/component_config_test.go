@@ -40,6 +40,7 @@ func TestAddAndOverrideConfigManually(t *testing.T) {
 func setupComponentConfigForTest(t *testing.T) ComponentConfig {
 	logger := zerolog.Nop()
 	cache, err := cache.NewCache(&logger)
+
 	if err != nil {
 		t.Fatal(err)
 	}

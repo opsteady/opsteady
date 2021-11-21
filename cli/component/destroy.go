@@ -19,6 +19,7 @@ func (c *DefaultComponent) Destroy() {
 	if len(c.OverrideDeployOrder) != 0 {
 		executeOrder = utils.ReverseStringArray(c.OverrideDeployOrder)
 	}
+
 	if len(c.OverrideDestroyOrder) != 0 {
 		executeOrder = c.OverrideDestroyOrder
 	}
@@ -46,9 +47,9 @@ func (c *DefaultComponent) Destroy() {
 	}
 }
 
-// DestroyTerraform destroyes resources created by Terrform
+// DestroyTerraform destroys resources created by Terrform
 func (c *DefaultComponent) DestroyTerraform(values map[string]interface{}) {
-	backendStorageName := values["management_bootstrap_terraform_state_account_name"].(string) // Always expecting this to be here
+	backendStorageName := values["management_bootstrap_terraform_state_account_name"].(string) //nolint // Always expecting this to be here
 	terraform := tasks.NewTerraform(c.TerraformFolder(), c.TerraformBackendConfigPath, backendStorageName, c.GlobalConfig.CachePath, c.Logger)
 
 	varsPath := fmt.Sprintf("%s/%s.tfvars.json", c.GlobalConfig.TmpFolder, c.ComponentName)

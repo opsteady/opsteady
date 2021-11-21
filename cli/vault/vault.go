@@ -24,7 +24,7 @@ type Vault interface {
 }
 
 // VaultImpl is the Vault interface implementation
-type VaultImpl struct {
+type VaultImpl struct { //nolint
 	client *api.Client
 	logger *zerolog.Logger
 	cache  cache.Cache
@@ -36,24 +36,37 @@ func NewVault(address, role, token string, insecure bool, cache cache.Cache, log
 	logger.Debug().Msg("Initialize Vault")
 
 	config := api.DefaultConfig()
-	config.ConfigureTLS(&api.TLSConfig{Insecure: insecure})
+	err := config.ConfigureTLS(&api.TLSConfig{Insecure: insecure})
+
+	if err != nil {
+		return nil, errors.Wrap(err, "could not configure TLS")
+	}
+
 	client, err := api.NewClient(config)
+
 	if err != nil {
 		return nil, errors.Wrap(err, "could not create the Vault client")
 	}
-	client.SetAddress(address)
+
+	if err := client.SetAddress(address); err != nil {
+		return nil, errors.Wrap(err, "could not set Vault address")
+	}
 
 	if token == "" {
 		tokenMap := cache.Retrieve(role)
+
 		if tokenMap == nil {
 			logger.Info().Str("role", role).Msg("Token not available in cache, logging in")
+
 			var err error
+
 			if token, err = oidcLogin(role, client, logger); err != nil {
 				return nil, err
 			}
+
 			cache.Store(role, map[string]interface{}{"token": token}, tokenTTL)
 		} else {
-			token = tokenMap["token"].(string)
+			token = tokenMap["token"].(string) //nolint
 		}
 	}
 
@@ -89,12 +102,14 @@ func oidcLogin(role string, client *api.Client, logger *zerolog.Logger) (string,
 func (v *VaultImpl) Read(path string, data map[string][]string) (map[string]interface{}, error) {
 	v.logger.Debug().Str("path", path).Msg("Read from Vault")
 	secret, err := v.client.Logical().ReadWithData(path, data)
+
 	if err != nil {
 		return nil, errors.Wrapf(err, "could not read from Vault path %s", path)
 	}
 
 	if secret == nil {
 		v.logger.Warn().Str("path", path).Msg("Secret is empty")
+
 		return make(map[string]interface{}), nil
 	}
 
@@ -105,6 +120,7 @@ func (v *VaultImpl) Read(path string, data map[string][]string) (map[string]inte
 func (v *VaultImpl) Write(path string, data map[string]interface{}) (map[string]interface{}, error) {
 	v.logger.Debug().Str("path", path).Msg("Write to Vault")
 	secret, err := v.client.Logical().Write(path, data)
+
 	if err != nil {
 		return nil, errors.Wrapf(err, "could not write to Vault path %s", path)
 	}

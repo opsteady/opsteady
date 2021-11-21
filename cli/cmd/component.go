@@ -23,13 +23,14 @@ var (
 )
 
 func executeComponent(cmd *cobra.Command, executeComponent func(c component.Component)) {
-	stopWhenAwsOrAzureIdNotSpecified(cmd)
+	stopWhenAwsOrAzureIDNotSpecified(cmd)
 	// Cleaning the TMP folder is very important because it stores rendered files
 	// If not cleaned you might apply wrong settings or files to wrong environments
 	ensureTmpFolderExistsAndIsEmpty()
 
 	logger.Debug().Msg("Find the component")
 	comp, ok := components.Components[componentFlag]
+
 	if !ok {
 		logger.Fatal().Str("component", componentFlag).Msg("Could not find component")
 	}
@@ -66,11 +67,12 @@ func executeComponent(cmd *cobra.Command, executeComponent func(c component.Comp
 
 	logger.Debug().Msg("Run the the component")
 	comp.Initialize(defaultComponent)
+
 	defer comp.(component.Component).Clean()
 	executeComponent(comp.(component.Component))
 }
 
-func stopWhenAwsOrAzureIdNotSpecified(cmd *cobra.Command) {
+func stopWhenAwsOrAzureIDNotSpecified(cmd *cobra.Command) {
 	if cmd.Use == "deploy" || cmd.Use == "destroy" {
 		if azureIDFlag == "" && awsIDFlag == "" {
 			logger.Fatal().Msgf("You need to specify an 'azure-id' or 'aws-id' flag for %s command", cmd.Use)
@@ -83,7 +85,9 @@ func ensureTmpFolderExistsAndIsEmpty() {
 	if err := os.RemoveAll(globalConfig.TmpFolder); err != nil {
 		logger.Fatal().Err(err).Msg("could not clean up the TMP dir")
 	}
+
 	logger.Trace().Msg("Create TMP dir")
+
 	if err := os.Mkdir(globalConfig.TmpFolder, 0700); err != nil {
 		logger.Fatal().Err(err).Str("dir", globalConfig.TmpFolder).Msg("could not create temporary directory")
 	}
@@ -92,6 +96,7 @@ func ensureTmpFolderExistsAndIsEmpty() {
 func calculateComponentFolder(comp component.Initialize) string {
 	fullPath := reflect.ValueOf(comp).Elem().Type().PkgPath()
 	withoutGithub := strings.ReplaceAll(fullPath, "github.com/opsteady/opsteady/", "")
+
 	return path.Dir(withoutGithub) // strip cicd from the path
 }
 
@@ -99,22 +104,24 @@ func initializeCacheDependency() (cache.Cache, cache.Cache) {
 	logger.Info().Msg("Initialize cache")
 	if cacheFlag {
 		fileCache, err := cache.NewFileCache(globalConfig.CacheFile, &logger)
+
 		if err != nil {
 			logger.Fatal().Err(err)
 		}
 		cacheConfig, err := cache.NewCache(&logger)
+
 		if err != nil {
 			logger.Fatal().Err(err)
-
 		}
+
 		return fileCache, cacheConfig
 	}
 
 	cache, err := cache.NewCache(&logger)
 	if err != nil {
 		logger.Fatal().Err(err)
-
 	}
+
 	return cache, cache
 }
 
@@ -127,6 +134,7 @@ func initComponentFlags(cmd *cobra.Command) {
 	if cmd.Use == "deploy" {
 		cmd.Flags().BoolVarP(&dryRunFlag, "dry-run", "", false, "Dry run the deployment")
 	}
+
 	cmd.Flags().StringVarP(&platformVersionFlag, "platform-version", "", "v0", "Platform version")
 	_ = cmd.MarkFlagRequired("component")
 }

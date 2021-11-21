@@ -28,22 +28,22 @@ func (o *OpsteadyCli) Validate() {
 	}
 }
 
-func (c *OpsteadyCli) Deploy() {
-	c.Logger.Info().Msg("Deploy not supported for this component")
+func (o *OpsteadyCli) Deploy() {
+	o.Logger.Info().Msg("Deploy not supported for this component")
 }
 
-func (c *OpsteadyCli) Destroy() {
-	c.Logger.Info().Msg("Destroy not supported for this component")
+func (o *OpsteadyCli) Destroy() {
+	o.Logger.Info().Msg("Destroy not supported for this component")
 }
 
-func (c *OpsteadyCli) Build() {
-	c.Logger.Info().Msg("Build not supported for this component")
+func (o *OpsteadyCli) Build() {
+	o.Logger.Info().Msg("Build not supported for this component")
 }
 
-func (c *OpsteadyCli) Test() {
-	c.Logger.Info().Msg("Test not supported for this component")
+func (o *OpsteadyCli) Test() {
+	o.Logger.Info().Msg("Test not supported for this component")
 }
 
-func (c *OpsteadyCli) Publish() {
-	c.Logger.Info().Msg("Publish not supported for this component")
+func (o *OpsteadyCli) Publish() {
+	o.Logger.Info().Msg("Publish not supported for this component")
 }

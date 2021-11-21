@@ -64,7 +64,7 @@ func (h *Helm) Delete(valuesFolder, name, namespace string, dryRun bool) error {
 		// so we just assume that the Helm status command could not find the release.
 		// The console output will indicate what the error was, so the information is
 		// not entirely lost in case you want to debug the command the failure.
-		return nil
+		return nil //nolint
 	}
 
 	command = NewCommand("helm", valuesFolder)

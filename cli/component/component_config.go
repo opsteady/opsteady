@@ -13,13 +13,13 @@ import (
 )
 
 // ComponentConfig interface to retrieve component config from Vault.
-type ComponentConfig interface {
+type ComponentConfig interface { //nolint
 	RetrieveConfig(string, string, []string) (map[string]interface{}, error)
 	GeneralAddOrOverride(string, string)
 }
 
 // ComponentConfigImpl is the implementation of the ComponentConfig interface.
-type ComponentConfigImpl struct {
+type ComponentConfigImpl struct { //nolint
 	TTL       time.Duration
 	cache     cache.Cache
 	logger    *zerolog.Logger
@@ -65,34 +65,42 @@ func (c *ComponentConfigImpl) retrieveConfig(version, environment string, compon
 	var wg sync.WaitGroup
 
 	c.logger.Debug().Msg("Fetch default settings for components")
+
 	for _, component := range components {
 		wg.Add(1)
 		path := fmt.Sprintf("config/data/%s/component/%s", version, component)
-		go c.fetchConfig(path, component, chanComponents, chanErrors, &wg)
+
+		go c.fetchConfig(path, chanComponents, chanErrors, &wg)
 	}
 
 	c.logger.Debug().Msg("Fetch settings per environment per component")
+
 	for _, component := range components {
 		wg.Add(1)
 		env := environment
+
 		if strings.HasPrefix(component, "management-") {
 			// Don't look at the platform env because it is the management env
 			env = "management"
 		}
 		path := fmt.Sprintf("config/data/%s/platform/%s/%s", version, env, component)
-		go c.fetchConfig(path, component, chanPlatform, chanErrors, &wg)
+
+		go c.fetchConfig(path, chanPlatform, chanErrors, &wg)
 	}
 
 	c.logger.Debug().Msg("Fetch Terraform output per environment per component")
+
 	for _, component := range components {
 		wg.Add(1)
 		env := environment
+
 		if strings.HasPrefix(component, "management-") {
 			// Don't look at the platform env because it is the management env
 			env = "management"
 		}
 		path := fmt.Sprintf("config/data/%s/platform/%s/%s-tf", version, env, component)
-		go c.fetchConfig(path, component, chanPlatformTerraform, chanErrors, &wg)
+
+		go c.fetchConfig(path, chanPlatformTerraform, chanErrors, &wg)
 	}
 
 	wg.Wait()
@@ -108,6 +116,7 @@ func (c *ComponentConfigImpl) retrieveConfig(version, environment string, compon
 	}
 
 	c.logger.Debug().Msg("First get the components")
+
 	for value := range chanComponents {
 		for k, v := range value {
 			values[k] = v
@@ -115,6 +124,7 @@ func (c *ComponentConfigImpl) retrieveConfig(version, environment string, compon
 	}
 
 	c.logger.Debug().Msg("Now override with platform specific info")
+
 	for value := range chanPlatform {
 		for k, v := range value {
 			values[k] = v
@@ -122,6 +132,7 @@ func (c *ComponentConfigImpl) retrieveConfig(version, environment string, compon
 	}
 
 	c.logger.Debug().Msg("Now add Terraform output platform specific")
+
 	for value := range chanPlatformTerraform {
 		for k, v := range value {
 			values[k] = v
@@ -131,20 +142,24 @@ func (c *ComponentConfigImpl) retrieveConfig(version, environment string, compon
 	return values, nil
 }
 
-func (c *ComponentConfigImpl) fetchConfig(path, component string, chanValues chan map[string]interface{}, chanErrors chan error, wg *sync.WaitGroup) {
+func (c *ComponentConfigImpl) fetchConfig(path string, chanValues chan map[string]interface{}, chanErrors chan error, wg *sync.WaitGroup) {
 	defer wg.Done()
 	values := make(map[string]interface{})
 
 	secret, err := c.vault.Read(path, nil)
+
 	if err != nil {
 		chanErrors <- err
+
 		return
 	}
 
 	if secret == nil {
 		chanErrors <- errors.Errorf("Data is empty in path [%s]", path)
+
 		return
 	}
+
 	if data, ok := secret["data"]; ok {
 		// Data can be nil if it is a '-tf' secret which is automatically created and deleted.
 		// When deleted the secret is still there but without any data.

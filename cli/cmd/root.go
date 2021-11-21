@@ -66,6 +66,7 @@ func setDefaults() {
 	if err != nil {
 		logger.Fatal().Err(err).Msg("Could not find the home dir")
 	}
+
 	viper.SetDefault("cache_path", fmt.Sprintf("%s/.cache", homeDir))
 	viper.SetDefault("cache_file", fmt.Sprintf("%s/.cache/.platform-cache", homeDir))
 	viper.SetDefault("tmp_folder", "/tmp/opsteady")
@@ -79,27 +80,41 @@ func initializeGlobalFlags() {
 	rootCmd.PersistentFlags().BoolVarP(&traceFlag, "trace", "", traceFlag, "Trace calls")
 
 	// The following flags can be set using config file or ENV
-	viper.BindPFlag("vault_address", rootCmd.Flags().Lookup("vault-address"))
-	viper.BindEnv("vault_address")
-	viper.BindPFlag("vault_insecure", rootCmd.Flags().Lookup("vault-insecure"))
-	viper.BindEnv("vault_insecure")
-	viper.BindEnv("vault_token")
+	viperBindPFlag("vault_address", "vault-address")
+	viperBindEnv("vault_address")
+	viperBindPFlag("vault_insecure", "vault-insecure")
+	viperBindEnv("vault_insecure")
+	viperBindEnv("vault_token")
+}
+
+func viperBindPFlag(name, lookupName string) {
+	if err := viper.BindPFlag(name, rootCmd.Flags().Lookup(lookupName)); err != nil {
+		logger.Trace().Err(err).Msg("Failed to bind env with viper")
+	}
+}
+
+func viperBindEnv(name string) {
+	if err := viper.BindEnv(name); err != nil {
+		logger.Fatal().Err(err).Msg("Failed to bind env with viper")
+	}
 }
 
 func initializeGlobalConfig() {
 	// Read the default config file
 	viper.SetConfigFile("default-config.yaml")
 	viper.AddConfigPath(".")
+
 	if err := viper.ReadInConfig(); err != nil {
 		logger.Fatal().Err(err).Msg("Failed to read default config")
 	}
 	// Read the user specific config
 	viper.SetConfigFile("config.yaml")
+
 	if err := viper.MergeInConfig(); err != nil {
-		// FIXME: Couldn't get it to work with "err.(*viper.ConfigFileNotFoundError)"
 		if !strings.Contains(err.Error(), "no such file or directory") {
 			logger.Fatal().Err(err).Msg("Failed to read user config")
 		}
+
 		logger.Warn().Msg("User config file not found, continuing without it")
 	}
 
@@ -108,6 +123,7 @@ func initializeGlobalConfig() {
 	viper.AutomaticEnv()
 
 	globalConfig = &configuration.GlobalConfig{}
+
 	if err := viper.Unmarshal(globalConfig); err != nil {
 		logger.Fatal().Err(err).Msg("Failed to decode into GlobalConfig struct")
 	}

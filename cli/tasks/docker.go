@@ -21,6 +21,7 @@ func (d *Docker) Build(workingDir, fullImageName string, args map[string]string)
 	d.logger.Info().Msg("Running docker build")
 	command := NewCommand("docker", workingDir)
 	command.AddArgs("build", "-t", fullImageName, ".")
+
 	for k, v := range args {
 		command.AddArgs("--build-arg", fmt.Sprintf("%s=%s", k, v))
 	}
