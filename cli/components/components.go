@@ -24,7 +24,6 @@ import (
 	managementInfra "github.com/opsteady/opsteady/management/infra/cicd"
 	managementVaultConfig "github.com/opsteady/opsteady/management/vault/config/cicd"
 	managementVaultInfra "github.com/opsteady/opsteady/management/vault/infra/cicd"
-	// New component path should be added here
 )
 
 // Components contains a list of component initializers

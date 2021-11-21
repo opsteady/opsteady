@@ -18,7 +18,10 @@ import (
 	"github.com/rs/zerolog"
 )
 
-const creationTimeName = "creationTime"
+const (
+	creationTimeName = "creationTime"
+	readWrite        = 0600
+)
 
 // Cache is used to store and retrieve data from memory or file
 type Cache interface {
@@ -62,6 +65,7 @@ func NewFileCache(filePath string, logger *zerolog.Logger) (Cache, error) {
 	}
 
 	logger.Debug().Msg("Cache initialized")
+
 	return cache, nil
 }
 
@@ -69,6 +73,7 @@ func NewFileCache(filePath string, logger *zerolog.Logger) (Cache, error) {
 // Set the creation time to now
 func (c *CacheImpl) Store(dataID string, data map[string]interface{}, ttl time.Duration) {
 	c.logger.Debug().Msg("Add creation time to the data")
+
 	data[creationTimeName] = time.Now().UTC().Add(ttl).Format(time.RFC3339)
 
 	c.logger.Trace().Msg("Store the data into memory")
@@ -113,7 +118,7 @@ func (c *CacheImpl) Retrieve(dataID string) map[string]interface{} {
 		return nil
 	}
 
-	creationTimeString := creationTimeInterface.(string)
+	creationTimeString := creationTimeInterface.(string) //nolint
 	creationTime, err := time.Parse(time.RFC3339, creationTimeString)
 
 	if err != nil {
@@ -123,7 +128,8 @@ func (c *CacheImpl) Retrieve(dataID string) map[string]interface{} {
 	}
 
 	c.logger.Trace().Msg("Check if data will still be valid 10 minutes from now")
-	now := time.Now().UTC().Add(time.Minute * 10)
+
+	now := time.Now().UTC().Add(time.Minute * 10) //nolint
 
 	if creationTime.After(now) {
 		c.logger.Trace().Str("id", dataID).Msg("Data is in cache and valid")
@@ -146,7 +152,7 @@ func (c *CacheImpl) saveToFile() error {
 
 	c.logger.Trace().Msg("Save the JSON cache data to file")
 
-	if err := ioutil.WriteFile(c.filePath, data, 0600); err != nil {
+	if err := ioutil.WriteFile(c.filePath, data, readWrite); err != nil {
 		return errors.Wrap(err, "could not save JSON cache data into file")
 	}
 

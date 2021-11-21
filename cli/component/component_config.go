@@ -61,47 +61,7 @@ func (c *ComponentConfigImpl) retrieveConfig(version, environment string, compon
 	chanPlatform := make(chan map[string]interface{}, len(components)+1)
 	chanPlatformTerraform := make(chan map[string]interface{}, len(components)+1)
 	chanErrors := make(chan error, len(components)+1)
-
-	var wg sync.WaitGroup
-
-	c.logger.Debug().Msg("Fetch default settings for components")
-
-	for _, component := range components {
-		wg.Add(1)
-		path := fmt.Sprintf("config/data/%s/component/%s", version, component)
-
-		go c.fetchConfig(path, chanComponents, chanErrors, &wg)
-	}
-
-	c.logger.Debug().Msg("Fetch settings per environment per component")
-
-	for _, component := range components {
-		wg.Add(1)
-		env := environment
-
-		if strings.HasPrefix(component, "management-") {
-			// Don't look at the platform env because it is the management env
-			env = "management"
-		}
-		path := fmt.Sprintf("config/data/%s/platform/%s/%s", version, env, component)
-
-		go c.fetchConfig(path, chanPlatform, chanErrors, &wg)
-	}
-
-	c.logger.Debug().Msg("Fetch Terraform output per environment per component")
-
-	for _, component := range components {
-		wg.Add(1)
-		env := environment
-
-		if strings.HasPrefix(component, "management-") {
-			// Don't look at the platform env because it is the management env
-			env = "management"
-		}
-		path := fmt.Sprintf("config/data/%s/platform/%s/%s-tf", version, env, component)
-
-		go c.fetchConfig(path, chanPlatformTerraform, chanErrors, &wg)
-	}
+	wg := c.runGoroutines(version, environment, components, chanComponents, chanPlatform, chanPlatformTerraform, chanErrors)
 
 	wg.Wait()
 	close(chanErrors)
@@ -142,8 +102,59 @@ func (c *ComponentConfigImpl) retrieveConfig(version, environment string, compon
 	return values, nil
 }
 
+func (c *ComponentConfigImpl) runGoroutines(version, environment string, components []string, chanComponents, chanPlatform, chanPlatformTerraform chan map[string]interface{}, chanErrors chan error) *sync.WaitGroup {
+	var wg sync.WaitGroup
+
+	c.logger.Debug().Msg("Fetch default settings for components")
+
+	for _, component := range components {
+		wg.Add(1)
+
+		path := fmt.Sprintf("config/data/%s/component/%s", version, component)
+
+		go c.fetchConfig(path, chanComponents, chanErrors, &wg)
+	}
+
+	c.logger.Debug().Msg("Fetch settings per environment per component")
+
+	for _, component := range components {
+		wg.Add(1)
+
+		env := environment
+
+		if strings.HasPrefix(component, "management-") {
+			// Don't look at the platform env because it is the management env
+			env = "management"
+		}
+
+		path := fmt.Sprintf("config/data/%s/platform/%s/%s", version, env, component)
+
+		go c.fetchConfig(path, chanPlatform, chanErrors, &wg)
+	}
+
+	c.logger.Debug().Msg("Fetch Terraform output per environment per component")
+
+	for _, component := range components {
+		wg.Add(1)
+
+		env := environment
+
+		if strings.HasPrefix(component, "management-") {
+			// Don't look at the platform env because it is the management env
+			env = "management"
+		}
+
+		path := fmt.Sprintf("config/data/%s/platform/%s/%s-tf", version, env, component)
+
+		go c.fetchConfig(path, chanPlatformTerraform, chanErrors, &wg)
+	}
+
+	return &wg
+}
+
 func (c *ComponentConfigImpl) fetchConfig(path string, chanValues chan map[string]interface{}, chanErrors chan error, wg *sync.WaitGroup) {
 	defer wg.Done()
+
 	values := make(map[string]interface{})
 
 	secret, err := c.vault.Read(path, nil)

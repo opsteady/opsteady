@@ -14,7 +14,8 @@ import (
 )
 
 const (
-	management = "management"
+	management   = "management"
+	readWriteAll = 0644
 )
 
 // Component is the interface all components have to implement.
@@ -147,6 +148,7 @@ func (c *DefaultComponent) AzureIDorAwsID() string {
 	if c.AzureID == "" {
 		return c.AwsID
 	}
+
 	return c.AzureID
 }
 
@@ -172,9 +174,11 @@ func (c *DefaultComponent) SetPlatformInfoToComponentConfig() {
 // RetrieveComponentConfig returns component config
 func (c *DefaultComponent) RetrieveComponentConfig() map[string]interface{} {
 	values, err := c.ComponentConfig.RetrieveConfig(c.PlatformVersion, c.AzureIDorAwsID(), c.ComponentNameAndAllTheDependencies())
+
 	if err != nil {
 		c.Logger.Fatal().Err(err).Msg("could not retrieve component configuration")
 	}
+
 	return values
 }
 
@@ -226,7 +230,8 @@ func (c *DefaultComponent) LoginToAKSorEKS(componentConfig map[string]interface{
 		if err := azTask.LoginToAzure(AKSCreds["client_id"].(string), AKSCreds["client_secret"].(string), c.GlobalConfig.TenantID); err != nil {
 			c.Logger.Fatal().Err(err).Msg("could not login to Azure")
 		}
-		clusterName := componentConfig["kubernetes_azure_cluster_name"].(string)
+
+		clusterName := componentConfig["kubernetes_azure_cluster_name"].(string) //nolint
 		clusterResourceGroup := fmt.Sprintf("kubernetes-%s", clusterName)
 		// Management cluster is different therefore we override this stuff here
 		if clusterName == management {
@@ -248,7 +253,7 @@ func (c *DefaultComponent) WriteConfigToJSON(path string) {
 		c.Logger.Fatal().Err(err).Msg("could not marshall the component configuration to JSON")
 	}
 
-	err = os.WriteFile(path, config, 0644)
+	err = os.WriteFile(path, config, readWriteAll)
 
 	if err != nil {
 		c.Logger.Fatal().Err(err).Msg("could not write the component configuration JSON to a file")

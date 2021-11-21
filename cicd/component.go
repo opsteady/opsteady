@@ -18,11 +18,13 @@ func (o *OpsteadyCli) Initialize(defaultComponent component.DefaultComponent) {
 func (o *OpsteadyCli) Validate() {
 	lint := tasks.NewCommand("golangci-lint", o.ComponentFolder)
 	lint.AddArgs("run", "--timeout", "10m")
+
 	if err := lint.Run(); err != nil {
 		o.Logger.Fatal().Err(err).Msg("Golang linting failed")
 	}
 
 	yaml := tasks.NewYaml(o.Logger)
+
 	if err := yaml.Lint("."); err != nil {
 		o.Logger.Fatal().Err(err).Msg("YAML linting failed")
 	}

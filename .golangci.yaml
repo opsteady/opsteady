@@ -15,6 +15,7 @@ linters:
     - gochecknoinits # We need the init
     - thelper # Doesn't allow to have helper functions in the test code
     - paralleltest # Not running the tests in parallel for now
+    - gofumpt # Not used
 
 issues:
   # https://github.com/golangci/golangci-lint/issues/826

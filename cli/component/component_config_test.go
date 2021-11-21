@@ -44,8 +44,10 @@ func setupComponentConfigForTest(t *testing.T) ComponentConfig {
 	if err != nil {
 		t.Fatal(err)
 	}
+
 	vault := &vault.FakeVault{
 		Requests: []string{},
 	}
+
 	return NewComponentConfig(cache, vault, &logger)
 }

@@ -132,17 +132,31 @@ func (vc *VaultCredentials) getAzureCreds(path string, cacheID string, subscript
 		return nil, errors.Wrapf(err, "could not get tenant ID from Azure secret backend configuration: %+v", azureConfig)
 	}
 
+	if err := vc.verifyCredentials(clientID, clientSecret, tenantID, subscriptionID); err != nil {
+		return nil, err
+	}
+
+	vc.cache.Store(cacheID, secret, DefaultTTL)
+
+	vc.logger.Info().Msg("Azure credentials are propagated.")
+	vc.logger.Debug().Str("id", cacheID).Msg("Returning retrieved credentials")
+
+	return secret, nil
+}
+
+func (vc *VaultCredentials) verifyCredentials(clientID, clientSecret, tenantID, subscriptionID string) error {
 	config := auth.NewClientCredentialsConfig(clientID, clientSecret, tenantID)
 	authorizer, err := config.Authorizer()
 
 	if err != nil {
-		return nil, errors.Wrapf(err, "could not authorize the Azure Go client")
+		return errors.Wrapf(err, "could not authorize the Azure Go client")
 	}
 
 	subscriptionClient := subscription.NewSubscriptionsClient()
 	subscriptionClient.Authorizer = authorizer
 
 	var subFound bool
+
 	tries := 0
 
 OUTER:
@@ -152,7 +166,7 @@ OUTER:
 	for tries < 5 {
 		for iter, err := subscriptionClient.ListComplete(context.Background()); iter.NotDone(); err = iter.Next() {
 			if err != nil {
-				return nil, err
+				return err
 			}
 
 			vc.logger.Info().Msg(fmt.Sprintf("Client has permissions for subscription '%s'", *iter.Value().DisplayName))
@@ -166,15 +180,10 @@ OUTER:
 	}
 
 	if !subFound {
-		return nil, errors.Wrapf(err, "client does not have permissions for subscription '%s'", subscriptionID)
+		return errors.Wrapf(err, "client does not have permissions for subscription '%s'", subscriptionID)
 	}
 
-	vc.cache.Store(cacheID, secret, DefaultTTL)
-
-	vc.logger.Info().Msg("Azure credentials are propagated.")
-	vc.logger.Debug().Str("id", cacheID).Msg("Returning retrieved credentials")
-
-	return secret, nil
+	return nil
 }
 
 // AzureAD retrieves credentials used for reading from Azure AD.

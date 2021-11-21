@@ -49,7 +49,9 @@ func (a *Az) LoginToAKS(clusterName, clusterResourceGroup string) error {
 // LoginToAcr logs in to ACR
 func (a *Az) LoginToAcr(acrName, subscription, clientID, clientSecret string) error {
 	a.logger.Info().Str("acr", acrName).Msg("Login to ACR")
+
 	command := NewCommand("az", ".")
+
 	command.AddArgs(
 		"acr",
 		"login",
@@ -57,5 +59,6 @@ func (a *Az) LoginToAcr(acrName, subscription, clientID, clientSecret string) er
 		"--name", acrName,
 		"-u", clientID,
 		"-p", clientSecret)
+
 	return command.Run()
 }

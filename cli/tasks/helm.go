@@ -113,7 +113,9 @@ func (h *Helm) Push(path, url string) error {
 // LoginToHelmRegistry logs to a registry
 func (h *Helm) LoginToHelmRegistry(user, pass, registry, tmpFolder string) error {
 	h.logger.Debug().Msg("Logging in to Helm repository")
+
 	command := NewCommand("helm", tmpFolder)
+
 	command.AddArgs(
 		"registry",
 		"login",

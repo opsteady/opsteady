@@ -71,6 +71,7 @@ func NewVault(address, role, token string, insecure bool, cache cache.Cache, log
 	}
 
 	client.SetToken(token)
+
 	vault := &VaultImpl{
 		client: client,
 		logger: logger,
@@ -82,6 +83,7 @@ func NewVault(address, role, token string, insecure bool, cache cache.Cache, log
 
 func oidcLogin(role string, client *api.Client, logger *zerolog.Logger) (string, error) {
 	logger.Info().Str("role", role).Msg("Login using OIDC method")
+
 	oidcHandler := &oidc.CLIHandler{}
 	oidcData := map[string]string{
 		"role":          role,
@@ -95,6 +97,7 @@ func oidcLogin(role string, client *api.Client, logger *zerolog.Logger) (string,
 	}
 
 	logger.Info().Str("role", role).Msg("Successfully logged in")
+
 	return secret.Auth.ClientToken, nil
 }
 

@@ -30,7 +30,7 @@ func (c *DefaultComponent) PrepareTerraformBackend() {
 		tfBackendCreds = fmt.Sprintf("key = \"%s\"\n%s", blobKey, tfBackendCreds)
 	}
 
-	if err := ioutil.WriteFile(c.TerraformBackendConfigPath, []byte(tfBackendCreds), 0644); err != nil {
+	if err := ioutil.WriteFile(c.TerraformBackendConfigPath, []byte(tfBackendCreds), readWriteAll); err != nil {
 		c.Logger.Fatal().Err(err).Str("path", c.TerraformBackendConfigPath).Msg("could not write the backend config file")
 	}
 }
@@ -47,5 +47,6 @@ func (c *DefaultComponent) determinBlobKey() string {
 	} else if c.AwsID != "" && c.AzureID != "" {
 		c.Logger.Info().Msg("You specified both an Azure and AWS ID, using the backend blob key in the Terraform provider")
 	}
+
 	return blobKey
 }
