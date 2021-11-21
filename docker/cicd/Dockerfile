@@ -16,7 +16,7 @@ RUN getfile https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION:1}/terr
 
 # renovate: datasource=github-releases depName=hashicorp/vault versioning=semver
 ENV VAULT_VERSION=v1.9.0
-RUN getfile https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip
+RUN getfile https://releases.hashicorp.com/vault/${VAULT_VERSION:1}/vault_${VAULT_VERSION:1}_linux_amd64.zip
 
 # renovate: datasource=github-releases depName=helm/helm versioning=semver
 ENV HELM_VERSION=v3.7.1
