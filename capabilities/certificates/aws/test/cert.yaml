@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: dev-aws-cert
+  namespace: platform
+spec:
+  secretName: dev-aws-cert-tls
+  issuerRef:
+    name: letsencrypt-staging
+    kind: ClusterIssuer
+  dnsNames:
+    - abcd.dev-aws.os.opsteady.com
+# Then kubectl describe certificate dev-aws-cert
+# kubectl describe secrets dev-aws-cert-tls
+# Debug: kubectl describe orders.acme.cert-manager.io

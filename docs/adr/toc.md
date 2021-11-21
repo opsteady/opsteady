@@ -34,4 +34,5 @@
 - [31. Kubernetes AWS network policies](0031-kubernetes-aws-network-policies.md)
 - [32. Platform account structure](0032-platform-account-structure.md)
 - [33. Life cycle management](0033-life-cycle-management.md)
-- [34. DNS Capability](0034-capabilities-dns.md)
+- [34. DNS capability](0034-capabilities-dns.md)
+- [35. Certificates capability](0035-capabilities-certificates.md)

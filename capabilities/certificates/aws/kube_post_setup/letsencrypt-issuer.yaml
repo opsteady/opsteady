@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt
+spec:
+  acme:
+    email: {{ .capabilities_certificates_aws_letsencrypt_email }}
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      # Secret resource that will be used to store the account's private key.
+      name: letsencrypt
+    solvers:
+      - dns01:
+        route53:
+          region: {{ .foundation_aws_region }}
+          hostedZoneID: {{ .foundation_aws_public_zone_id }}

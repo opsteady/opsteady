@@ -6,6 +6,8 @@ Date: 2021-11-10
 
 Status: Accepted on 2021-11-10
 
+Foundation for [0035-capabilities-certificates.md](0035-capabilities-certificates.md) on 2021-11-21
+
 ## Context
 
 Some platform services need to be exposed outside the platform. DNS is the Internet standard for resolving services from a human-friendly name to an IP address. We want to offer automated DNS management for the platform or user services that we run in the clusters. If desired, a DNS name should be automatically created and available for the services that need it.

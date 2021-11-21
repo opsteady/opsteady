@@ -42,13 +42,13 @@ jobs:
           vault_ca_storage_account_name: opsteadyosvault
           EOF
 
-      - name: Validate go code
-        run: |
-          go run main.go validate -c cli --cache
-
       # Added to show info in the PR, don't need to check the logs
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v2
         with:
           version: latest
           args: --issues-exit-code=0 --timeout 10m
+
+      - name: Validate go code
+        run: |
+          go run main.go validate -c cli --cache

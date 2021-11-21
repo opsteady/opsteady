@@ -32,3 +32,4 @@ This document is the implementation of the [ADR Security and Compliance](../adr/
 | No WAF enabled on the load balancer                              | [0025](../adr/0026-kubernetes-aws-loadbalancing.md) |
 | SSL policies on load balancer set to default (permissive)        | [0025](../adr/0026-kubernetes-aws-loadbalancing.md) |
 | Default Azure Files storage is not customer key encrypted        | [0025](../adr/0027-azure-storage.md)                |
+| Support use of Let's Encrypt certificates                        | [0035](../adr/0035-capabilities-certificates.md)    |

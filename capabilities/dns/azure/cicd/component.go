@@ -10,7 +10,7 @@ type CapabilitiesDNSAzure struct {
 // Initialize creates a new CapabilitiesDNSAzure component
 func (c *CapabilitiesDNSAzure) Initialize(defaultComponent component.DefaultComponent) {
 	c.DefaultComponent = defaultComponent
-	c.DefaultComponent.RequiresComponents("foundation-azure", "kubernetes-azure-cluster")
+	c.DefaultComponent.RequiresComponents("foundation-azure", "kubernetes-azure-cluster", "capabilities-dns-azure")
 	c.DefaultComponent.SetVaultInfoToComponentConfig()
 	c.DefaultComponent.UseHelm(component.NewHelmChart(
 		"external-dns",

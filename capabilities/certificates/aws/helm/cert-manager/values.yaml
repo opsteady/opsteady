@@ -1,0 +1,51 @@
+global:
+  imagePullSecrets:
+    - name: management-acr
+
+  priorityClassName: "system-cluster-critical"
+
+  leaderElection:
+    namespace: "platform"
+
+serviceAccount:
+  create: true
+  name: "cert-manager"
+  automountServiceAccountToken: true
+  annotations:
+    eks.amazonaws.com/role-arn: {{ .capabilities_certificates_aws_iam_role_arn }}
+
+nodeSelector:
+  name: system
+
+image:
+  repository: opsteadyos.azurecr.io/jetstack/cert-manager-controller
+  pullPolicy: Always
+
+prometheus:
+  enabled: true
+  servicemonitor:
+    enabled: false
+
+webhook:
+  nodeSelector:
+    name: system
+
+  image:
+    repository: opsteadyos.azurecr.io/jetstack/cert-manager-webhook
+    pullPolicy: Always
+
+cainjector:
+  nodeSelector:
+    name: system
+
+  image:
+    repository: opsteadyos.azurecr.io/jetstack/cert-manager-cainjector
+    pullPolicy: Always
+
+startupapicheck:
+  nodeSelector:
+  name: system
+
+  image:
+    repository: opsteadyos.azurecr.io/jetstack/cert-manager-ctl
+    pullPolicy: Always

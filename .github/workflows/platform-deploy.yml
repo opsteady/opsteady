@@ -89,3 +89,7 @@ jobs:
       - name: Deploy DNS capability
         run: |
           go run main.go deploy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c capabilities-dns-${{ github.event.inputs.cloud }} --cache
+
+      - name: Deploy Certificates capability
+        run: |
+          go run main.go deploy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c capabilities-certificates-${{ github.event.inputs.cloud }} --cache
