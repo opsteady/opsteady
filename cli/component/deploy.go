@@ -43,7 +43,7 @@ func (c *DefaultComponent) Deploy() {
 
 // DeployTerraform uses Terrform code to deploy resources
 func (c *DefaultComponent) DeployTerraform(componentConfig map[string]interface{}) {
-	backendStorageName := componentConfig["management_bootstrap_terraform_state_account_name"].(string) // Always expecting this to be here
+	backendStorageName := componentConfig["management_bootstrap_terraform_state_account_name"].(string) //nolint // Always expecting this to be here
 	terraform := tasks.NewTerraform(c.TerraformFolder(), c.TerraformBackendConfigPath, backendStorageName, c.GlobalConfig.CachePath, c.Logger)
 
 	varsPath := fmt.Sprintf("%s/%s.tfvars.json", c.GlobalConfig.TmpFolder, c.ComponentName)
@@ -51,9 +51,11 @@ func (c *DefaultComponent) DeployTerraform(componentConfig map[string]interface{
 
 	if c.DryRun {
 		c.Logger.Info().Msg("DryRun mode activated")
+
 		if err := terraform.InitAndPlan(varsPath); err != nil {
 			c.Logger.Fatal().Err(err).Msg("could not plan")
 		}
+
 		return
 	}
 
@@ -67,6 +69,7 @@ func (c *DefaultComponent) DeployHelm(componentConfig map[string]interface{}) {
 	template := templating.NewTemplating(c.Logger)
 
 	helm := tasks.NewHelm(c.Logger)
+
 	for _, chart := range c.HelmCharts {
 		if err := template.Render(c.HelmFolder(), c.HelmTmpFolder(chart.Release), componentConfig); err != nil {
 			c.Logger.Fatal().Err(err).Str("chart", chart.Release).Msg("could not template Helm values files")

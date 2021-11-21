@@ -41,8 +41,7 @@ func (t *Templating) Render(sourceFolder, destFolder string, values map[string]i
 					return err
 				}
 
-				//foundation_azure_environment_name
-
+				// foundation_azure_environment_name
 				// Render the file
 				return template.Execute(valuesFile, values)
 			}

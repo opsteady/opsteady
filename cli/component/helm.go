@@ -30,13 +30,12 @@ func (c *DefaultComponent) UseHelm(charts ...*HelmChart) {
 func (c *DefaultComponent) LoginToHelmRegistry() {
 	c.Logger.Info().Msg("Preparing Helm environment...")
 
-	// TODO: we should have a separate SP for accessing Helm registry
 	mgmtCreds, err := c.Credentials.Azure("management")
 	if err != nil {
 		c.Logger.Fatal().Err(err).Msg("could not get management credentials to prepare helm")
 	}
-	user := mgmtCreds["client_id"].(string)
-	pass := mgmtCreds["client_secret"].(string)
+	user := mgmtCreds["client_id"].(string)     //nolint
+	pass := mgmtCreds["client_secret"].(string) //nolint
 
 	login := tasks.NewHelm(c.Logger)
 	if err := login.LoginToHelmRegistry(user, pass, c.GlobalConfig.ManagementHelmRepository, c.GlobalConfig.TmpFolder); err != nil {

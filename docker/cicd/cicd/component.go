@@ -26,10 +26,10 @@ func (d *DockerCicd) Initialize(defaultComponent component.DefaultComponent) {
 	d.SetDockerBuildInfo("cicd", "2.4.0", buildArgs)
 }
 
-func (c *DockerCicd) Deploy() {
-	c.Logger.Info().Msg("Deploy not supported for this component")
+func (d *DockerCicd) Deploy() {
+	d.Logger.Info().Msg("Deploy not supported for this component")
 }
 
-func (c *DockerCicd) Destroy() {
-	c.Logger.Info().Msg("Destroy not supported for this component")
+func (d *DockerCicd) Destroy() {
+	d.Logger.Info().Msg("Destroy not supported for this component")
 }

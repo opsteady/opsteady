@@ -72,12 +72,12 @@ func TestConcurency(t *testing.T) {
 
 	for i := 1; i <= 50; i++ {
 		wg.Add(1)
+
 		go func() {
 			cache.Store(strconv.Itoa(rand.Int()), testDataCaching, time.Minute*1)
 			wg.Done()
 		}()
 	}
 
-	wg.Wait()
-	// This test should not fail
+	wg.Wait() // This test should not fail
 }

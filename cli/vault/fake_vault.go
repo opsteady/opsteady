@@ -13,6 +13,7 @@ var fakeResponseVaultConfig = map[string]interface{}{"data": vaultCoNfigData}
 
 func (f *FakeVault) Read(path string, data map[string][]string) (map[string]interface{}, error) {
 	f.Requests = append(f.Requests, path)
+
 	if strings.Contains(path, "aws/") || strings.Contains(path, "azure/") || strings.Contains(path, "azuread/") {
 		return fakeResponseVaultAwsAzure, nil
 	}
@@ -21,6 +22,7 @@ func (f *FakeVault) Read(path string, data map[string][]string) (map[string]inte
 
 func (f *FakeVault) Write(path string, data map[string]interface{}) (map[string]interface{}, error) {
 	f.Requests = append(f.Requests, path)
+
 	return fakeResponseVaultAwsAzure, nil
 }
 

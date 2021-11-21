@@ -36,6 +36,7 @@ type Credentials interface {
 // NewCredentials creates a new credentials struct
 func NewCredentials(vault vault.Vault, cache cache.Cache, logger *zerolog.Logger) Credentials {
 	logger.Debug().Msg("Initialize Credentials")
+
 	return &VaultCredentials{
 		vault:  vault,
 		logger: logger,
@@ -46,14 +47,17 @@ func NewCredentials(vault vault.Vault, cache cache.Cache, logger *zerolog.Logger
 // AWS retrieves AWS credentials
 func (vc *VaultCredentials) AWS(accountID string, ttl string) (map[string]interface{}, error) {
 	vc.logger.Info().Str("ttl", ttl).Str("account", accountID).Msg("Retrieve AWS credentials")
-	id := fmt.Sprintf("AWS/%s", accountID)
-	secret := vc.cache.Retrieve(id)
+	fullID := fmt.Sprintf("AWS/%s", accountID)
+	secret := vc.cache.Retrieve(fullID)
+
 	if secret != nil {
-		vc.logger.Info().Str("id", id).Msg("Using AWS credentials from cache")
+		vc.logger.Info().Str("id", fullID).Msg("Using AWS credentials from cache")
+
 		return secret, nil
 	}
 
 	ttlDuration, err := time.ParseDuration(ttl)
+
 	if err != nil {
 		return nil, errors.Wrapf(err, "could not parse the TTL %s as duration", ttl)
 	}
@@ -62,14 +66,16 @@ func (vc *VaultCredentials) AWS(accountID string, ttl string) (map[string]interf
 		"ttl": ttl,
 	}
 
-	vc.logger.Debug().Str("id", id).Msg("Requesting AWS credentials from Vault")
+	vc.logger.Debug().Str("id", fullID).Msg("Requesting AWS credentials from Vault")
 	secret, err = vc.vault.Write(fmt.Sprintf("aws/%s/sts/vault-aws-access", accountID), data)
+
 	if err != nil {
-		return nil, errors.Wrapf(err, "failed to retrieve credentials from Vault for %s", id)
+		return nil, errors.Wrapf(err, "failed to retrieve credentials from Vault for %s", fullID)
 	}
 
-	vc.cache.Store(id, secret, ttlDuration)
-	vc.logger.Debug().Str("id", id).Msg("Returning retrieved credentials")
+	vc.cache.Store(fullID, secret, ttlDuration)
+	vc.logger.Debug().Str("id", fullID).Msg("Returning retrieved credentials")
+
 	return secret, nil
 }
 
@@ -91,40 +97,46 @@ func (vc *VaultCredentials) AKS(subscriptionID string) (map[string]interface{}, 
 
 func (vc *VaultCredentials) getAzureCreds(path string, cacheID string, subscriptionID string) (map[string]interface{}, error) {
 	secret := vc.cache.Retrieve(cacheID)
+
 	if secret != nil {
 		vc.logger.Info().Str("id", cacheID).Msg("Using Azure credentials from cache")
+
 		return secret, nil
 	}
 
 	vc.logger.Debug().Str("id", cacheID).Msg("Requesting Azure credentials from Vault")
 	secret, err := vc.vault.Read(path, nil)
+
 	if err != nil {
 		return nil, errors.Wrapf(err, "failed to retrieve credentials from Vault for %s", path)
 	}
 
 	vc.logger.Info().Msg("Waiting for Azure credentials propagation.")
 
-	clientID := secret["client_id"].(string)
-	clientSecret := secret["client_secret"].(string)
+	clientID := secret["client_id"].(string)         //nolint
+	clientSecret := secret["client_secret"].(string) //nolint
 
-	configPath := fmt.Sprintf("azure/config")
+	configPath := "azure/config"
 	azureConfig, err := vc.vault.Read(configPath, nil)
+
 	if err != nil {
-		return nil, fmt.Errorf("Could not read the Azure secret backend configuration: %s", err)
+		return nil, errors.Wrapf(err, "could not read the Azure secret backend configuration")
 	}
 
 	tenantID := ""
 	if _, ok := azureConfig["tenant_id"]; ok {
-		tenantID = azureConfig["tenant_id"].(string)
+		tenantID = azureConfig["tenant_id"].(string) //nolint
 	}
+
 	if tenantID == "" {
-		return nil, fmt.Errorf("Could not get tenant ID from Azure secret backend configuration: %+v", azureConfig)
+		return nil, errors.Wrapf(err, "could not get tenant ID from Azure secret backend configuration: %+v", azureConfig)
 	}
 
 	config := auth.NewClientCredentialsConfig(clientID, clientSecret, tenantID)
 	authorizer, err := config.Authorizer()
+
 	if err != nil {
-		return nil, fmt.Errorf("Could not authorize the Azure Go client")
+		return nil, errors.Wrapf(err, "could not authorize the Azure Go client")
 	}
 
 	subscriptionClient := subscription.NewSubscriptionsClient()
@@ -147,13 +159,14 @@ OUTER:
 
 			if strings.EqualFold(*iter.Value().DisplayName, subscriptionID) {
 				subFound = true
+
 				break OUTER
 			}
 		}
 	}
 
 	if !subFound {
-		return nil, fmt.Errorf("Client does not have permissions for subscription '%s'", subscriptionID)
+		return nil, errors.Wrapf(err, "client does not have permissions for subscription '%s'", subscriptionID)
 	}
 
 	vc.cache.Store(cacheID, secret, DefaultTTL)
@@ -166,22 +179,26 @@ OUTER:
 
 // AzureAD retrieves credentials used for reading from Azure AD.
 func (vc *VaultCredentials) AzureAD() (map[string]interface{}, error) {
-	id := "AzureAD"
+	fixedID := "AzureAD"
 
-	secret := vc.cache.Retrieve(id)
+	secret := vc.cache.Retrieve(fixedID)
+
 	if secret != nil {
-		vc.logger.Info().Str("id", id).Msg("Using AzureAD credentials from cache")
+		vc.logger.Info().Str("id", fixedID).Msg("Using AzureAD credentials from cache")
+
 		return secret, nil
 	}
 
-	vc.logger.Debug().Str("id", id).Msg("Requesting AzureAD credentials")
+	vc.logger.Debug().Str("id", fixedID).Msg("Requesting AzureAD credentials")
 	secret, err := vc.vault.Read("azuread/creds/management", nil)
+
 	if err != nil {
-		return nil, errors.Wrapf(err, "failed to retrieve credentials from Vault for %s", id)
+		return nil, errors.Wrapf(err, "failed to retrieve credentials from Vault for %s", fixedID)
 	}
 
-	vc.cache.Store(id, secret, DefaultTTL)
+	vc.cache.Store(fixedID, secret, DefaultTTL)
 
-	vc.logger.Debug().Str("id", id).Msg("Returning retrieved credentials")
+	vc.logger.Debug().Str("id", fixedID).Msg("Returning retrieved credentials")
+
 	return secret, nil
 }

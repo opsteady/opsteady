@@ -7,6 +7,14 @@ linters:
     - golint # Deprecated
     - interfacer # Deprecated
     - scopelint # Deprecated
+    - exhaustivestruct # We can't and won't initialize alle fields
+    - wrapcheck # Not creating an API it is oke to see the errors
+    - testpackage # Not using this
+    - lll # We are oke with long lines, because of renovate
+    - ireturn # We want interfaces
+    - gochecknoinits # We need the init
+    - thelper # Doesn't allow to have helper functions in the test code
+    - paralleltest # Not running the tests in parallel for now
 
 issues:
   # https://github.com/golangci/golangci-lint/issues/826

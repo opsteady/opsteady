@@ -10,7 +10,6 @@ import (
 func (c *DefaultComponent) PrepareTerraformBackend() {
 	c.Logger.Info().Msg("Preparing Terraform environment...")
 
-	// TODO: We should use a dedicated user for Terraform storage with only access to that
 	mgmtCreds, err := c.Credentials.Azure("management")
 	if err != nil {
 		c.Logger.Fatal().Err(err).Msg("could not get management credentials to prepare terraform")
@@ -26,9 +25,20 @@ func (c *DefaultComponent) PrepareTerraformBackend() {
 		mgmtCreds["client_id"].(string),
 		mgmtCreds["client_secret"].(string))
 
+	if blobKey := c.determinBlobKey(); blobKey != "" {
+		c.Logger.Info().Str("backend", blobKey).Msg("Using backend blob key")
+		tfBackendCreds = fmt.Sprintf("key = \"%s\"\n%s", blobKey, tfBackendCreds)
+	}
+
+	if err := ioutil.WriteFile(c.TerraformBackendConfigPath, []byte(tfBackendCreds), 0644); err != nil {
+		c.Logger.Fatal().Err(err).Str("path", c.TerraformBackendConfigPath).Msg("could not write the backend config file")
+	}
+}
+
+func (c *DefaultComponent) determinBlobKey() string {
 	// Try to determine which blob key to use for Terraform state
 	var blobKey string
-	if c.AwsID != "" && c.AzureID == "" {
+	if c.AwsID != "" && c.AzureID == "" { //nolint
 		blobKey = fmt.Sprintf("%s/%s/%s.tfstate", "aws", c.AwsID, c.ComponentName)
 	} else if c.AwsID == "" && c.AzureID != "" {
 		blobKey = fmt.Sprintf("%s/%s/%s.tfstate", "azure", c.AzureID, c.ComponentName)
@@ -37,13 +47,5 @@ func (c *DefaultComponent) PrepareTerraformBackend() {
 	} else if c.AwsID != "" && c.AzureID != "" {
 		c.Logger.Info().Msg("You specified both an Azure and AWS ID, using the backend blob key in the Terraform provider")
 	}
-
-	if blobKey != "" {
-		c.Logger.Info().Str("backend", blobKey).Msg("Using backend blob key")
-		tfBackendCreds = fmt.Sprintf("key = \"%s\"\n%s", blobKey, tfBackendCreds)
-	}
-
-	if err := ioutil.WriteFile(c.TerraformBackendConfigPath, []byte(tfBackendCreds), 0644); err != nil {
-		c.Logger.Fatal().Err(err).Str("path", c.TerraformBackendConfigPath).Msg("could not write the backend config file")
-	}
+	return blobKey
 }

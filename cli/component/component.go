@@ -13,6 +13,10 @@ import (
 	"github.com/rs/zerolog"
 )
 
+const (
+	management = "management"
+)
+
 // Component is the interface all components have to implement.
 type Component interface {
 	Validate()
@@ -50,7 +54,7 @@ type DefaultComponent struct {
 	AwsID                 string
 	AzureID               string
 	PlatformVersion       string           // Version of the platform (used as a folder in Vault)
-	HelmCharts            []*HelmChart     // We expect all charts to be comming from management ACR
+	HelmCharts            []*HelmChart     // We expect all charts to be from management ACR
 	DockerBuildInfo       *DockerBuildInfo // We expect all docker images to be saved to ACR
 	// Names of the folders a component uses which will determin what will be executed, order can be adjusted
 	Terraform     string
@@ -88,44 +92,53 @@ func (c *DefaultComponent) SetDockerBuildInfo(name, version string, buildArgs ma
 // sets them to env so they can be used by the CLI further down the process.
 func (c *DefaultComponent) SetCloudCredentialsToEnv() {
 	if c.AwsID != "" {
-		awsAccountCreds, err := c.Credentials.AWS(c.AwsID, "60m")
-		if err != nil {
-			c.Logger.Fatal().Err(err).Str("awsID", c.AwsID).Msg("Could not get credentials")
-		}
-
-		if err := os.Setenv("AWS_ACCESS_KEY_ID", awsAccountCreds["access_key"].(string)); err != nil {
-			c.Logger.Fatal().Err(err).Msg("Could not set env AWS_ACCESS_KEY_ID")
-		}
-
-		if err := os.Setenv("AWS_SECRET_ACCESS_KEY", awsAccountCreds["secret_key"].(string)); err != nil {
-			c.Logger.Fatal().Err(err).Msg("Could not set env AWS_SECRET_ACCESS_KEY")
-		}
-
-		if err := os.Setenv("AWS_SESSION_TOKEN", awsAccountCreds["security_token"].(string)); err != nil {
-			c.Logger.Fatal().Err(err).Msg("Could not set env AWS_SESSION_TOKEN")
-		}
+		c.setAwsCloudCredentialsToEnv()
 	}
+
 	if c.AzureID != "" {
-		azureSubscriptionCreds, err := c.Credentials.Azure(c.AzureID)
-		if err != nil {
-			c.Logger.Fatal().Err(err).Str("azureID", c.AzureID).Msg("Could not get credentials")
-		}
+		c.setAzureCloudCredentialsToEnv()
+	}
+}
 
-		if err := os.Setenv("ARM_CLIENT_ID", azureSubscriptionCreds["client_id"].(string)); err != nil {
-			c.Logger.Fatal().Err(err).Msg("Could not set env ARM_CLIENT_ID")
-		}
+func (c *DefaultComponent) setAwsCloudCredentialsToEnv() {
+	awsAccountCreds, err := c.Credentials.AWS(c.AwsID, "60m")
+	if err != nil {
+		c.Logger.Fatal().Err(err).Str("awsID", c.AwsID).Msg("Could not get credentials")
+	}
 
-		if err := os.Setenv("ARM_CLIENT_SECRET", azureSubscriptionCreds["client_secret"].(string)); err != nil {
-			c.Logger.Fatal().Err(err).Msg("Could not set env ARM_CLIENT_SECRET")
-		}
+	if err := os.Setenv("AWS_ACCESS_KEY_ID", awsAccountCreds["access_key"].(string)); err != nil {
+		c.Logger.Fatal().Err(err).Msg("Could not set env AWS_ACCESS_KEY_ID")
+	}
 
-		if err := os.Setenv("ARM_TENANT_ID", c.GlobalConfig.TenantID); err != nil {
-			c.Logger.Fatal().Err(err).Msg("Could not set env ARM_TENANT_ID")
-		}
+	if err := os.Setenv("AWS_SECRET_ACCESS_KEY", awsAccountCreds["secret_key"].(string)); err != nil {
+		c.Logger.Fatal().Err(err).Msg("Could not set env AWS_SECRET_ACCESS_KEY")
+	}
 
-		if err := os.Setenv("ARM_SUBSCRIPTION_ID", c.GlobalConfig.ManagementSubscriptionID); err != nil {
-			c.Logger.Fatal().Err(err).Msg("Could not set env ARM_SUBSCRIPTION_ID")
-		}
+	if err := os.Setenv("AWS_SESSION_TOKEN", awsAccountCreds["security_token"].(string)); err != nil {
+		c.Logger.Fatal().Err(err).Msg("Could not set env AWS_SESSION_TOKEN")
+	}
+}
+
+func (c *DefaultComponent) setAzureCloudCredentialsToEnv() {
+	azureSubscriptionCreds, err := c.Credentials.Azure(c.AzureID)
+	if err != nil {
+		c.Logger.Fatal().Err(err).Str("azureID", c.AzureID).Msg("Could not get credentials")
+	}
+
+	if err := os.Setenv("ARM_CLIENT_ID", azureSubscriptionCreds["client_id"].(string)); err != nil {
+		c.Logger.Fatal().Err(err).Msg("Could not set env ARM_CLIENT_ID")
+	}
+
+	if err := os.Setenv("ARM_CLIENT_SECRET", azureSubscriptionCreds["client_secret"].(string)); err != nil {
+		c.Logger.Fatal().Err(err).Msg("Could not set env ARM_CLIENT_SECRET")
+	}
+
+	if err := os.Setenv("ARM_TENANT_ID", c.GlobalConfig.TenantID); err != nil {
+		c.Logger.Fatal().Err(err).Msg("Could not set env ARM_TENANT_ID")
+	}
+
+	if err := os.Setenv("ARM_SUBSCRIPTION_ID", c.GlobalConfig.ManagementSubscriptionID); err != nil {
+		c.Logger.Fatal().Err(err).Msg("Could not set env ARM_SUBSCRIPTION_ID")
 	}
 }
 
@@ -179,7 +192,7 @@ func (c *DefaultComponent) AddAzureADCredentialsToComponentConfig() {
 
 // AddManagementCredentialsToComponentConfig adds management credentials to component config to be used elsewhere
 func (c *DefaultComponent) AddManagementCredentialsToComponentConfig() {
-	mgmtSubscriptionCreds, err := c.Credentials.Azure("management")
+	mgmtSubscriptionCreds, err := c.Credentials.Azure(management)
 	if err != nil {
 		c.Logger.Fatal().Err(err).Msg("could not get credentials for management subscription")
 	}
@@ -199,24 +212,28 @@ func (c *DefaultComponent) LoginToAKSorEKS(componentConfig map[string]interface{
 			c.Logger.Fatal().Err(err).Msg("could not login to EKS")
 		}
 	}
+
 	if c.AzureID != "" {
 		c.Logger.Info().Msg("Preparing AKS environment...")
 		AKSCreds, err := c.Credentials.AKS(c.AzureID)
+
 		if err != nil {
 			c.Logger.Fatal().Err(err).Msg("could not get credentials to prepare AKS")
 		}
-		az := tasks.NewAz(c.GlobalConfig.TmpFolder, c.Logger)
-		if err := az.LoginToAzure(AKSCreds["client_id"].(string), AKSCreds["client_secret"].(string), c.GlobalConfig.TenantID); err != nil {
+
+		azTask := tasks.NewAz(c.GlobalConfig.TmpFolder, c.Logger)
+
+		if err := azTask.LoginToAzure(AKSCreds["client_id"].(string), AKSCreds["client_secret"].(string), c.GlobalConfig.TenantID); err != nil {
 			c.Logger.Fatal().Err(err).Msg("could not login to Azure")
 		}
 		clusterName := componentConfig["kubernetes_azure_cluster_name"].(string)
 		clusterResourceGroup := fmt.Sprintf("kubernetes-%s", clusterName)
 		// Management cluster is different therefore we override this stuff here
-		if clusterName == "management" {
-			clusterResourceGroup = "management"
+		if clusterName == management {
+			clusterResourceGroup = management
 		}
 
-		if err := az.LoginToAKS(clusterName, clusterResourceGroup); err != nil {
+		if err := azTask.LoginToAKS(clusterName, clusterResourceGroup); err != nil {
 			c.Logger.Fatal().Err(err).Msg("could not login to ASK via az")
 		}
 	}
@@ -226,11 +243,13 @@ func (c *DefaultComponent) LoginToAKSorEKS(componentConfig map[string]interface{
 // writes it to a file indicated by the path parameter.
 func (c *DefaultComponent) WriteConfigToJSON(path string) {
 	config, err := json.Marshal(c.RetrieveComponentConfig())
+
 	if err != nil {
 		c.Logger.Fatal().Err(err).Msg("could not marshall the component configuration to JSON")
 	}
 
 	err = os.WriteFile(path, config, 0644)
+
 	if err != nil {
 		c.Logger.Fatal().Err(err).Msg("could not write the component configuration JSON to a file")
 	}

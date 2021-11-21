@@ -14,10 +14,10 @@ func (d *DockerBase) Initialize(defaultComponent component.DefaultComponent) {
 	d.SetDockerBuildInfo("base", "2.0.0", nil)
 }
 
-func (c *DockerBase) Deploy() {
-	c.Logger.Info().Msg("Deploy not supported for this component")
+func (d *DockerBase) Deploy() {
+	d.Logger.Info().Msg("Deploy not supported for this component")
 }
 
-func (c *DockerBase) Destroy() {
-	c.Logger.Info().Msg("Destroy not supported for this component")
+func (d *DockerBase) Destroy() {
+	d.Logger.Info().Msg("Destroy not supported for this component")
 }

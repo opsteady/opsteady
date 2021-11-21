@@ -95,6 +95,7 @@ func (t *Terraform) Init() error {
 	if t.backendConfigPath != "" {
 		command.AddArgs(fmt.Sprintf("-backend-config=%s", t.backendConfigPath))
 	}
+
 	command.AddEnv("TF_PLUGIN_CACHE_DIR", t.cachePath)
 
 	return command.Run()
