@@ -1,0 +1,66 @@
+imagePullSecrets:
+  - name: management-acr
+
+controller:
+  image:
+    registry: opsteadyos.azurecr.io
+    digest: ""
+    pullPolicy: Always
+
+  ingressClassResource:
+    default: true # Make ingress the default ingress
+
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+
+  minReadySeconds: 4
+
+  nodeSelector:
+    name: system
+
+  replicaCount: 2
+
+  minAvailable: 1
+
+  externalTrafficPolicy: "Local"
+
+  priorityClassName: "system-cluster-critical"
+
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+          matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+                - ingress-nginx
+            - key: app.kubernetes.io/instance
+              operator: In
+              values:
+                - ingress-nginx
+            - key: app.kubernetes.io/component
+              operator: In
+              values:
+                - controller
+          topologyKey: "kubernetes.io/hostname"
+
+  admissionWebhooks:
+    patch:
+      image:
+        registry: opsteadyos.azurecr.io
+        digest: ""
+        pullPolicy: Always
+      nodeSelector:
+        name: system
+
+# Part of controller.service
+{{ if eq .platform_cloud_name "aws" }}
+  service:
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-type: external
+      service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+      service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+{{ end }}

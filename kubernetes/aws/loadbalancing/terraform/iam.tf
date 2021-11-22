@@ -251,7 +251,7 @@ EOF
 }
 
 resource "aws_iam_policy_attachment" "aws_load_balancer_controller" {
-  name        = "aws-load-balancer-controller-${var.foundation_aws_name}"
+  name       = "aws-load-balancer-controller-${var.foundation_aws_name}"
   roles      = [aws_iam_role.aws_load_balancer_controller.name]
   policy_arn = aws_iam_policy.aws_load_balancer_controller.arn
 }

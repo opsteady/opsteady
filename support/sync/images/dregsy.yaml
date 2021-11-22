@@ -39,6 +39,8 @@ tasks:
         tags: ["v3.20.2"]
       - from: amazon/aws-efs-csi-driver
         tags: ["v1.3.4"]
+      - from: hashicorp/http-echo
+        tags: ["0.2.3"]
 
   - name: mcr.microsoft.com
     verbose: true
@@ -76,6 +78,12 @@ tasks:
         tags: ["v1.4.0"]
       - from: external-dns/external-dns
         tags: ["v0.10.1", "v0.9.0"]
+      - from: ingress-nginx/controller
+        tags: ["v1.0.5"]
+      - from: ingress-nginx/kube-webhook-certgen
+        tags: ["v1.1.1"]
+      - from: defaultbackend-amd64
+        tags: ["1.5"]
 
   - name: public.ecr.aws
     verbose: true
