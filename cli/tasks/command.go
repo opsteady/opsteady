@@ -36,7 +36,7 @@ func NewCommand(command, workingDir string) Command {
 
 // Run runs the command
 func (c *CommandImpl) Run() error {
-	cmd := exec.Command(c.Command, c.Args...)
+	cmd := exec.Command(c.Command, c.Args...) //nolint
 	cmd.Dir = c.WorkingDir
 
 	cmd.Stdout = os.Stdout
@@ -47,6 +47,7 @@ func (c *CommandImpl) Run() error {
 	for key, value := range c.Env {
 		env = append(env, fmt.Sprintf("%s=%s", key, value))
 	}
+
 	cmd.Env = env
 
 	if err := cmd.Run(); err != nil {

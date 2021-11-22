@@ -14,6 +14,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const (
+	readWriteExecute = 0700
+)
+
 var (
 	componentFlag       string
 	azureIDFlag         string
@@ -29,6 +33,7 @@ func executeComponent(cmd *cobra.Command, executeComponent func(c component.Comp
 	ensureTmpFolderExistsAndIsEmpty()
 
 	logger.Debug().Msg("Find the component")
+
 	comp, ok := components.Components[componentFlag]
 
 	if !ok {
@@ -36,6 +41,7 @@ func executeComponent(cmd *cobra.Command, executeComponent func(c component.Comp
 	}
 
 	logger.Trace().Msg("Initialize dependencies for the default component implementation")
+
 	vaultCache, configCache := initializeCacheDependency()
 
 	vaultImpl, err := vault.NewVault(globalConfig.VaultAddress, "platform-admin", globalConfig.VaultToken, globalConfig.VaultInsecure, vaultCache, &logger)
@@ -82,13 +88,14 @@ func stopWhenAwsOrAzureIDNotSpecified(cmd *cobra.Command) {
 
 func ensureTmpFolderExistsAndIsEmpty() {
 	logger.Debug().Msg("Cleanup TMP dir")
+
 	if err := os.RemoveAll(globalConfig.TmpFolder); err != nil {
 		logger.Fatal().Err(err).Msg("could not clean up the TMP dir")
 	}
 
 	logger.Trace().Msg("Create TMP dir")
 
-	if err := os.Mkdir(globalConfig.TmpFolder, 0700); err != nil {
+	if err := os.Mkdir(globalConfig.TmpFolder, readWriteExecute); err != nil {
 		logger.Fatal().Err(err).Str("dir", globalConfig.TmpFolder).Msg("could not create temporary directory")
 	}
 }
@@ -102,12 +109,14 @@ func calculateComponentFolder(comp component.Initialize) string {
 
 func initializeCacheDependency() (cache.Cache, cache.Cache) {
 	logger.Info().Msg("Initialize cache")
+
 	if cacheFlag {
 		fileCache, err := cache.NewFileCache(globalConfig.CacheFile, &logger)
 
 		if err != nil {
 			logger.Fatal().Err(err)
 		}
+
 		cacheConfig, err := cache.NewCache(&logger)
 
 		if err != nil {
@@ -118,6 +127,7 @@ func initializeCacheDependency() (cache.Cache, cache.Cache) {
 	}
 
 	cache, err := cache.NewCache(&logger)
+
 	if err != nil {
 		logger.Fatal().Err(err)
 	}
@@ -131,6 +141,7 @@ func initComponentFlags(cmd *cobra.Command) {
 	cmd.Flags().StringVarP(&componentFlag, "component", "c", "", "Name of the component")
 	cmd.Flags().StringVarP(&azureIDFlag, "azure-id", "", "", "Azure subscription ID")
 	cmd.Flags().StringVarP(&awsIDFlag, "aws-id", "", "", "AWS Account ID")
+
 	if cmd.Use == "deploy" {
 		cmd.Flags().BoolVarP(&dryRunFlag, "dry-run", "", false, "Dry run the deployment")
 	}

@@ -65,6 +65,7 @@ func (t *Terraform) InitAndPlan(varsFile string) error {
 	if err := t.Init(); err != nil {
 		return err
 	}
+
 	return t.Plan(varsFile)
 }
 
@@ -73,6 +74,7 @@ func (t *Terraform) InitAndApply(varsFile string) error {
 	if err := t.Init(); err != nil {
 		return err
 	}
+
 	return t.Apply(varsFile)
 }
 
@@ -89,9 +91,11 @@ func (t *Terraform) Init() error {
 
 	command := NewCommand("terraform", t.path)
 	command.AddArgs("init", "-reconfigure", "-upgrade")
+
 	if t.backendStorageName != "" {
 		command.AddArgs(fmt.Sprintf("-backend-config=storage_account_name=%s", t.backendStorageName))
 	}
+
 	if t.backendConfigPath != "" {
 		command.AddArgs(fmt.Sprintf("-backend-config=%s", t.backendConfigPath))
 	}

@@ -12,7 +12,7 @@ func (c *DefaultComponent) Build() {
 	}
 
 	for _, folder := range executeOrder {
-		switch folder {
+		switch folder { //nolint //remove when we have more options
 		case c.Docker:
 			c.BuildDocker()
 		}

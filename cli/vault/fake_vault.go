@@ -17,6 +17,7 @@ func (f *FakeVault) Read(path string, data map[string][]string) (map[string]inte
 	if strings.Contains(path, "aws/") || strings.Contains(path, "azure/") || strings.Contains(path, "azuread/") {
 		return fakeResponseVaultAwsAzure, nil
 	}
+
 	return fakeResponseVaultConfig, nil
 }
 
