@@ -7,7 +7,7 @@ terraform {
     }
 
     azurerm = {
-      version = "~> 2.85.0"
+      version = "~> 2.87.0"
     }
 
     vault = {
