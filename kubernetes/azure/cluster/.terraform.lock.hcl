@@ -21,8 +21,8 @@ provider "registry.terraform.io/hashicorp/azurerm" {
 }
 
 provider "registry.terraform.io/hashicorp/vault" {
-  version = "3.0.0"
+  version = "3.0.1"
   hashes = [
-    "h1:1Pl0vIs03udKkvtGp8m0lues4VLG2ZxlbKVa2hZsH0w=",
+    "h1:0E6lQGHly25Ywk1psqd+bEL0a2TSzvvqOIuROLo3WyI=",
   ]
 }

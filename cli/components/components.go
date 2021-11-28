@@ -7,6 +7,7 @@ import (
 	capabilitiesDNSAWS "github.com/opsteady/opsteady/capabilities/dns/aws/cicd"
 	capabilitiesDNSAzure "github.com/opsteady/opsteady/capabilities/dns/azure/cicd"
 	capabilitiesLoadbalancing "github.com/opsteady/opsteady/capabilities/loadbalancing/cicd"
+	capabilitiesUserAuth "github.com/opsteady/opsteady/capabilities/user-auth/cicd"
 	cli "github.com/opsteady/opsteady/cicd"
 	"github.com/opsteady/opsteady/cli/component"
 	dockerBase "github.com/opsteady/opsteady/docker/base/cicd"
@@ -50,6 +51,7 @@ func init() {
 	Components["capabilities-certificates-aws"] = &capabilitiesCertificatesAWS.CapabilitiesCertificatesAWS{}
 	Components["capabilities-certificates-azure"] = &capabilitiesCertificatesAzure.CapabilitiesCertificatesAzure{}
 	Components["capabilities-loadbalancing"] = &capabilitiesLoadbalancing.CapabilitiesLoadbalacing{}
+	Components["capabilities-user-auth"] = &capabilitiesUserAuth.UserAuth{}
 	Components["docker-base"] = &dockerBase.DockerBase{}
 	Components["docker-cicd"] = &dockerCicd.DockerCicd{}
 	Components["cli"] = &cli.OpsteadyCli{}

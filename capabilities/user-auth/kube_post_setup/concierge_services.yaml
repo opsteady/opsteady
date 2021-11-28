@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pinniped-concierge-api
+  namespace: platform
+  labels:
+    app: pinniped-concierge
+  annotations:
+    kapp.k14s.io/disable-default-label-scoping-rules: ""
+spec:
+  type: ClusterIP
+  selector:
+    deployment.pinniped.dev: concierge
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 8443
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pinniped-concierge-proxy
+  namespace: platform
+  labels:
+    app: pinniped-concierge
+  annotations:
+    kapp.k14s.io/disable-default-label-scoping-rules: ""
+spec:
+  type: ClusterIP
+  selector:
+    deployment.pinniped.dev: concierge
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 8444
+---
+apiVersion: apiregistration.k8s.io/v1
+kind: APIService
+metadata:
+  name: v1alpha1.login.concierge.pinniped.dev
+  labels:
+    app: pinniped-concierge
+spec:
+  version: v1alpha1
+  group: login.concierge.pinniped.dev
+  groupPriorityMinimum: 9900
+  versionPriority: 15
+  service:
+    name: pinniped-concierge-api
+    namespace: platform
+    port: 443
+---
+apiVersion: apiregistration.k8s.io/v1
+kind: APIService
+metadata:
+  name: v1alpha1.identity.concierge.pinniped.dev
+  labels:
+    app: pinniped-concierge
+spec:
+  version: v1alpha1
+  group: identity.concierge.pinniped.dev
+  groupPriorityMinimum: 9900
+  versionPriority: 15
+  service:
+    name: pinniped-concierge-api
+    namespace: platform
+    port: 443

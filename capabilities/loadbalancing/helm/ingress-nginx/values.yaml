@@ -7,6 +7,9 @@ controller:
     digest: ""
     pullPolicy: Always
 
+  extraArgs:
+    enable-ssl-passthrough: true # used by pinniped
+
   ingressClassResource:
     default: true # Make ingress the default ingress
 
@@ -32,19 +35,19 @@ controller:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
         - labelSelector:
-          matchExpressions:
-            - key: app.kubernetes.io/name
-              operator: In
-              values:
-                - ingress-nginx
-            - key: app.kubernetes.io/instance
-              operator: In
-              values:
-                - ingress-nginx
-            - key: app.kubernetes.io/component
-              operator: In
-              values:
-                - controller
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - ingress-nginx
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                  - ingress-nginx
+              - key: app.kubernetes.io/component
+                operator: In
+                values:
+                  - controller
           topologyKey: "kubernetes.io/hostname"
 
   admissionWebhooks:

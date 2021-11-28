@@ -3,7 +3,10 @@ extends: default
 
 # Ignore files that have templating, yamllinter gives syntax error
 ignore: |
+  .github/
   capabilities/loadbalancing/helm/ingress-nginx/values.yaml
+  capabilities/user-auth/kube_post_setup/concierge_credential.yaml
+  capabilities/user-auth/kube_post_setup/ingress.yaml
 
 # We don't want to add --- in every yaml
 rules:
@@ -21,6 +24,6 @@ rules:
     ignore-shebangs: true
     min-spaces-from-content: 1
   line-length:
-    max: 1000 # CRDs have long lines
+    max: 2000 # CRDs have long lines
     allow-non-breakable-words: true
     allow-non-breakable-inline-mappings: false
