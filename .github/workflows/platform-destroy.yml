@@ -49,6 +49,10 @@ jobs:
           management_helm_repository: opsteadyos.azurecr.io
           EOF
 
+      - name: Destroy Loadbalancing capability
+        run: |
+          go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c capabilities-loadbalancing --cache
+
       - name: Destroy Certificates capability
         run: |
           go run main.go destroy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c capabilities-certificates-${{ github.event.inputs.cloud }} --cache

@@ -103,6 +103,7 @@ func (c *DefaultComponent) SetCloudCredentialsToEnv() {
 
 func (c *DefaultComponent) setAwsCloudCredentialsToEnv() {
 	awsAccountCreds, err := c.Credentials.AWS(c.AwsID, "60m")
+
 	if err != nil {
 		c.Logger.Fatal().Err(err).Str("awsID", c.AwsID).Msg("Could not get credentials")
 	}
@@ -152,6 +153,15 @@ func (c *DefaultComponent) AzureIDorAwsID() string {
 	return c.AzureID
 }
 
+// CloudName returns azure or aws depending of the cloud
+func (c *DefaultComponent) CloudName() string {
+	if c.AzureID == "" {
+		return "aws"
+	}
+
+	return "azure"
+}
+
 func (c *DefaultComponent) ComponentNameAndAllTheDependencies() []string {
 	return utils.UniqueNonEmptyElementsOf(append([]string{c.ComponentName}, append(c.DefaultDependencies, c.ComponentDependencies...)...))
 }
@@ -168,6 +178,7 @@ func (c *DefaultComponent) SetVaultInfoToComponentConfig() {
 func (c *DefaultComponent) SetPlatformInfoToComponentConfig() {
 	c.ComponentConfig.GeneralAddOrOverride("platform_version", c.PlatformVersion)
 	c.ComponentConfig.GeneralAddOrOverride("platform_environment_name", c.AzureIDorAwsID())
+	c.ComponentConfig.GeneralAddOrOverride("platform_cloud_name", c.CloudName())
 	c.ComponentConfig.GeneralAddOrOverride("platform_component_name", c.ComponentName)
 }
 

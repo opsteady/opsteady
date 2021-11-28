@@ -1,0 +1,12 @@
+source:
+  repo:
+    kind: HELM
+    url: https://kubernetes.github.io/ingress-nginx
+target:
+  containerRegistry: opsteadyos.azurecr.io
+  containerRepository: opsteadyos.azurecr.io
+  repo:
+    kind: OCI
+    url: https://opsteadyos.azurecr.io/helm
+charts:
+  - ingress-nginx

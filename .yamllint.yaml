@@ -1,9 +1,9 @@
 ---
 extends: default
 
+# Ignore files that have templating, yamllinter gives syntax error
 ignore: |
-  .github
-  local-test-component
+  capabilities/loadbalancing/helm/ingress-nginx/values.yaml
 
 # We don't want to add --- in every yaml
 rules:

@@ -1,0 +1,41 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: test-app
+  labels:
+    app: test
+spec:
+  imagePullSecrets:
+    - name: management-acr
+  containers:
+    - name: test-app
+      image: opsteadyos.azurecr.io/hashicorp/http-echo:0.2.3
+      args:
+        - "-text=test"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: test-service
+spec:
+  selector:
+    app: test
+  ports:
+    - port: 5678
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: test-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            backend:
+              serviceName: test-service
+              servicePort: 5678
+# kubectl get svc -- to find the IP address or URL of the LB
+# curl -vv http://IP -- should return test (if you see nginx then it is WRONG)
