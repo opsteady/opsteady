@@ -37,3 +37,4 @@
 - [34. DNS capability](0034-capabilities-dns.md)
 - [35. Certificates capability](0035-capabilities-certificates.md)
 - [36. Loadbalancing capability](0036-capabilities-loadbalancing.md)
+- [37. Loadbalancing capability implementation](0037-capabilities-loadbalancing-implementation.md)
