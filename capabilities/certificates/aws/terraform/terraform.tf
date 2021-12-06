@@ -3,7 +3,7 @@ terraform {
 
   required_providers {
     aws = {
-      version = "~> 3.67.0"
+      version = "~> 3.68.0"
     }
 
     azurerm = {
