@@ -20,7 +20,7 @@ require (
 	github.com/hashicorp/go-secure-stdlib/parseutil v0.1.2 // indirect
 	github.com/hashicorp/go-version v1.3.0 // indirect
 	github.com/hashicorp/hcl v1.0.1-vault-3 // indirect
-	github.com/hashicorp/vault-plugin-auth-jwt v0.11.2
+	github.com/hashicorp/vault-plugin-auth-jwt v0.11.3
 	github.com/hashicorp/vault/api v1.3.0
 	github.com/hashicorp/yamux v0.0.0-20210826001029-26ff87cf9493 // indirect
 	github.com/huandu/xstrings v1.3.2 // indirect
