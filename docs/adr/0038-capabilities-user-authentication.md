@@ -19,15 +19,17 @@ The solution we are choosing is using the impersonation option in Kubernetes. Th
 
 If and when cloud providers allow an easy way of connecting other IDPs we will switch to that.
 
-Pinniped solves the authorization problem where it connects external IDP groups to Kubernetes roles. But pinniped can only have one IDP (OIDC) connection where we need one for ourselves using our Azure AD tenant and one or more for the users of the specific platform. To enable those options we have chosen [dex](https://dexidp.io/). Dex allows us to offer multiple IDPs on login so we can connect to multiple user IDPs on one cluster. Pinniped self offers supervisor but it does not allow us to add them programmatically as Dex does.
+Pinniped solves the authorization problem where it connects external IDP groups to Kubernetes roles. But pinniped can only have one IDP (OIDC) connection where we need one for ourselves using our Azure AD tenant and one or more for the users of the specific platform. To enable those options we have chosen [dex](https://dexidp.io/). Dex allows us to offer multiple IDPs on login so we can connect to multiple user IDPs on one cluster. Pinniped itself offers supervisor but it does not allow us to add them programmatically as Dex does.
 
 For more information on the pinniped architecture and the way the authentication works see [their architecture](https://pinniped.dev/docs/background/architecture/)
 
 ### Dex configuration
 
 Dex depends on our load balancing, DNS, and certification capabilities to deliver the integrated OIDC from different IDPs. By default, we have our tenant in Azure AD connected to the cluster. Dex requires information to be stored, we are using the Kubernetes storage for that.
-TODO how do we configure multiple IDPs for our users? (we also have a second one, the same tenant representing the customer for now)
-TODO add info about using our build because of configuration, link to PR/issue
+
+Dex exposes a GRPC API to allows runtime configuration. In particular we will use the ability to dynamically add and remove connectors to configure the user IDP in Dex. Our self-service platform operator will interface with Dex, based on custom CRDs that provide identity provider information. These custom resources will be created with the Kubernetes API, most likely from the graphical portal interface for easy configuration.
+
+Currently Dex does not contain an option to configure connectors via the API. A [PR](https://github.com/dexidp/dex/pull/1489) is open that provides the needed functionality but it has not been merged yet. We will use a fork and custom build, that will include these changes, to run Dex in the Opsteady platform. Once the PR is merged, we will switch back to the main release.
 
 Although Dex gives us an option to style the UI the users get presented we have decided not to make any changes to that for now.
 
