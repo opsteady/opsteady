@@ -75,7 +75,7 @@ tasks:
       - from: sig-storage/csi-node-driver-registrar
         tags: ["v2.1.0"]
       - from: provider-aws/aws-ebs-csi-driver
-        tags: ["v1.4.0"]
+        tags: ["v1.4.0", "v1.5.0"]
       - from: external-dns/external-dns
         tags: ["v0.10.1", "v0.9.0"]
       - from: ingress-nginx/controller
