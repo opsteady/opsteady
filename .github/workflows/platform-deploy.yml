@@ -97,3 +97,7 @@ jobs:
       - name: Deploy Loadbalancing capability
         run: |
           go run main.go deploy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c capabilities-loadbalancing --cache
+
+      - name: Deploy user authentication capability
+        run: |
+          go run main.go deploy --${{ github.event.inputs.cloud }}-id ${{ github.event.inputs.platform }} -c capabilities-user-auth --cache

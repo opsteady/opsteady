@@ -1,0 +1,20 @@
+---
+apiVersion: authentication.concierge.pinniped.dev/v1alpha1
+kind: JWTAuthenticator
+metadata:
+  name: pinniped-cli
+spec:
+  issuer: https://{{ .capabilities_user_auth_oidc_url }}
+  audience: pinniped-cli
+  claims:
+    username: name
+---
+apiVersion: authentication.concierge.pinniped.dev/v1alpha1
+kind: JWTAuthenticator
+metadata:
+  name: backstage
+spec:
+  issuer: https://{{ .capabilities_user_auth_oidc_url }}
+  audience: backstage
+  claims:
+    username: name

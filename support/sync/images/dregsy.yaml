@@ -98,3 +98,23 @@ tasks:
         tags: ["v2.1.0-eks-1-18-2"]
       - from: eks-distro/kubernetes-csi/external-provisioner
         tags: ["v2.1.1-eks-1-18-2"]
+
+  - name: ghcr.io
+    verbose: true
+    source:
+      registry: ghcr.io
+    target:
+      registry: opsteadyos.azurecr.io
+    mappings:
+      - from: dexidp/dex
+        tags: ["v2.30.0", "v2.30.2"]
+
+  - name: projects.registry.vmware.com
+    verbose: true
+    source:
+      registry: projects.registry.vmware.com
+    target:
+      registry: opsteadyos.azurecr.io
+    mappings:
+      - from: pinniped/pinniped-server
+        tags: ["v0.12.0"]

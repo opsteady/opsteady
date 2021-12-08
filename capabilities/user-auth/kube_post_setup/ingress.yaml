@@ -1,0 +1,25 @@
+{{ $public_name := (coalesce .foundation_azure_public_zone_name .foundation_aws_public_zone_name) }}
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/ingress.allow-http: "false"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+  name: impersonation-proxy
+  namespace: platform
+spec:
+  rules:
+  - host: api.{{ $public_name }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: pinniped-concierge-proxy
+            port:
+              number: 443
+        path: /
+        pathType: Prefix

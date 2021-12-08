@@ -48,7 +48,7 @@ cainjector:
 
 startupapicheck:
   nodeSelector:
-  name: system
+    name: system
 
   image:
     repository: opsteadyos.azurecr.io/jetstack/cert-manager-ctl

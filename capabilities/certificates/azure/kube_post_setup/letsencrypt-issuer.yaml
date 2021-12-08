@@ -11,8 +11,8 @@ spec:
       name: letsencrypt
     solvers:
       - dns01:
-          azureDNS:
-            subscriptionID: {{ .foundation_azure_subscription_id }}
-            resourceGroupName: {{ .foundation_azure_resource_group }}
-            hostedZoneName: {{ .foundation_azure_public_zone_name }}
-            environment: AzurePublicCloud
+        azureDNS:
+          subscriptionID: {{ .foundation_azure_subscription_id }}
+          resourceGroupName: {{ .foundation_azure_resource_group }}
+          hostedZoneName: {{ .foundation_azure_public_zone_name }}
+          environment: AzurePublicCloud
