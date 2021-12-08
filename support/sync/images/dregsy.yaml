@@ -79,7 +79,7 @@ tasks:
       - from: external-dns/external-dns
         tags: ["v0.10.1", "v0.9.0"]
       - from: ingress-nginx/controller
-        tags: ["v1.0.5"]
+        tags: ["v1.0.5", "v1.1.0"]
       - from: ingress-nginx/kube-webhook-certgen
         tags: ["v1.1.1"]
       - from: defaultbackend-amd64
