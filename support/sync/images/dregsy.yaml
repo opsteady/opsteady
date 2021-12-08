@@ -18,7 +18,7 @@ tasks:
       registry: opsteadyos.azurecr.io
     mappings:
       - from: tigera/operator
-        tags: ["v1.20.3"]
+        tags: ["v1.20.3", "v1.23.3"]
       - from: jetstack/cert-manager-controller
         tags: ["v1.6.0", "v1.6.1"]
       - from: jetstack/cert-manager-webhook
@@ -36,7 +36,7 @@ tasks:
       registry: opsteadyos.azurecr.io
     mappings:
       - from: calico/ctl
-        tags: ["v3.20.2"]
+        tags: ["v3.20.2", "v3.21.2"]
       - from: amazon/aws-efs-csi-driver
         tags: ["v1.3.4"]
       - from: hashicorp/http-echo
