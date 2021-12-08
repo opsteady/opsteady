@@ -334,6 +334,8 @@ github.com/hashicorp/serf v0.8.2/go.mod h1:6hOLApaqBFA1NXqRQAsxw9QxuDEvNxSQRwA/J
 github.com/hashicorp/serf v0.9.5/go.mod h1:UWDWwZeL5cuWDJdl0C6wrvrUwEqtQ4ZKBKKENpqIUyk=
 github.com/hashicorp/vault-plugin-auth-jwt v0.11.2 h1:+dRT24GSDXKMF+phD+ejFDax8cI0gri6saj9p7cCXw0=
 github.com/hashicorp/vault-plugin-auth-jwt v0.11.2/go.mod h1:jzjDdssus8sw8G6NOP7kNFMEeIvrjXvPHUR3pEn5+r0=
+github.com/hashicorp/vault-plugin-auth-jwt v0.11.3 h1:uo7Gz81YqiYjg1ne4ZvT5csV/L4UT/9jlNVdCdb1jEs=
+github.com/hashicorp/vault-plugin-auth-jwt v0.11.3/go.mod h1:jzjDdssus8sw8G6NOP7kNFMEeIvrjXvPHUR3pEn5+r0=
 github.com/hashicorp/vault/api v1.3.0 h1:uDy39PLSvy6gtKyjOCRPizy2QdFiIYSWBR2pxCEzYL8=
 github.com/hashicorp/vault/api v1.3.0/go.mod h1:EabNQLI0VWbWoGlA+oBLC8PXmR9D60aUVgQGvangFWQ=
 github.com/hashicorp/vault/sdk v0.3.0 h1:kR3dpxNkhh/wr6ycaJYqp6AFT/i2xaftbfnwZduTKEY=
