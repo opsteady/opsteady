@@ -12,7 +12,7 @@ terraform {
     }
 
     aws = {
-      version = "~> 3.68.0"
+      version = "~> 3.69.0"
     }
   }
 
