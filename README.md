@@ -1,6 +1,6 @@
 # ![logo](docs/images/logo.png)
 
-Opsteady is an opioniated reference implementation, based on years of platform building experience, for a container-based platform that provides an exceptional developer experience. Next to developers, it also caters to the needs of other organisational roles that are closely involved in the software development lifecycle like security officers, testers, site reliability engineers, etc.
+Opsteady is an opinionated reference implementation, based on years of platform building experience, for a container-based platform that provides an exceptional developer experience. Next to developers, it also caters to the needs of other organisational roles that are closely involved in the software development lifecycle like security officers, testers, site reliability engineers, etc.
 
 ## Background
 
