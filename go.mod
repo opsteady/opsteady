@@ -3,7 +3,7 @@ module github.com/opsteady/opsteady
 go 1.16
 
 require (
-	github.com/Azure/azure-sdk-for-go/v61 v61.4.0
+	github.com/Azure/azure-sdk-for-go v61.4.0+incompatible
 	github.com/Azure/go-autorest/autorest v0.11.22 // indirect
 	github.com/Azure/go-autorest/autorest/azure/auth v0.5.9
 	github.com/Azure/go-autorest/autorest/to v0.4.0 // indirect
@@ -13,9 +13,6 @@ require (
 	github.com/Masterminds/sprig v2.22.0+incompatible
 	github.com/cenkalti/backoff/v3 v3.2.2 // indirect
 	github.com/coreos/go-oidc/v3 v3.1.0 // indirect
-	github.com/fatih/color v1.13.0 // indirect
-	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
-	github.com/googleapis/gax-go/v2 v2.1.1 // indirect
 	github.com/hashicorp/go-retryablehttp v0.7.0 // indirect
 	github.com/hashicorp/go-secure-stdlib/parseutil v0.1.2 // indirect
 	github.com/hashicorp/go-version v1.3.0 // indirect
@@ -38,7 +35,6 @@ require (
 	github.com/stretchr/objx v0.2.0 // indirect
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/net v0.0.0-20210917221730-978cfadd31cf // indirect
-	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac // indirect
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 )
