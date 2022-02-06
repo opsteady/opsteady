@@ -56,7 +56,9 @@ resource "azurerm_role_assignment" "disk_encryption_crypto_user" {
 }
 
 resource "azurerm_role_assignment" "aks_cluster_disk_encryption_reader" {
+  count = var.management_infra_minimal ? 0 : 1
+
   scope                = azurerm_disk_encryption_set.management.id
   role_definition_name = "Reader"
-  principal_id         = azurerm_kubernetes_cluster.management.identity.0.principal_id
+  principal_id         = azurerm_kubernetes_cluster.management.0.identity.0.principal_id
 }

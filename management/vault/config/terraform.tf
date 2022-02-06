@@ -42,7 +42,7 @@ provider "azuread" {
 }
 
 provider "vault" {
-  address = "https://vault.management.${var.management_infra_domain}"
+  address = "https://vault.management.${var.management_infra_domain}:8200"
   token   = var.vault_token
 }
 

@@ -42,10 +42,11 @@ RUN pip install azure-cli==${AZURECLI_VERSION}
 ENV PATH="/usr/lib/go-1.17/bin:${PATH}"
 
 ARG VAULT_CA_STORAGE_ACCOUNT
-RUN if [[ ! -z "$VAULT_CA_STORAGE_ACCOUNT" ]]; then curl -o /vault-ca.pem https://$VAULT_CA_STORAGE_ACCOUNT.blob.core.windows.net/vault-ca/ca.pem; fi
-
-RUN openssl x509 -in /vault-ca.pem -inform PEM -out /usr/local/share/ca-certificates/vault-ca.crt
-RUN update-ca-certificates
+RUN if [[ ! -z "$VAULT_CA_STORAGE_ACCOUNT" ]]; then \
+      curl -o /vault-ca.pem https://$VAULT_CA_STORAGE_ACCOUNT.blob.core.windows.net/vault-ca/ca.pem && \
+      openssl x509 -in /vault-ca.pem -inform PEM -out /usr/local/share/ca-certificates/vault-ca.crt && \
+      update-ca-certificates; \
+    fi
 
 RUN install-packages docker-ce-cli
 
@@ -54,7 +55,7 @@ ENV HADOLINT_VERSION=v2.8.0
 RUN getfile -n hadolint https://github.com/hadolint/hadolint/releases/download/${HADOLINT_VERSION}/hadolint-Linux-x86_64
 
 # renovate: datasource=github-releases depName=golangci/golangci-lint versioning=semver
-ENV GOLINT_VERSION=v1.44.0
+ENV GOLINT_VERSION=1.44.0
 RUN getfile https://github.com/golangci/golangci-lint/releases/download/v${GOLINT_VERSION}/golangci-lint-${GOLINT_VERSION}-linux-amd64.tar.gz
 RUN install-packages libc-dev gcc
 

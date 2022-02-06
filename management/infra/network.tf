@@ -41,6 +41,8 @@ resource "azurerm_subnet_network_security_group_association" "pub" {
 
 # Reserve some IP space for outgoing traffic on the AKS loadbalancer
 resource "azurerm_public_ip_prefix" "pub" {
+  count = var.management_infra_minimal ? 0 : 1
+
   name                = "pub-${var.management_infra_aks_name}"
   location            = azurerm_resource_group.management.location
   resource_group_name = azurerm_resource_group.management.name

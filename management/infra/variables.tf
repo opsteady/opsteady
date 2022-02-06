@@ -1,3 +1,8 @@
+variable "management_infra_minimal" {
+  description = "Configure a minimal infrastructure without a Kubernetes cluster. This assumes you are running the Vault elsewhere"
+  type = bool
+}
+
 variable "management_infra_location" {
   type = string
 }

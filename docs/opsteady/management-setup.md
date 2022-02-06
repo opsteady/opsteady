@@ -35,7 +35,7 @@ cd ../..
 Either open the project in Visual Studio code with the provided remote container or use the container manually:
 
 ```bash
-# Run this from the root of the repository
+# Run this from the **root of the repository**
 docker run -it --rm -v $(pwd):/data dev-management.azurecr.io/cicd:1.0.0 /bin/bash
 ```
 
@@ -68,7 +68,7 @@ terraform init -reconfigure -backend-config "storage_account_name=This name shou
 When creating the initial management infra, we provide a set of defaults for the Terraform values. They are located in `management/defaults/infra.default.tfvars.json`. To deploy the management infrastructure successfully, copy the default file to a custom tfvars file called `management/defaults/infra.tfvars.json`.
 
 In this file also update the `management_infra_key_vault_administrators` to include your AD user object ID. You can find this in the Azure AD. This makes sure that you can administer the key vault.
-In this file also update the `management_infra_platform_admins` to include your AD user object ID. You can find this in the Azure AD. This makes sure that you can login to the Vault later on and manageme the entire platform.
+In this file also update the `management_infra_platform_admins` to include your AD user object ID. You can find this in the Azure AD. This makes sure that you can login to the Vault later on and manage the entire platform.
 
 ```bash
 cd management/infra

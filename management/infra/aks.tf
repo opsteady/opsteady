@@ -1,4 +1,6 @@
 resource "azurerm_kubernetes_cluster" "management" {
+  count = var.management_infra_minimal ? 0 : 1
+
   name                            = var.management_infra_aks_name
   dns_prefix                      = var.management_infra_aks_name
   node_resource_group             = "nodes-${var.management_infra_aks_name}"
@@ -29,7 +31,7 @@ resource "azurerm_kubernetes_cluster" "management" {
     load_balancer_sku  = "Standard"
     outbound_type      = "loadBalancer"
     load_balancer_profile {
-      outbound_ip_prefix_ids = [azurerm_public_ip_prefix.pub.id]
+      outbound_ip_prefix_ids = [azurerm_public_ip_prefix.pub.0.id]
     }
   }
 
@@ -49,8 +51,10 @@ resource "azurerm_kubernetes_cluster" "management" {
 }
 
 resource "azurerm_monitor_diagnostic_setting" "aks" {
+  count = var.management_infra_minimal ? 0 : 1
+
   name                       = var.management_infra_aks_name
-  target_resource_id         = azurerm_kubernetes_cluster.management.id
+  target_resource_id         = azurerm_kubernetes_cluster.management.0.id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.management.id
 
   log {
@@ -78,7 +82,7 @@ resource "azurerm_monitor_diagnostic_setting" "aks" {
     enabled  = true
 
     retention_policy {
-      days = 0
+      days    = 0
       enabled = false
     }
   }
@@ -108,7 +112,7 @@ resource "azurerm_monitor_diagnostic_setting" "aks" {
     enabled  = true
 
     retention_policy {
-      days = 0
+      days    = 0
       enabled = false
     }
   }

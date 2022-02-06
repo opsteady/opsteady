@@ -3,7 +3,7 @@ module "vault_oidc_auth" {
   name                    = "vault-oidc-auth"
   group_membership_claims = ["All"]
   redirect_uris = [
-    "https://vault.management.${var.management_infra_domain}/ui/vault/auth/oidc/oidc/callback",
+"https://vault.management.${var.management_infra_domain}:8200/ui/vault/auth/oidc/oidc/callback",
     "http://localhost:8250/oidc/callback",
   ]
 
@@ -45,7 +45,7 @@ resource "vault_jwt_auth_backend_role" "platform_viewer" {
   user_claim  = "email"
   role_type   = "oidc"
   allowed_redirect_uris = [
-    "https://vault.management.${var.management_infra_domain}/ui/vault/auth/oidc/oidc/callback",
+  "https://vault.management.${var.management_infra_domain}:8200/ui/vault/auth/oidc/oidc/callback",
     "http://localhost:8250/oidc/callback",
   ]
   groups_claim = "groups"
@@ -61,7 +61,7 @@ resource "vault_jwt_auth_backend_role" "platform_operator" {
   user_claim  = "email"
   role_type   = "oidc"
   allowed_redirect_uris = [
-    "https://vault.management.${var.management_infra_domain}/ui/vault/auth/oidc/oidc/callback",
+    "https://vault.management.${var.management_infra_domain}:8200/ui/vault/auth/oidc/oidc/callback",
     "http://localhost:8250/oidc/callback",
   ]
   groups_claim = "groups"
@@ -77,7 +77,7 @@ resource "vault_jwt_auth_backend_role" "platform_admin" {
   user_claim  = "email"
   role_type   = "oidc"
   allowed_redirect_uris = [
-    "https://vault.management.${var.management_infra_domain}/ui/vault/auth/oidc/oidc/callback",
+    "https://vault.management.${var.management_infra_domain}:8200/ui/vault/auth/oidc/oidc/callback",
     "http://localhost:8250/oidc/callback",
   ]
   groups_claim = "groups"
