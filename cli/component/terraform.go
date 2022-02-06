@@ -38,12 +38,14 @@ func (c *DefaultComponent) PrepareTerraformBackend() {
 func (c *DefaultComponent) determinBlobKey() string {
 	// Try to determine which blob key to use for Terraform state
 	var blobKey string
-	if c.AwsID != "" && c.AzureID == "" { //nolint
+	if c.AwsID != "" && c.AzureID == "" && c.LocalID == "" { //nolint
 		blobKey = fmt.Sprintf("%s/%s/%s.tfstate", "aws", c.AwsID, c.ComponentName)
-	} else if c.AwsID == "" && c.AzureID != "" {
+	} else if c.AwsID == "" && c.AzureID != "" && c.LocalID == "" {
 		blobKey = fmt.Sprintf("%s/%s/%s.tfstate", "azure", c.AzureID, c.ComponentName)
-	} else if c.AwsID == "" && c.AzureID == "" {
-		c.Logger.Fatal().Msg("Please specify a target AWS/Azure ID")
+	} else if c.AwsID == "" && c.AzureID == "" && c.LocalID != "" {
+		blobKey = fmt.Sprintf("%s/%s/%s.tfstate", "local", c.LocalID, c.ComponentName)
+	} else if c.AwsID == "" && c.AzureID == "" && c.LocalID == "" {
+		c.Logger.Fatal().Msg("Please specify a target AWS/Azure/Local ID")
 	} else if c.AwsID != "" && c.AzureID != "" {
 		c.Logger.Info().Msg("You specified both an Azure and AWS ID, using the backend blob key in the Terraform provider")
 	}

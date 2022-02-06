@@ -14,6 +14,7 @@ import (
 	dockerCicd "github.com/opsteady/opsteady/docker/cicd/cicd"
 	foundationAWS "github.com/opsteady/opsteady/foundation/aws/cicd"
 	foundationAzure "github.com/opsteady/opsteady/foundation/azure/cicd"
+	foundationLocal "github.com/opsteady/opsteady/foundation/local/cicd"
 	kubernetesAWSCluster "github.com/opsteady/opsteady/kubernetes/aws/cluster/cicd"
 	kubernetesAWSLoadbalancing "github.com/opsteady/opsteady/kubernetes/aws/loadbalancing/cicd"
 	kubernetesAWSNetworkPolicies "github.com/opsteady/opsteady/kubernetes/aws/network-policies/cicd"
@@ -38,6 +39,7 @@ func init() {
 	Components["management-vault-config"] = &managementVaultConfig.ManagementVaultConfig{}
 	Components["foundation-azure"] = &foundationAzure.FoundationAzure{}
 	Components["foundation-aws"] = &foundationAWS.FoundationAWS{}
+	Components["foundation-local"] = &foundationLocal.FoundationLocal{}
 	Components["kubernetes-aws-cluster"] = &kubernetesAWSCluster.KubernetesAWSCluster{}
 	Components["kubernetes-bootstrap"] = &kubernetesBootstrap.KubernetesBootstrap{}
 	Components["kubernetes-aws-storage-ebs"] = &kubernetesAWSStorageEBS.KubernetesAWSStorageEBS{}
