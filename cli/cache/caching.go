@@ -118,7 +118,7 @@ func (c *CacheImpl) Retrieve(dataID string) map[string]interface{} {
 		return nil
 	}
 
-	creationTimeString := creationTimeInterface.(string) //nolint
+	creationTimeString := creationTimeInterface.(string)
 	creationTime, err := time.Parse(time.RFC3339, creationTimeString)
 
 	if err != nil {

@@ -43,7 +43,7 @@ func (c *DefaultComponent) Deploy() {
 
 // DeployTerraform uses Terrform code to deploy resources
 func (c *DefaultComponent) DeployTerraform(componentConfig map[string]interface{}) {
-	backendStorageName := componentConfig["management_bootstrap_terraform_state_account_name"].(string) //nolint // Always expecting this to be here
+	backendStorageName := componentConfig["management_bootstrap_terraform_state_account_name"].(string)
 	terraform := tasks.NewTerraform(c.TerraformFolder(), c.TerraformBackendConfigPath, backendStorageName, c.GlobalConfig.CachePath, c.Logger)
 
 	varsPath := fmt.Sprintf("%s/%s.tfvars.json", c.GlobalConfig.TmpFolder, c.ComponentName)

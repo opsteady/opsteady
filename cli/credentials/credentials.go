@@ -113,8 +113,8 @@ func (vc *VaultCredentials) getAzureCreds(path string, cacheID string, subscript
 
 	vc.logger.Info().Msg("Waiting for Azure credentials propagation.")
 
-	clientID := secret["client_id"].(string)         //nolint
-	clientSecret := secret["client_secret"].(string) //nolint
+	clientID := secret["client_id"].(string)
+	clientSecret := secret["client_secret"].(string)
 
 	configPath := "azure/config"
 	azureConfig, err := vc.vault.Read(configPath, nil)
@@ -125,7 +125,7 @@ func (vc *VaultCredentials) getAzureCreds(path string, cacheID string, subscript
 
 	tenantID := ""
 	if _, ok := azureConfig["tenant_id"]; ok {
-		tenantID = azureConfig["tenant_id"].(string) //nolint
+		tenantID = azureConfig["tenant_id"].(string)
 	}
 
 	if tenantID == "" {

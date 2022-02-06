@@ -66,7 +66,7 @@ func NewVault(address, role, token string, insecure bool, cache cache.Cache, log
 
 			cache.Store(role, map[string]interface{}{"token": token}, tokenTTL)
 		} else {
-			token = tokenMap["token"].(string) //nolint
+			token = tokenMap["token"].(string)
 		}
 	}
 

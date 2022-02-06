@@ -16,6 +16,8 @@ linters:
     - thelper # Doesn't allow to have helper functions in the test code
     - paralleltest # Not running the tests in parallel for now
     - gofumpt # Not used
+    - forcetypeassert # We are doing conversions which we don't want to check, Vault data to string for example
+    - varnamelen # We are content with the short names
 
 issues:
   # https://github.com/golangci/golangci-lint/issues/826
