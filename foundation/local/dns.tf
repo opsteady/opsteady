@@ -1,7 +1,7 @@
 # Create a unique subdomain for this platform
 resource "azurerm_dns_zone" "public" {
   name                = "${var.foundation_local_public_name}.${var.management_infra_domain}"
-  resource_group_name = "management"
+  resource_group_name = azurerm_resource_group.foundation.name
 }
 
 resource "azurerm_dns_ns_record" "public_management_delegation" {

@@ -1,0 +1,21 @@
+apiVersion: k3d.io/v1alpha3
+kind: Simple
+name: opsteady
+servers: 1
+agents: 3
+
+volumes:
+  - volume: /tmp/k3d/storage:/var/lib/rancher/k3s/storage
+    nodeFilters:
+      - agent:*
+
+options:
+  k3s:
+    extraArgs:
+      - arg: --no-deploy=traefik
+        nodeFilters:
+          - server:*
+    nodeLabels:
+      - label: name=system
+        nodeFilters:
+          - agent:*

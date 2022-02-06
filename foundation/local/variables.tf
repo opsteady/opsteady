@@ -1,6 +1,18 @@
+variable "foundation_local_name" {
+  description = "Name to be used for resources or as a suffix, mostly plt1"
+  type        = string
+}
 variable "foundation_local_public_name" {
   description = "The name used as the sub domain"
   type        = string
+}
+
+variable "foundation_local_subscription_id" {
+  type = string
+}
+
+variable "foundation_local_location" {
+  type = string
 }
 
 variable "management_infra_domain" {

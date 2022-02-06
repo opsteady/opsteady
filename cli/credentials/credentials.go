@@ -2,13 +2,9 @@
 package credentials
 
 import (
-	"context"
 	"fmt"
-	"strings"
 	"time"
 
-	"github.com/Azure/azure-sdk-for-go/services/preview/subscription/mgmt/2019-10-01-preview/subscription"
-	"github.com/Azure/go-autorest/autorest/azure/auth"
 	"github.com/opsteady/opsteady/cli/cache"
 	"github.com/opsteady/opsteady/cli/vault"
 	"github.com/pkg/errors"
@@ -113,9 +109,6 @@ func (vc *VaultCredentials) getAzureCreds(path string, cacheID string, subscript
 
 	vc.logger.Info().Msg("Waiting for Azure credentials propagation.")
 
-	clientID := secret["client_id"].(string)
-	clientSecret := secret["client_secret"].(string)
-
 	configPath := "azure/config"
 	azureConfig, err := vc.vault.Read(configPath, nil)
 
@@ -132,9 +125,7 @@ func (vc *VaultCredentials) getAzureCreds(path string, cacheID string, subscript
 		return nil, errors.Wrapf(err, "could not get tenant ID from Azure secret backend configuration: %+v", azureConfig)
 	}
 
-	if err := vc.verifyCredentials(clientID, clientSecret, tenantID, subscriptionID); err != nil {
-		return nil, err
-	}
+	time.Sleep(10 * time.Second)
 
 	vc.cache.Store(cacheID, secret, DefaultTTL)
 
@@ -142,48 +133,6 @@ func (vc *VaultCredentials) getAzureCreds(path string, cacheID string, subscript
 	vc.logger.Debug().Str("id", cacheID).Msg("Returning retrieved credentials")
 
 	return secret, nil
-}
-
-func (vc *VaultCredentials) verifyCredentials(clientID, clientSecret, tenantID, subscriptionID string) error {
-	config := auth.NewClientCredentialsConfig(clientID, clientSecret, tenantID)
-	authorizer, err := config.Authorizer()
-
-	if err != nil {
-		return errors.Wrapf(err, "could not authorize the Azure Go client")
-	}
-
-	subscriptionClient := subscription.NewSubscriptionsClient()
-	subscriptionClient.Authorizer = authorizer
-
-	var subFound bool
-
-	tries := 0
-
-OUTER:
-	// We try to get the subscription list as a heuristic to know if the credential permissions have
-	// been propagated. The amount of tries is arbitrary but should succeed most of the time within
-	// five tries.
-	for tries < 5 {
-		for iter, err := subscriptionClient.ListComplete(context.Background()); iter.NotDone(); err = iter.Next() {
-			if err != nil {
-				return err
-			}
-
-			vc.logger.Info().Msg(fmt.Sprintf("Client has permissions for subscription '%s'", *iter.Value().DisplayName))
-
-			if strings.EqualFold(*iter.Value().DisplayName, subscriptionID) {
-				subFound = true
-
-				break OUTER
-			}
-		}
-	}
-
-	if !subFound {
-		return errors.Wrapf(err, "client does not have permissions for subscription '%s'", subscriptionID)
-	}
-
-	return nil
 }
 
 // AzureAD retrieves credentials used for reading from Azure AD.

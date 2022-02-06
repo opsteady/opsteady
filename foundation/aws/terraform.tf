@@ -17,9 +17,8 @@ terraform {
   }
 
   backend "azurerm" {
-    resource_group_name  = "terraform-state"
-    storage_account_name = "aiplatformmgmt"
-    container_name       = "platform"
+    resource_group_name = "terraform-state"
+    container_name      = "platform"
   }
 }
 

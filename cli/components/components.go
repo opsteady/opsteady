@@ -23,6 +23,7 @@ import (
 	kubernetesAzureCluster "github.com/opsteady/opsteady/kubernetes/azure/cluster/cicd"
 	kubernetesAzurePodIdentity "github.com/opsteady/opsteady/kubernetes/azure/pod-identity/cicd"
 	kubernetesBootstrap "github.com/opsteady/opsteady/kubernetes/bootstrap/cicd"
+	kubernetesLocalCluster "github.com/opsteady/opsteady/kubernetes/local/cluster/cicd"
 	managementBootstrap "github.com/opsteady/opsteady/management/bootstrap/cicd"
 	managementInfra "github.com/opsteady/opsteady/management/infra/cicd"
 	managementVaultConfig "github.com/opsteady/opsteady/management/vault/config/cicd"
@@ -48,6 +49,7 @@ func init() {
 	Components["kubernetes-aws-loadbalancing"] = &kubernetesAWSLoadbalancing.KubernetesAWSLoadbalancing{}
 	Components["kubernetes-azure-pod-identity"] = &kubernetesAzurePodIdentity.KubernetesAzurePodIdentity{}
 	Components["kubernetes-azure-cluster"] = &kubernetesAzureCluster.KubernetesAzure{}
+	Components["kubernetes-local-cluster"] = &kubernetesLocalCluster.KubernetesLocal{}
 	Components["capabilities-dns-aws"] = &capabilitiesDNSAWS.CapabilitiesDNSAWS{}
 	Components["capabilities-dns-azure"] = &capabilitiesDNSAzure.CapabilitiesDNSAzure{}
 	Components["capabilities-certificates-aws"] = &capabilitiesCertificatesAWS.CapabilitiesCertificatesAWS{}

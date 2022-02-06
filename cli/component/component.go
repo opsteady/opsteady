@@ -98,7 +98,11 @@ func (c *DefaultComponent) SetCloudCredentialsToEnv() {
 	}
 
 	if c.AzureID != "" {
-		c.setAzureCloudCredentialsToEnv()
+		c.setAzureCloudCredentialsToEnv(c.AzureID)
+	}
+
+	if c.LocalID != "" { // Local uses credentials of local sub for all local deployments
+		c.setAzureCloudCredentialsToEnv(c.LocalID)
 	}
 }
 
@@ -122,10 +126,10 @@ func (c *DefaultComponent) setAwsCloudCredentialsToEnv() {
 	}
 }
 
-func (c *DefaultComponent) setAzureCloudCredentialsToEnv() {
-	azureSubscriptionCreds, err := c.Credentials.Azure(c.AzureID)
+func (c *DefaultComponent) setAzureCloudCredentialsToEnv(id string) {
+	azureSubscriptionCreds, err := c.Credentials.Azure(id)
 	if err != nil {
-		c.Logger.Fatal().Err(err).Str("azureID", c.AzureID).Msg("Could not get credentials")
+		c.Logger.Fatal().Err(err).Str("azureID", id).Msg("Could not get credentials")
 	}
 
 	if err := os.Setenv("ARM_CLIENT_ID", azureSubscriptionCreds["client_id"].(string)); err != nil {
@@ -222,8 +226,8 @@ func (c *DefaultComponent) AddManagementCredentialsToComponentConfig() {
 	c.ComponentConfig.GeneralAddOrOverride("tenant_id", c.GlobalConfig.TenantID)
 }
 
-// LoginToAKSorEKS logs in to AKS or EKS
-func (c *DefaultComponent) LoginToAKSorEKS(componentConfig map[string]interface{}) {
+// LoginKubernetes logs in to AKS or EKS or Local
+func (c *DefaultComponent) LoginKubernetes(componentConfig map[string]interface{}) {
 	if c.AwsID != "" {
 		aws := tasks.NewAws(c.GlobalConfig.TmpFolder, c.Logger)
 
@@ -255,6 +259,14 @@ func (c *DefaultComponent) LoginToAKSorEKS(componentConfig map[string]interface{
 
 		if err := azTask.LoginToAKS(clusterName, clusterResourceGroup); err != nil {
 			c.Logger.Fatal().Err(err).Msg("could not login to ASK via az")
+		}
+	}
+
+	if c.LocalID != "" {
+		k3d := tasks.NewK3d(c.GlobalConfig.TmpFolder, c.Logger)
+
+		if err := k3d.LoginToKubernetes("opsteady"); err != nil {
+			c.Logger.Fatal().Err(err).Msg("could not login to local k3d cluster")
 		}
 	}
 }

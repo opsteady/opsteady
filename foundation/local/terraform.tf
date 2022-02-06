@@ -23,6 +23,13 @@ terraform {
 }
 
 provider "azurerm" {
+  subscription_id = var.foundation_local_subscription_id
+  features {}
+}
+
+provider "azurerm" {
+  alias = "management"
+
   client_id       = var.management_client_id
   client_secret   = var.management_client_secret
   subscription_id = var.management_subscription_id
