@@ -54,7 +54,7 @@ ENV HADOLINT_VERSION=v2.8.0
 RUN getfile -n hadolint https://github.com/hadolint/hadolint/releases/download/${HADOLINT_VERSION}/hadolint-Linux-x86_64
 
 # renovate: datasource=github-releases depName=golangci/golangci-lint versioning=semver
-ENV GOLINT_VERSION=v1.44.0
+ENV GOLINT_VERSION=1.44.0
 RUN getfile https://github.com/golangci/golangci-lint/releases/download/v${GOLINT_VERSION}/golangci-lint-${GOLINT_VERSION}-linux-amd64.tar.gz
 RUN install-packages libc-dev gcc
 
