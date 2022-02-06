@@ -34,8 +34,9 @@ func (c *DefaultComponent) LoginToHelmRegistry() {
 	if err != nil {
 		c.Logger.Fatal().Err(err).Msg("could not get management credentials to prepare helm")
 	}
-	user := mgmtCreds["client_id"].(string)     //nolint
-	pass := mgmtCreds["client_secret"].(string) //nolint
+
+	user := mgmtCreds["client_id"].(string)
+	pass := mgmtCreds["client_secret"].(string)
 
 	login := tasks.NewHelm(c.Logger)
 	if err := login.LoginToHelmRegistry(user, pass, c.GlobalConfig.ManagementHelmRepository, c.GlobalConfig.TmpFolder); err != nil {
