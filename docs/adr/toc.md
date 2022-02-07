@@ -38,3 +38,5 @@
 - [35. Certificates capability](0035-capabilities-certificates.md)
 - [36. Loadbalancing capability](0036-capabilities-loadbalancing.md)
 - [37. Loadbalancing capability implementation](0037-capabilities-loadbalancing-implementation.md)
+- [38. User authentication capabilitity](0038-capabilities-user-authentication.md)
+- [39. Local development](0039-local-development.md)
