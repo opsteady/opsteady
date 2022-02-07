@@ -6,6 +6,8 @@ Date: 2022-02-07
 
 Status: Accepted on 2022-02-07
 
+Build on [0005-multi-cloud.md](0005-multi-cloud.md) on 2022-02-07
+
 ## Context
 
 We need a way to develop the Opsteady platform without incurring a lot of (cloud) costs or waiting on long provisioning times. Cloud environments are the main target for production workloads but they are slow(er), costly and not strictly necessary to develop the Opsteady capabilities and portal.

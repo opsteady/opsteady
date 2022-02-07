@@ -8,6 +8,7 @@ Status: Accepted on 2021-08-26
 Build on [0003-project-scope.md](0003-project-scope.md) on 2021-08-26
 Foundation for [0006-management-environment.md](0006-management-environment.md) on 2021-08-27
 Foundation for [0007-management-connectivity.md](0007-management-connectivity.md) on 2021-08-27
+Foundation for [0039-local-development.md](0039-local-development.md) on 2022-02-07
 
 ## Context
 
