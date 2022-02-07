@@ -13,6 +13,6 @@ func (c *CapabilitiesLoadbalacing) Initialize(defaultComponent component.Default
 	c.DefaultComponent.RequiresComponents("foundation-aws", "kubernetes-azure-cluster", "kubernetes-aws-cluster")
 	c.DefaultComponent.UseHelm(component.NewHelmChart(
 		"ingress-nginx",
-		"4.0.16", // renovate: datasource=helm registryUrl=https://kubernetes.github.io/ingress-nginx depName=ingress-nginx versioning=semver
+		"4.0.17", // renovate: datasource=helm registryUrl=https://kubernetes.github.io/ingress-nginx depName=ingress-nginx versioning=semver
 	))
 }
