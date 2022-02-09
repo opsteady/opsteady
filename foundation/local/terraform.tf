@@ -11,8 +11,8 @@ terraform {
       version = "~> 3.2.0"
     }
 
-    aws = {
-      version = "~> 3.74.0"
+    azuread = {
+      version = "~> 2.17.0"
     }
   }
 
@@ -22,8 +22,9 @@ terraform {
   }
 }
 
-provider "aws" {
-  region = var.foundation_aws_region
+provider "azurerm" {
+  subscription_id = var.foundation_local_subscription_id
+  features {}
 }
 
 provider "azurerm" {

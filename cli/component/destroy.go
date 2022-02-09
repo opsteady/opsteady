@@ -32,16 +32,16 @@ func (c *DefaultComponent) Destroy() {
 			c.PrepareTerraformBackend()
 			c.DestroyTerraform(componentConfig)
 		case c.CRD:
-			c.LoginToAKSorEKS(componentConfig)
+			c.LoginKubernetes(componentConfig)
 			c.DestroyCRD(componentConfig)
 		case c.KubeSetup:
-			c.LoginToAKSorEKS(componentConfig)
+			c.LoginKubernetes(componentConfig)
 			c.DestroyKubeSetup(componentConfig)
 		case c.Helm:
-			c.LoginToAKSorEKS(componentConfig)
+			c.LoginKubernetes(componentConfig)
 			c.DestroyHelm(componentConfig)
 		case c.KubePostSetup:
-			c.LoginToAKSorEKS(componentConfig)
+			c.LoginKubernetes(componentConfig)
 			c.DestroyKubePostSetup(componentConfig)
 		}
 	}

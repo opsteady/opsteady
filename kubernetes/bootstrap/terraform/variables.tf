@@ -1,25 +1,30 @@
 // This is variable is set for AWS platforms
 variable "foundation_aws_environment_name" {
-  type = string
+  type    = string
   default = ""
 }
 
 // This is variable is set for Azure platforms
 variable "foundation_azure_environment_name" {
-  type = string
+  type    = string
   default = ""
 }
 
-variable "azuread_tenant_id" {
+// This is variable is set for Local platforms
+variable "foundation_local_environment_name" {
   type    = string
+  default = ""
+}
+variable "azuread_tenant_id" {
+  type = string
 }
 
 variable "azuread_client_id" {
-  type    = string
+  type = string
 }
 
 variable "azuread_client_secret" {
-  type    = string
+  type = string
 }
 
 variable "management_infra_acr_name" {

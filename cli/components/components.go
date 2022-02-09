@@ -14,6 +14,7 @@ import (
 	dockerCicd "github.com/opsteady/opsteady/docker/cicd/cicd"
 	foundationAWS "github.com/opsteady/opsteady/foundation/aws/cicd"
 	foundationAzure "github.com/opsteady/opsteady/foundation/azure/cicd"
+	foundationLocal "github.com/opsteady/opsteady/foundation/local/cicd"
 	kubernetesAWSCluster "github.com/opsteady/opsteady/kubernetes/aws/cluster/cicd"
 	kubernetesAWSLoadbalancing "github.com/opsteady/opsteady/kubernetes/aws/loadbalancing/cicd"
 	kubernetesAWSNetworkPolicies "github.com/opsteady/opsteady/kubernetes/aws/network-policies/cicd"
@@ -22,6 +23,7 @@ import (
 	kubernetesAzureCluster "github.com/opsteady/opsteady/kubernetes/azure/cluster/cicd"
 	kubernetesAzurePodIdentity "github.com/opsteady/opsteady/kubernetes/azure/pod-identity/cicd"
 	kubernetesBootstrap "github.com/opsteady/opsteady/kubernetes/bootstrap/cicd"
+	kubernetesLocalCluster "github.com/opsteady/opsteady/kubernetes/local/cluster/cicd"
 	managementBootstrap "github.com/opsteady/opsteady/management/bootstrap/cicd"
 	managementInfra "github.com/opsteady/opsteady/management/infra/cicd"
 	managementVaultConfig "github.com/opsteady/opsteady/management/vault/config/cicd"
@@ -38,6 +40,7 @@ func init() {
 	Components["management-vault-config"] = &managementVaultConfig.ManagementVaultConfig{}
 	Components["foundation-azure"] = &foundationAzure.FoundationAzure{}
 	Components["foundation-aws"] = &foundationAWS.FoundationAWS{}
+	Components["foundation-local"] = &foundationLocal.FoundationLocal{}
 	Components["kubernetes-aws-cluster"] = &kubernetesAWSCluster.KubernetesAWSCluster{}
 	Components["kubernetes-bootstrap"] = &kubernetesBootstrap.KubernetesBootstrap{}
 	Components["kubernetes-aws-storage-ebs"] = &kubernetesAWSStorageEBS.KubernetesAWSStorageEBS{}
@@ -46,6 +49,7 @@ func init() {
 	Components["kubernetes-aws-loadbalancing"] = &kubernetesAWSLoadbalancing.KubernetesAWSLoadbalancing{}
 	Components["kubernetes-azure-pod-identity"] = &kubernetesAzurePodIdentity.KubernetesAzurePodIdentity{}
 	Components["kubernetes-azure-cluster"] = &kubernetesAzureCluster.KubernetesAzure{}
+	Components["kubernetes-local-cluster"] = &kubernetesLocalCluster.KubernetesLocal{}
 	Components["capabilities-dns-aws"] = &capabilitiesDNSAWS.CapabilitiesDNSAWS{}
 	Components["capabilities-dns-azure"] = &capabilitiesDNSAzure.CapabilitiesDNSAzure{}
 	Components["capabilities-certificates-aws"] = &capabilitiesCertificatesAWS.CapabilitiesCertificatesAWS{}

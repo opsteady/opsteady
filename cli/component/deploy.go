@@ -25,17 +25,17 @@ func (c *DefaultComponent) Deploy() {
 			c.PrepareTerraformBackend()
 			c.DeployTerraform(componentConfig)
 		case c.CRD:
-			c.LoginToAKSorEKS(componentConfig)
+			c.LoginKubernetes(componentConfig)
 			c.DeployCRD(componentConfig)
 		case c.KubeSetup:
-			c.LoginToAKSorEKS(componentConfig)
+			c.LoginKubernetes(componentConfig)
 			c.DeployKubeSetup(componentConfig)
 		case c.Helm:
-			c.LoginToAKSorEKS(componentConfig)
+			c.LoginKubernetes(componentConfig)
 			c.LoginToHelmRegistry()
 			c.DeployHelm(componentConfig)
 		case c.KubePostSetup:
-			c.LoginToAKSorEKS(componentConfig)
+			c.LoginKubernetes(componentConfig)
 			c.DeployKubePostSetup(componentConfig)
 		}
 	}

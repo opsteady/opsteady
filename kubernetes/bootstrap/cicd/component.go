@@ -12,7 +12,7 @@ type KubernetesBootstrap struct {
 // Initialize creates a new KubernetesBootstrap struct
 func (k *KubernetesBootstrap) Initialize(defaultComponent component.DefaultComponent) {
 	k.DefaultComponent = defaultComponent
-	k.DefaultComponent.RequiresComponents("management-infra", "foundation-aws", "foundation-azure", "kubernetes-azure-cluster", "kubernetes-aws-cluster")
+	k.DefaultComponent.RequiresComponents("management-infra", "foundation-aws", "foundation-azure", "foundation-local", "kubernetes-azure-cluster", "kubernetes-aws-cluster")
 	k.DefaultComponent.SetVaultInfoToComponentConfig()
 	k.DefaultComponent.AddAzureADCredentialsToComponentConfig()
 }

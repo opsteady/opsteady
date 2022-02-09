@@ -22,6 +22,7 @@ var (
 	componentFlag       string
 	azureIDFlag         string
 	awsIDFlag           string
+	localIDFlag         string
 	dryRunFlag          bool
 	platformVersionFlag string
 )
@@ -62,6 +63,7 @@ func executeComponent(cmd *cobra.Command, executeComponent func(c component.Comp
 		DryRun:                     dryRunFlag,
 		AwsID:                      awsIDFlag,
 		AzureID:                    azureIDFlag,
+		LocalID:                    localIDFlag,
 		PlatformVersion:            platformVersionFlag,
 		Terraform:                  "terraform",
 		CRD:                        "crd",
@@ -80,8 +82,8 @@ func executeComponent(cmd *cobra.Command, executeComponent func(c component.Comp
 
 func stopWhenAwsOrAzureIDNotSpecified(cmd *cobra.Command) {
 	if cmd.Use == "deploy" || cmd.Use == "destroy" {
-		if azureIDFlag == "" && awsIDFlag == "" {
-			logger.Fatal().Msgf("You need to specify an 'azure-id' or 'aws-id' flag for %s command", cmd.Use)
+		if azureIDFlag == "" && awsIDFlag == "" && localIDFlag == "" {
+			logger.Fatal().Msgf("You need to specify an 'azure-id' or 'aws-id' or 'local-id' flag for %s command", cmd.Use)
 		}
 	}
 }
@@ -139,8 +141,9 @@ func initializeCacheDependency() (cache.Cache, cache.Cache) {
 func initComponentFlags(cmd *cobra.Command) {
 	rootCmd.AddCommand(cmd)
 	cmd.Flags().StringVarP(&componentFlag, "component", "c", "", "Name of the component")
-	cmd.Flags().StringVarP(&azureIDFlag, "azure-id", "", "", "Azure subscription ID")
-	cmd.Flags().StringVarP(&awsIDFlag, "aws-id", "", "", "AWS Account ID")
+	cmd.Flags().StringVarP(&azureIDFlag, "azure-id", "", "", "Azure platform ID")
+	cmd.Flags().StringVarP(&awsIDFlag, "aws-id", "", "", "AWS platform ID")
+	cmd.Flags().StringVarP(&localIDFlag, "local-id", "", "", "Local platform ID")
 
 	if cmd.Use == "deploy" {
 		cmd.Flags().BoolVarP(&dryRunFlag, "dry-run", "", false, "Dry run the deployment")

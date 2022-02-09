@@ -54,6 +54,7 @@ type DefaultComponent struct {
 	DryRun                bool
 	AwsID                 string
 	AzureID               string
+	LocalID               string
 	PlatformVersion       string           // Version of the platform (used as a folder in Vault)
 	HelmCharts            []*HelmChart     // We expect all charts to be from management ACR
 	DockerBuildInfo       *DockerBuildInfo // We expect all docker images to be saved to ACR
@@ -97,7 +98,11 @@ func (c *DefaultComponent) SetCloudCredentialsToEnv() {
 	}
 
 	if c.AzureID != "" {
-		c.setAzureCloudCredentialsToEnv()
+		c.setAzureCloudCredentialsToEnv(c.AzureID)
+	}
+
+	if c.LocalID != "" { // Local uses credentials of local sub for all local deployments
+		c.setAzureCloudCredentialsToEnv(c.LocalID)
 	}
 }
 
@@ -121,10 +126,10 @@ func (c *DefaultComponent) setAwsCloudCredentialsToEnv() {
 	}
 }
 
-func (c *DefaultComponent) setAzureCloudCredentialsToEnv() {
-	azureSubscriptionCreds, err := c.Credentials.Azure(c.AzureID)
+func (c *DefaultComponent) setAzureCloudCredentialsToEnv(id string) {
+	azureSubscriptionCreds, err := c.Credentials.Azure(id)
 	if err != nil {
-		c.Logger.Fatal().Err(err).Str("azureID", c.AzureID).Msg("Could not get credentials")
+		c.Logger.Fatal().Err(err).Str("azureID", id).Msg("Could not get credentials")
 	}
 
 	if err := os.Setenv("ARM_CLIENT_ID", azureSubscriptionCreds["client_id"].(string)); err != nil {
@@ -144,9 +149,12 @@ func (c *DefaultComponent) setAzureCloudCredentialsToEnv() {
 	}
 }
 
-// AzureIDorAwsID returns AzureID if both AWS and Azure ID are set
-func (c *DefaultComponent) AzureIDorAwsID() string {
+// PlatformID returns AzureID if both AWS and/or Azure and/or Local ID are set
+func (c *DefaultComponent) PlatformID() string {
 	if c.AzureID == "" {
+		if c.AwsID == "" {
+			return c.LocalID
+		}
 		return c.AwsID
 	}
 
@@ -177,14 +185,14 @@ func (c *DefaultComponent) SetVaultInfoToComponentConfig() {
 // to ComponentConfig so that other steps can use it.
 func (c *DefaultComponent) SetPlatformInfoToComponentConfig() {
 	c.ComponentConfig.GeneralAddOrOverride("platform_version", c.PlatformVersion)
-	c.ComponentConfig.GeneralAddOrOverride("platform_environment_name", c.AzureIDorAwsID())
+	c.ComponentConfig.GeneralAddOrOverride("platform_environment_name", c.PlatformID())
 	c.ComponentConfig.GeneralAddOrOverride("platform_cloud_name", c.CloudName())
 	c.ComponentConfig.GeneralAddOrOverride("platform_component_name", c.ComponentName)
 }
 
 // RetrieveComponentConfig returns component config
 func (c *DefaultComponent) RetrieveComponentConfig() map[string]interface{} {
-	values, err := c.ComponentConfig.RetrieveConfig(c.PlatformVersion, c.AzureIDorAwsID(), c.ComponentNameAndAllTheDependencies())
+	values, err := c.ComponentConfig.RetrieveConfig(c.PlatformVersion, c.PlatformID(), c.ComponentNameAndAllTheDependencies())
 
 	if err != nil {
 		c.Logger.Fatal().Err(err).Msg("could not retrieve component configuration")
@@ -218,8 +226,8 @@ func (c *DefaultComponent) AddManagementCredentialsToComponentConfig() {
 	c.ComponentConfig.GeneralAddOrOverride("tenant_id", c.GlobalConfig.TenantID)
 }
 
-// LoginToAKSorEKS logs in to AKS or EKS
-func (c *DefaultComponent) LoginToAKSorEKS(componentConfig map[string]interface{}) {
+// LoginKubernetes logs in to AKS or EKS or Local
+func (c *DefaultComponent) LoginKubernetes(componentConfig map[string]interface{}) {
 	if c.AwsID != "" {
 		aws := tasks.NewAws(c.GlobalConfig.TmpFolder, c.Logger)
 
@@ -251,6 +259,14 @@ func (c *DefaultComponent) LoginToAKSorEKS(componentConfig map[string]interface{
 
 		if err := azTask.LoginToAKS(clusterName, clusterResourceGroup); err != nil {
 			c.Logger.Fatal().Err(err).Msg("could not login to ASK via az")
+		}
+	}
+
+	if c.LocalID != "" {
+		k3d := tasks.NewK3d(c.GlobalConfig.TmpFolder, c.Logger)
+
+		if err := k3d.LoginToKubernetes("opsteady"); err != nil {
+			c.Logger.Fatal().Err(err).Msg("could not login to local k3d cluster")
 		}
 	}
 }
