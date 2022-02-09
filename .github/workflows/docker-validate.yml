@@ -10,7 +10,7 @@ jobs:
   validate:
     runs-on: ubuntu-20.04
     env:
-      VAULT_ADDRESS: https://vault.management.os.opsteady.com
+      VAULT_ADDRESS: https://vault.management.os.opsteady.com:8200
     permissions:
       id-token: write
       contents: read
