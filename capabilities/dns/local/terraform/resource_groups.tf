@@ -1,4 +1,4 @@
 resource "azurerm_resource_group" "dns" {
-  name     = "dns-${var.foundation_local_name}"
-  location = var.foundation_local_location
+  name     = "dns-${var.local_foundation_name}"
+  location = var.local_foundation_location
 }

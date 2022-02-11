@@ -1,5 +1,5 @@
 resource "aws_iam_role" "aws_ebs_csi_driver" {
-  name = "aws-ebs-csi-driver-${var.foundation_aws_name}"
+  name = "aws-ebs-csi-driver-${var.aws_foundation_name}"
 
   assume_role_policy = <<EOF
 {
@@ -8,12 +8,12 @@ resource "aws_iam_role" "aws_ebs_csi_driver" {
     {
       "Effect": "Allow",
       "Principal": {
-        "Federated": "${var.kubernetes_aws_cluster_openid_connect_provider_platform_arn}"
+        "Federated": "${var.aws_cluster_openid_connect_provider_platform_arn}"
       },
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "${replace(var.kubernetes_aws_cluster_openid_connect_provider_platform_url, "https://", "")}:sub": ["system:serviceaccount:platform:ebs-csi-controller-sa", "system:serviceaccount:platform:ebs-csi-node-sa"]
+          "${replace(var.aws_cluster_openid_connect_provider_platform_url, "https://", "")}:sub": ["system:serviceaccount:platform:ebs-csi-controller-sa", "system:serviceaccount:platform:ebs-csi-node-sa"]
         }
       }
     }
@@ -23,7 +23,7 @@ EOF
 }
 
 resource "aws_iam_policy" "aws_ebs_csi_driver" {
-  name        = "aws-ebs-csi-driver-${var.foundation_aws_name}"
+  name        = "aws-ebs-csi-driver-${var.aws_foundation_name}"
   path        = "/"
   description = "AWS EBS CSI driver"
 
@@ -177,7 +177,7 @@ EOF
 }
 
 resource "aws_iam_policy_attachment" "aws_ebs_csi_driver" {
-  name        = "aws-ebs-csi-driver-${var.foundation_aws_name}"
+  name       = "aws-ebs-csi-driver-${var.aws_foundation_name}"
   roles      = [aws_iam_role.aws_ebs_csi_driver.name]
   policy_arn = aws_iam_policy.aws_ebs_csi_driver.arn
 }

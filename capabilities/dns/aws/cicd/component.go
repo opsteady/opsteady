@@ -1,28 +1,34 @@
 package cicd
 
-import "github.com/opsteady/opsteady/cli/component"
+import (
+	"github.com/opsteady/opsteady/cli/component"
+	foundationAWS "github.com/opsteady/opsteady/foundation/aws/cicd"
+	kubernetesAWSCluster "github.com/opsteady/opsteady/kubernetes/aws/cluster/cicd"
+)
 
-// CapabilititesDNSAWS is an AWS implmentation for the external-dns controller
+// CapabilitiesDNSAWS is an AWS implementation for the external-dns controller
 type CapabilitiesDNSAWS struct {
 	component.DefaultComponent
 }
 
-// Initialize creates a new CapabilitiesDNSAWS component
-func (c *CapabilitiesDNSAWS) Initialize(defaultComponent component.DefaultComponent) {
+var Instance = &CapabilitiesDNSAWS{}
+
+func init() {
+	m := component.DefaultMetadata()
+	m.Name = "dns"
+	m.Group = component.CapabilitiesBasic
+	m.AddTarget(component.TargetAws)
+	m.AddGroupDependency(component.KubernetesAddons)
+	Instance.Metadata = &m
+}
+
+// Configure configures CapabilitiesDNSAWS before running
+func (c *CapabilitiesDNSAWS) Configure(defaultComponent component.DefaultComponent) {
 	c.DefaultComponent = defaultComponent
-	c.DefaultComponent.RequiresComponents("foundation-aws", "kubernetes-aws-cluster")
-	c.DefaultComponent.SetVaultInfoToComponentConfig()
-	c.DefaultComponent.UseHelm(component.NewHelmChart(
+	c.AddRequiresInformationFrom(foundationAWS.Instance.GetMetadata(), kubernetesAWSCluster.Instance.GetMetadata())
+	c.SetVaultInfoToComponentConfig()
+	c.UseHelm(component.NewHelmChart(
 		"external-dns",
 		"1.7.1", // renovate: datasource=helm registryUrl=https://kubernetes-sigs.github.io/external-dns depName=external-dns versioning=semver
 	))
-}
-
-func (k *CapabilitiesDNSAWS) Info() component.ComponentDepInfo {
-	return component.ComponentDepInfo{
-		Description:    "Creates EKS",
-		Group:          "Kubernetes Cluster",
-		DependsOn:      []string{""},
-		DependsOnGroup: "",
-	}
 }

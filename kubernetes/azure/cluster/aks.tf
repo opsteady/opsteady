@@ -1,20 +1,20 @@
 resource "azurerm_kubernetes_cluster" "platform" {
-  name                    = var.foundation_azure_name
-  dns_prefix              = var.foundation_azure_name
-  node_resource_group     = "platform-nodes-${var.foundation_azure_name}"
+  name                    = var.azure_foundation_name
+  dns_prefix              = var.azure_foundation_name
+  node_resource_group     = "platform-nodes-${var.azure_foundation_name}"
   location                = azurerm_resource_group.kubernetes.location
   resource_group_name     = azurerm_resource_group.kubernetes.name
   sku_tier                = "Free"
-  kubernetes_version      = var.kubernetes_azure_cluster_kubernetes_version
+  kubernetes_version      = var.azure_cluster_kubernetes_version
   private_cluster_enabled = false
   disk_encryption_set_id  = azurerm_disk_encryption_set.platform.id
 
   default_node_pool {
     name                   = "system"
     vnet_subnet_id         = var.foundation_azure_pods_subnet_id
-    node_count             = var.kubernetes_azure_cluster_system_nodepool_node_count
-    vm_size                = var.kubernetes_azure_cluster_system_nodepool_node_size
-    orchestrator_version   = var.kubernetes_azure_cluster_kubernetes_version
+    node_count             = var.azure_cluster_system_nodepool_node_count
+    vm_size                = var.azure_cluster_system_nodepool_node_size
+    orchestrator_version   = var.azure_cluster_kubernetes_version
     enable_auto_scaling    = false
     availability_zones     = ["1", "2", "3"]
     enable_host_encryption = true

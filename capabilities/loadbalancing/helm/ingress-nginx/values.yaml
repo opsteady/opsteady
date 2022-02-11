@@ -67,7 +67,7 @@ controller:
 {{ end }}
 
 # Part of controller.service
-{{ if eq .platform_cloud_name "aws" }}
+{{ if eq .platform_target_name "aws" }}
   service:
     annotations:
       service.beta.kubernetes.io/aws-load-balancer-type: external

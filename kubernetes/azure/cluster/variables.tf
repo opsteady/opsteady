@@ -1,32 +1,32 @@
-variable "kubernetes_azure_cluster_system_nodepool_node_count" {
+variable "azure_cluster_system_nodepool_node_count" {
   type = number
 }
 
-variable "kubernetes_azure_cluster_system_nodepool_node_size" {
+variable "azure_cluster_system_nodepool_node_size" {
   type = string
 }
 
-variable "kubernetes_azure_cluster_platform_nodepool_node_count" {
+variable "azure_cluster_platform_nodepool_node_count" {
   type = number
 }
 
-variable "kubernetes_azure_cluster_platform_nodepool_node_size" {
+variable "azure_cluster_platform_nodepool_node_size" {
   type = string
 }
 
-variable "kubernetes_azure_cluster_kubernetes_version" {
+variable "azure_cluster_kubernetes_version" {
   type = string
 }
 
-variable "foundation_azure_subscription_id" {
+variable "azure_foundation_subscription_id" {
   type = string
 }
 
-variable "foundation_azure_name" {
+variable "azure_foundation_name" {
   type = string
 }
 
-variable "foundation_azure_location" {
+variable "azure_foundation_location" {
   type = string
 }
 
@@ -45,18 +45,13 @@ variable "foundation_azure_log_analytics_id" {
   type = string
 }
 
-variable "platform_version" {
+variable "platform_terraform_output_path" {
   type = string
 }
 
-variable "platform_environment_name" {
+variable "platform_vault_vars_name" {
   type = string
 }
-
-variable "platform_component_name" {
-  type = string
-}
-
 variable "vault_address" {
   type = string
 }

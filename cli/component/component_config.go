@@ -2,7 +2,6 @@ package component
 
 import (
 	"fmt"
-	"strings"
 	"sync"
 	"time"
 
@@ -14,7 +13,7 @@ import (
 
 // ComponentConfig interface to retrieve component config from Vault.
 type ComponentConfig interface { //nolint
-	RetrieveConfig(string, string, []string) (map[string]interface{}, error)
+	RetrieveConfig(string, string, []*Metadata) (map[string]interface{}, error)
 	GeneralAddOrOverride(string, string)
 }
 
@@ -44,8 +43,8 @@ func (c *ComponentConfigImpl) GeneralAddOrOverride(key, value string) {
 }
 
 // RetrieveConfig retrieves the component config from Vault.
-func (c *ComponentConfigImpl) RetrieveConfig(version, environment string, components []string) (map[string]interface{}, error) {
-	values, err := c.retrieveConfig(version, environment, components)
+func (c *ComponentConfigImpl) RetrieveConfig(version, id string, components []*Metadata) (map[string]interface{}, error) {
+	values, err := c.retrieveConfig(version, id, components)
 
 	for k, v := range c.overrides {
 		values[k] = v
@@ -55,13 +54,13 @@ func (c *ComponentConfigImpl) RetrieveConfig(version, environment string, compon
 }
 
 // retrieveConfig retrieves the component config from Vault.
-func (c *ComponentConfigImpl) retrieveConfig(version, environment string, components []string) (map[string]interface{}, error) {
+func (c *ComponentConfigImpl) retrieveConfig(version, id string, components []*Metadata) (map[string]interface{}, error) {
 	values := make(map[string]interface{})
 	chanComponents := make(chan map[string]interface{}, len(components)+1)
 	chanPlatform := make(chan map[string]interface{}, len(components)+1)
 	chanPlatformTerraform := make(chan map[string]interface{}, len(components)+1)
 	chanErrors := make(chan error, len(components)+1)
-	wg := c.runGoroutines(version, environment, components, chanComponents, chanPlatform, chanPlatformTerraform, chanErrors)
+	wg := c.runGoroutines(version, id, components, chanComponents, chanPlatform, chanPlatformTerraform, chanErrors)
 
 	wg.Wait()
 	close(chanErrors)
@@ -102,51 +101,38 @@ func (c *ComponentConfigImpl) retrieveConfig(version, environment string, compon
 	return values, nil
 }
 
-func (c *ComponentConfigImpl) runGoroutines(version, environment string, components []string, chanComponents, chanPlatform, chanPlatformTerraform chan map[string]interface{}, chanErrors chan error) *sync.WaitGroup {
+func (c *ComponentConfigImpl) runGoroutines(version, id string, components []*Metadata, chanComponents, chanPlatform, chanPlatformTerraform chan map[string]interface{}, chanErrors chan error) *sync.WaitGroup {
 	var wg sync.WaitGroup
 
-	c.logger.Debug().Msg("Fetch default settings for components")
+	for _, comp := range components {
+		for _, t := range comp.Targets {
+			tmpID := id
 
-	for _, component := range components {
-		wg.Add(1)
+			if t == "management" {
+				tmpID = "management" // Override this for management
+			}
 
-		path := fmt.Sprintf("config/data/%s/component/%s", version, component)
+			wg.Add(1)
 
-		go c.fetchConfig(path, chanComponents, chanErrors, &wg)
-	}
+			pathOne := fmt.Sprintf("config/data/%s/component/%s/%s", version, t, comp.Name)
+			c.logger.Debug().Str("path", pathOne).Msg("Fetch default settings for components")
 
-	c.logger.Debug().Msg("Fetch settings per environment per component")
+			go c.fetchConfig(pathOne, chanComponents, chanErrors, &wg)
 
-	for _, component := range components {
-		wg.Add(1)
+			pathTwo := fmt.Sprintf("config/data/%s/platform/%s/%s/%s", version, t, tmpID, comp.Name)
+			c.logger.Debug().Str("path", pathTwo).Msg("Fetch settings per environment per component")
 
-		env := environment
+			wg.Add(1)
 
-		if strings.HasPrefix(component, "management-") {
-			// Don't look at the platform env because it is the management env
-			env = "management"
+			go c.fetchConfig(pathTwo, chanPlatform, chanErrors, &wg)
+
+			pathThree := fmt.Sprintf("config/data/%s/platform/%s/%s/%s-tf", version, t, tmpID, comp.Name)
+			c.logger.Debug().Str("path", pathThree).Msg("Fetch Terraform output per environment per component")
+
+			wg.Add(1)
+
+			go c.fetchConfig(pathThree, chanPlatformTerraform, chanErrors, &wg)
 		}
-
-		path := fmt.Sprintf("config/data/%s/platform/%s/%s", version, env, component)
-
-		go c.fetchConfig(path, chanPlatform, chanErrors, &wg)
-	}
-
-	c.logger.Debug().Msg("Fetch Terraform output per environment per component")
-
-	for _, component := range components {
-		wg.Add(1)
-
-		env := environment
-
-		if strings.HasPrefix(component, "management-") {
-			// Don't look at the platform env because it is the management env
-			env = "management"
-		}
-
-		path := fmt.Sprintf("config/data/%s/platform/%s/%s-tf", version, env, component)
-
-		go c.fetchConfig(path, chanPlatformTerraform, chanErrors, &wg)
 	}
 
 	return &wg

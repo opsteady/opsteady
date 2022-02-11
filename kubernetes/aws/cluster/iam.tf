@@ -1,5 +1,5 @@
 resource "aws_iam_role" "eks" {
-  name = "eks-${var.foundation_aws_name}"
+  name = "eks-${var.aws_foundation_name}"
 
   assume_role_policy = <<EOF
 {
@@ -28,7 +28,7 @@ resource "aws_iam_role_policy_attachment" "eks_service" {
 }
 
 resource "aws_iam_role" "eks_system_node_group" {
-  name = "eks-system-node-group-${var.foundation_aws_name}"
+  name = "eks-system-node-group-${var.aws_foundation_name}"
 
   assume_role_policy = <<EOF
 {
@@ -57,7 +57,7 @@ resource "aws_iam_role_policy_attachment" "eks_container_registry" {
 }
 
 resource "aws_iam_role" "eks_cni" {
-  name = "eks-cni-${var.foundation_aws_name}"
+  name = "eks-cni-${var.aws_foundation_name}"
 
   assume_role_policy = <<EOF
 {

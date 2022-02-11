@@ -1,32 +1,28 @@
-variable "foundation_aws_name" {
+variable "aws_foundation_name" {
   type = string
 }
 
-variable "foundation_aws_region" {
+variable "aws_foundation_region" {
   type = string
 }
 
-variable "foundation_aws_public_zone_id" {
+variable "aws_foundation_public_zone_id" {
   type = string
 }
 
-variable "kubernetes_aws_cluster_openid_connect_provider_platform_arn" {
+variable "aws_cluster_openid_connect_provider_platform_arn" {
   type = string
 }
 
-variable "kubernetes_aws_cluster_openid_connect_provider_platform_url" {
+variable "aws_cluster_openid_connect_provider_platform_url" {
   type = string
 }
 
-variable "platform_version" {
+variable "platform_terraform_output_path" {
   type = string
 }
 
-variable "platform_environment_name" {
-  type = string
-}
-
-variable "platform_component_name" {
+variable "platform_vault_vars_name" {
   type = string
 }
 

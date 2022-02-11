@@ -52,7 +52,7 @@ func (c *DefaultComponent) DestroyTerraform(values map[string]interface{}) {
 	backendStorageName := values["management_bootstrap_terraform_state_account_name"].(string)
 	terraform := tasks.NewTerraform(c.TerraformFolder(), c.TerraformBackendConfigPath, backendStorageName, c.GlobalConfig.CachePath, c.Logger)
 
-	varsPath := fmt.Sprintf("%s/%s.tfvars.json", c.GlobalConfig.TmpFolder, c.ComponentName)
+	varsPath := fmt.Sprintf("%s/%s.tfvars.json", c.GlobalConfig.TmpFolder, c.Metadata.Name)
 	c.WriteConfigToJSON(varsPath)
 
 	if err := terraform.Destroy(varsPath); err != nil {

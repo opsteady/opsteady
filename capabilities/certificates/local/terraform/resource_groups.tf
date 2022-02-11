@@ -1,4 +1,4 @@
 resource "azurerm_resource_group" "certificates" {
-  name     = "certificates-${var.foundation_local_name}"
-  location = var.foundation_local_location
+  name     = "certificates-${var.local_foundation_name}"
+  location = var.local_foundation_location
 }

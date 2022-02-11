@@ -1,5 +1,5 @@
 resource "aws_iam_role" "external_dns" {
-  name = "external-dns-${var.foundation_aws_name}"
+  name = "external-dns-${var.aws_foundation_name}"
 
   assume_role_policy = <<EOF
 {
@@ -8,12 +8,12 @@ resource "aws_iam_role" "external_dns" {
     {
       "Effect": "Allow",
       "Principal": {
-        "Federated": "${var.kubernetes_aws_cluster_openid_connect_provider_platform_arn}"
+        "Federated": "${var.aws_cluster_openid_connect_provider_platform_arn}"
       },
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "${replace(var.kubernetes_aws_cluster_openid_connect_provider_platform_url, "https://", "")}:sub": "system:serviceaccount:platform:external-dns"
+          "${replace(var.aws_cluster_openid_connect_provider_platform_url, "https://", "")}:sub": "system:serviceaccount:platform:external-dns"
         }
       }
     }
@@ -23,7 +23,7 @@ EOF
 }
 
 resource "aws_iam_policy" "external_dns" {
-  name        = "external-dns-${var.foundation_aws_name}"
+  name        = "external-dns-${var.aws_foundation_name}"
   path        = "/"
   description = "External DNS"
 
@@ -37,7 +37,7 @@ resource "aws_iam_policy" "external_dns" {
         "route53:ChangeResourceRecordSets"
       ],
       "Resource": [
-        "arn:aws:route53:::hostedzone/${var.foundation_aws_public_zone_id}"
+        "arn:aws:route53:::hostedzone/${var.aws_foundation_public_zone_id}"
       ]
     },
     {
@@ -56,7 +56,7 @@ EOF
 }
 
 resource "aws_iam_policy_attachment" "aws_load_balancer_controller" {
-  name        = "external-dns-${var.foundation_aws_name}"
+  name       = "external-dns-${var.aws_foundation_name}"
   roles      = [aws_iam_role.external_dns.name]
   policy_arn = aws_iam_policy.external_dns.arn
 }

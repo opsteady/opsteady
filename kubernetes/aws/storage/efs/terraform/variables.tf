@@ -1,60 +1,56 @@
-variable "foundation_aws_name" {
+variable "aws_foundation_name" {
   type = string
 }
 
-variable "foundation_aws_region" {
+variable "aws_foundation_region" {
   type = string
 }
 
-variable "foundation_aws_vpc_id" {
+variable "aws_foundation_vpc_id" {
   type = string
 }
 
-variable "foundation_aws_pods_a_subnet_id" {
+variable "aws_foundation_pods_a_subnet_id" {
   type = string
 }
 
-variable "foundation_aws_pods_b_subnet_id" {
+variable "aws_foundation_pods_b_subnet_id" {
   type = string
 }
 
-variable "foundation_aws_pods_c_subnet_id" {
+variable "aws_foundation_pods_c_subnet_id" {
   type = string
 }
 
-variable "foundation_aws_pods_a_cidr_block" {
+variable "aws_foundation_pods_a_cidr_block" {
   type = string
 }
 
-variable "foundation_aws_pods_b_cidr_block" {
+variable "aws_foundation_pods_b_cidr_block" {
   type = string
 }
 
-variable "foundation_aws_pods_c_cidr_block" {
+variable "aws_foundation_pods_c_cidr_block" {
   type = string
 }
 
-variable "kubernetes_aws_cluster_security_group_id" {
+variable "aws_cluster_security_group_id" {
   type = string
 }
 
-variable "kubernetes_aws_cluster_openid_connect_provider_platform_arn" {
+variable "aws_cluster_openid_connect_provider_platform_arn" {
   type = string
 }
 
-variable "kubernetes_aws_cluster_openid_connect_provider_platform_url" {
+variable "aws_cluster_openid_connect_provider_platform_url" {
   type = string
 }
 
-variable "platform_version" {
+variable "platform_terraform_output_path" {
   type = string
 }
 
-variable "platform_environment_name" {
-  type = string
-}
-
-variable "platform_component_name" {
+variable "platform_vault_vars_name" {
   type = string
 }
 

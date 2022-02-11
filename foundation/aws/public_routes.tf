@@ -2,7 +2,7 @@ resource "aws_route_table" "pub_a" {
   vpc_id = aws_vpc.platform.id
 
   tags = {
-    Name = "pub-a-${var.foundation_aws_name}"
+    Name = "pub-a-${var.aws_foundation_name}"
   }
 }
 
@@ -21,7 +21,7 @@ resource "aws_route_table" "pub_b" {
   vpc_id = aws_vpc.platform.id
 
   tags = {
-    Name = "pub-b-${var.foundation_aws_name}"
+    Name = "pub-b-${var.aws_foundation_name}"
   }
 }
 
@@ -41,7 +41,7 @@ resource "aws_route_table" "pub_c" {
   vpc_id = aws_vpc.platform.id
 
   tags = {
-    Name = "pub-c-${var.foundation_aws_name}"
+    Name = "pub-c-${var.aws_foundation_name}"
   }
 }
 

@@ -1,14 +1,14 @@
 locals {
-  gateway_a = var.foundation_aws_nat_a_enabeld ? aws_nat_gateway.nat_a.0.id : var.foundation_aws_nat_b_enabeld ? aws_nat_gateway.nat_b.0.id : aws_nat_gateway.nat_c.0.id
-  gateway_b = var.foundation_aws_nat_b_enabeld ? aws_nat_gateway.nat_b.0.id : var.foundation_aws_nat_a_enabeld ? aws_nat_gateway.nat_a.0.id : aws_nat_gateway.nat_c.0.id
-  gateway_c = var.foundation_aws_nat_c_enabeld ? aws_nat_gateway.nat_c.0.id : var.foundation_aws_nat_a_enabeld ? aws_nat_gateway.nat_a.0.id : aws_nat_gateway.nat_b.0.id
+  gateway_a = var.aws_foundation_nat_a_enabeld ? aws_nat_gateway.nat_a.0.id : var.aws_foundation_nat_b_enabeld ? aws_nat_gateway.nat_b.0.id : aws_nat_gateway.nat_c.0.id
+  gateway_b = var.aws_foundation_nat_b_enabeld ? aws_nat_gateway.nat_b.0.id : var.aws_foundation_nat_a_enabeld ? aws_nat_gateway.nat_a.0.id : aws_nat_gateway.nat_c.0.id
+  gateway_c = var.aws_foundation_nat_c_enabeld ? aws_nat_gateway.nat_c.0.id : var.aws_foundation_nat_a_enabeld ? aws_nat_gateway.nat_a.0.id : aws_nat_gateway.nat_b.0.id
 }
 
 resource "aws_route_table" "pods_a" {
   vpc_id = aws_vpc.platform.id
 
   tags = {
-    Name = "pods-a-${var.foundation_aws_name}"
+    Name = "pods-a-${var.aws_foundation_name}"
   }
 }
 
@@ -27,7 +27,7 @@ resource "aws_route_table" "pods_b" {
   vpc_id = aws_vpc.platform.id
 
   tags = {
-    Name = "pods-b-${var.foundation_aws_name}"
+    Name = "pods-b-${var.aws_foundation_name}"
   }
 }
 
@@ -46,7 +46,7 @@ resource "aws_route_table" "pods_c" {
   vpc_id = aws_vpc.platform.id
 
   tags = {
-    Name = "pods-c-${var.foundation_aws_name}"
+    Name = "pods-c-${var.aws_foundation_name}"
   }
 }
 

@@ -1,14 +1,14 @@
-variable "foundation_aws_name" {
+variable "aws_foundation_name" {
   type    = string
   default = ""
 }
 
-variable "foundation_azure_name" {
+variable "azure_foundation_name" {
   type    = string
   default = ""
 }
 
-variable "foundation_local_name" {
+variable "local_foundation_name" {
   type    = string
   default = ""
 }
@@ -17,17 +17,17 @@ variable "capabilities_user_auth_oidc_owners" {
   type = list(string)
 }
 
-variable "foundation_azure_public_zone_name" {
+variable "azure_foundation_public_zone_name" {
   type    = string
   default = ""
 }
 
-variable "foundation_aws_public_zone_name" {
+variable "aws_foundation_public_zone_name" {
   type    = string
   default = ""
 }
 
-variable "foundation_local_public_zone_name" {
+variable "local_foundation_public_zone_name" {
   type    = string
   default = ""
 }
@@ -51,14 +51,10 @@ variable "vault_token" {
   type = string
 }
 
-variable "platform_version" {
+variable "platform_terraform_output_path" {
   type = string
 }
 
-variable "platform_environment_name" {
-  type = string
-}
-
-variable "platform_component_name" {
+variable "platform_vault_vars_name" {
   type = string
 }

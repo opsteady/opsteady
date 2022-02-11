@@ -23,7 +23,7 @@ terraform {
 }
 
 provider "aws" {
-  region = var.foundation_aws_region
+  region = var.aws_foundation_region
 }
 
 provider "azurerm" {

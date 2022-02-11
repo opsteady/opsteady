@@ -7,8 +7,18 @@ type DockerBase struct {
 	component.DefaultComponent
 }
 
-// Initialize creates a new DockerBase struct
-func (d *DockerBase) Initialize(defaultComponent component.DefaultComponent) {
+var Instance = &DockerBase{}
+
+func init() {
+	m := component.DefaultMetadata()
+	m.Name = "base"
+	m.Group = component.Docker
+	m.AddTarget(component.TargetDocker)
+	Instance.Metadata = &m
+}
+
+// Configure configures DockerBase before running
+func (d *DockerBase) Configure(defaultComponent component.DefaultComponent) {
 	d.DefaultComponent = defaultComponent
 	d.Docker = "" // Use root of the folder
 	d.SetDockerBuildInfo("base", "1.0.0", nil)

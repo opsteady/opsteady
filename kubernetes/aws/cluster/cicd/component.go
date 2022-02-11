@@ -1,25 +1,30 @@
 package cicd
 
-import "github.com/opsteady/opsteady/cli/component"
+import (
+	"github.com/opsteady/opsteady/cli/component"
+	foundationAWS "github.com/opsteady/opsteady/foundation/aws/cicd"
+)
 
 // KubernetesAWSCluster is a component for creating Kubernetes (EKS)
 type KubernetesAWSCluster struct {
 	component.DefaultComponent
 }
 
-// Initialize creates a new KubernetesAWSCluster struct
-func (k *KubernetesAWSCluster) Initialize(defaultComponent component.DefaultComponent) {
-	k.DefaultComponent = defaultComponent
-	k.DefaultComponent.Terraform = "" // Use root of the folder
-	k.DefaultComponent.RequiresComponents("foundation-aws")
-	k.DefaultComponent.SetVaultInfoToComponentConfig()
+var Instance = &KubernetesAWSCluster{}
+
+func init() {
+	m := component.DefaultMetadata()
+	m.Name = "cluster"
+	m.Group = component.Kubernetes
+	m.AddTarget(component.TargetAws)
+	m.AddGroupDependency(component.Foundation)
+	Instance.Metadata = &m
 }
 
-func (k *KubernetesAWSCluster) Info() component.ComponentDepInfo {
-	return component.ComponentDepInfo{
-		Description:    "Creates EKS",
-		Group:          "Kubernetes Cluster",
-		DependsOn:      []string{""},
-		DependsOnGroup: "",
-	}
+// Configure configures KubernetesAWSCluster before running
+func (k *KubernetesAWSCluster) Configure(defaultComponent component.DefaultComponent) {
+	k.DefaultComponent = defaultComponent
+	k.Terraform = "" // Use root of the folder
+	k.SetVaultInfoToComponentConfig()
+	k.AddRequiresInformationFrom(foundationAWS.Instance.GetMetadata())
 }

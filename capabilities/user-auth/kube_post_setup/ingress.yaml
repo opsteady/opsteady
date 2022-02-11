@@ -1,4 +1,8 @@
-{{ $public_name := (coalesce .foundation_azure_public_zone_name .foundation_aws_public_zone_name .foundation_local_public_zone_name) }}
+{
+  {
+    $public_name := (coalesce .azure_foundation_public_zone_name .aws_foundation_public_zone_name .local_foundation_public_zone_name),
+  },
+}
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -13,13 +17,13 @@ metadata:
   namespace: platform
 spec:
   rules:
-  - host: api.{{ $public_name }}
-    http:
-      paths:
-      - backend:
-          service:
-            name: pinniped-concierge-proxy
-            port:
-              number: 443
-        path: /
-        pathType: Prefix
+    - host: api.{{ $public_name }}
+      http:
+        paths:
+          - backend:
+              service:
+                name: pinniped-concierge-proxy
+                port:
+                  number: 443
+            path: /
+            pathType: Prefix

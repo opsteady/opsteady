@@ -41,12 +41,12 @@ controller:
 
   serviceAccount:
     annotations:
-      eks.amazonaws.com/role-arn: {{ .kubernetes_aws_storage_ebs_iam_role_arn }}
+      eks.amazonaws.com/role-arn: { { .aws_storage_ebs_iam_role_arn } }
 
 node:
   serviceAccount:
     annotations:
-      eks.amazonaws.com/role-arn: {{ .kubernetes_aws_storage_ebs_iam_role_arn }}
+      eks.amazonaws.com/role-arn: { { .aws_storage_ebs_iam_role_arn } }
 
 storageClasses:
   - name: ebs

@@ -75,3 +75,6 @@ The following environment variables are always available in every step:
 - platform_version
 - platform_environment_name
 - platform_component_name
+- platform_target_name
+- platform_terraform_output_path
+- platform_vault_vars_name

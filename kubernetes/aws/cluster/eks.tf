@@ -1,12 +1,12 @@
 resource "aws_kms_key" "platform" {
-  description         = "eks-platform-${var.foundation_aws_name}"
+  description         = "eks-platform-${var.aws_foundation_name}"
   enable_key_rotation = true
 }
 
 resource "aws_eks_cluster" "platform" {
-  name     = var.foundation_aws_name
+  name     = var.aws_foundation_name
   role_arn = aws_iam_role.eks.arn
-  version  = var.kubernetes_aws_cluster_kubernetes_version
+  version  = var.aws_cluster_kubernetes_version
 
   enabled_cluster_log_types = ["api", "audit", "controllerManager"]
 
@@ -22,18 +22,18 @@ resource "aws_eks_cluster" "platform" {
     // directly to the Kubernetes API. The public endpoint is also enabled but this can then
     // be used for management purposes only and, optionally, controlled via CIDR restrictions.
     endpoint_private_access = true
-    public_access_cidrs     = var.kubernetes_aws_cluster_public_access_cidrs
+    public_access_cidrs     = var.aws_cluster_public_access_cidrs
     security_group_ids      = [aws_security_group.eks_cluster.id]
     subnet_ids = [
-      var.foundation_aws_eks_a_subnet_id,
-      var.foundation_aws_eks_b_subnet_id,
-      var.foundation_aws_eks_c_subnet_id,
+      var.aws_foundation_eks_a_subnet_id,
+      var.aws_foundation_eks_b_subnet_id,
+      var.aws_foundation_eks_c_subnet_id,
     ]
   }
 
   kubernetes_network_config {
     // In the future this can potentially be adjusted if it clashes with peered networks.
-    service_ipv4_cidr = var.kubernetes_aws_cluster_service_ipv4_cidr
+    service_ipv4_cidr = var.aws_cluster_service_ipv4_cidr
   }
 
   depends_on = [
@@ -44,18 +44,18 @@ resource "aws_eks_cluster" "platform" {
 }
 
 resource "aws_eks_node_group" "system" {
-  cluster_name    = var.foundation_aws_name
+  cluster_name    = var.aws_foundation_name
   node_group_name = "system"
-  instance_types  = var.kubernetes_aws_cluster_system_node_group_instance_types
+  instance_types  = var.aws_cluster_system_node_group_instance_types
   node_role_arn   = aws_iam_role.eks_system_node_group.arn
   labels = {
     name = "system"
   }
 
   subnet_ids = [
-    var.foundation_aws_pods_a_subnet_id,
-    var.foundation_aws_pods_b_subnet_id,
-    var.foundation_aws_pods_c_subnet_id,
+    var.aws_foundation_pods_a_subnet_id,
+    var.aws_foundation_pods_b_subnet_id,
+    var.aws_foundation_pods_c_subnet_id,
   ]
 
   launch_template {
@@ -64,9 +64,9 @@ resource "aws_eks_node_group" "system" {
   }
 
   scaling_config {
-    desired_size = var.kubernetes_aws_cluster_system_node_group_node_count
-    min_size     = var.kubernetes_aws_cluster_system_node_group_node_count
-    max_size     = var.kubernetes_aws_cluster_system_node_group_node_count
+    desired_size = var.aws_cluster_system_node_group_node_count
+    min_size     = var.aws_cluster_system_node_group_node_count
+    max_size     = var.aws_cluster_system_node_group_node_count
   }
 
   update_config {
@@ -93,7 +93,7 @@ resource "aws_eks_node_group" "system" {
 # -------------
 #
 # resource "aws_kms_key" "system" {
-#   description         = "eks-system-${var.foundation_aws_name}"
+#   description         = "eks-system-${var.aws_foundation_name}"
 #   enable_key_rotation = true
 #   policy = <<POLICY
 # {
@@ -151,7 +151,7 @@ resource "aws_eks_node_group" "system" {
 
 resource "aws_launch_template" "system" {
   image_id               = data.aws_ssm_parameter.eks_ami_id.value
-  name                   = "${var.foundation_aws_name}-system"
+  name                   = "${var.aws_foundation_name}-system"
   update_default_version = true
 
   block_device_mappings {

@@ -18,11 +18,21 @@ type KubernetesLocal struct {
 	k3d *tasks.K3d
 }
 
-// Initialize creates a new KubernetesLocal struct
-func (k *KubernetesLocal) Initialize(defaultComponent component.DefaultComponent) {
+var Instance = &KubernetesLocal{}
+
+func init() {
+	m := component.DefaultMetadata()
+	m.Name = "cluster"
+	m.Group = component.Kubernetes
+	m.AddTarget(component.TargetLocal)
+	m.AddGroupDependency(component.Foundation)
+	Instance.Metadata = &m
+}
+
+// Configure configures KubernetesLocal before running
+func (k *KubernetesLocal) Configure(defaultComponent component.DefaultComponent) {
 	k.DefaultComponent = defaultComponent
-	k.DefaultComponent.RequiresComponents("foundation-azure")
-	k.DefaultComponent.SetVaultInfoToComponentConfig()
+	k.SetVaultInfoToComponentConfig()
 	k.k3d = tasks.NewK3d(k.ComponentFolder, k.Logger)
 }
 
@@ -44,14 +54,5 @@ func (k *KubernetesLocal) Destroy() {
 
 	if err := k.k3d.DeleteCluster("opsteady"); err != nil {
 		k.Logger.Fatal().Err(err).Msg("could not delete cluster locally")
-	}
-}
-
-func (k *KubernetesLocal) Info() component.ComponentDepInfo {
-	return component.ComponentDepInfo{
-		Description:    "Creates K3D cluster",
-		Group:          "Kubernetes Cluster",
-		DependsOn:      []string{"foundation-local"},
-		DependsOnGroup: "Foundation",
 	}
 }

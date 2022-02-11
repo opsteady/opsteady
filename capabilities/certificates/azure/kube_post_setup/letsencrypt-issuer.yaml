@@ -4,7 +4,7 @@ metadata:
   name: letsencrypt
 spec:
   acme:
-    email: {{ .capabilities_certificates_azure_letsencrypt_email }}
+    email: { { .azure_certificates_letsencrypt_email } }
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       # Secret resource that will be used to store the account's private key.
@@ -12,7 +12,7 @@ spec:
     solvers:
       - dns01:
         azureDNS:
-          subscriptionID: {{ .foundation_azure_subscription_id }}
-          resourceGroupName: {{ .foundation_azure_resource_group }}
-          hostedZoneName: {{ .foundation_azure_public_zone_name }}
+          subscriptionID: { { .azure_foundation_subscription_id } }
+          resourceGroupName: { { .azure_foundation_resource_group } }
+          hostedZoneName: { { .azure_foundation_public_zone_name } }
           environment: AzurePublicCloud

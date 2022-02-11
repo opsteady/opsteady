@@ -11,8 +11,18 @@ type DockerCicd struct {
 	component.DefaultComponent
 }
 
-// Initialize creates a new DockerCicd struct
-func (d *DockerCicd) Initialize(defaultComponent component.DefaultComponent) {
+var Instance = &DockerCicd{}
+
+func init() {
+	m := component.DefaultMetadata()
+	m.Name = "cicd"
+	m.Group = component.Docker
+	m.AddTarget(component.TargetDocker)
+	Instance.Metadata = &m
+}
+
+// Configure configures DockerCicd before running
+func (d *DockerCicd) Configure(defaultComponent component.DefaultComponent) {
 	d.DefaultComponent = defaultComponent
 	d.Docker = "" // Use root of the folder
 	buildArgs := map[string]string{

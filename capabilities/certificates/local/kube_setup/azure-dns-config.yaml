@@ -6,4 +6,4 @@ metadata:
   namespace: platform
 type: Opaque
 stringData:
-  clientSecret: {{ .capabilities_certificates_local_service_principal_password }}
+  clientSecret: { { .local_certificates_service_principal_password } }

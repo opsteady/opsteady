@@ -25,30 +25,11 @@ func (c *DefaultComponent) PrepareTerraformBackend() {
 		mgmtCreds["client_id"].(string),
 		mgmtCreds["client_secret"].(string))
 
-	if blobKey := c.determinBlobKey(); blobKey != "" {
-		c.Logger.Info().Str("backend", blobKey).Msg("Using backend blob key")
-		tfBackendCreds = fmt.Sprintf("key = \"%s\"\n%s", blobKey, tfBackendCreds)
-	}
+	blobKey := fmt.Sprintf("%s/%s/%s.tfstate", c.CurrentTarget, c.PlatformID, c.Metadata.Name)
+	c.Logger.Info().Str("backend", blobKey).Msg("Using backend blob key")
+	tfBackendCreds = fmt.Sprintf("key = \"%s\"\n%s", blobKey, tfBackendCreds)
 
 	if err := ioutil.WriteFile(c.TerraformBackendConfigPath, []byte(tfBackendCreds), readWriteAll); err != nil {
 		c.Logger.Fatal().Err(err).Str("path", c.TerraformBackendConfigPath).Msg("could not write the backend config file")
 	}
-}
-
-func (c *DefaultComponent) determinBlobKey() string { //nolint
-	// Try to determine which blob key to use for Terraform state
-	var blobKey string
-	if c.AwsID != "" && c.AzureID == "" && c.LocalID == "" { //nolint
-		blobKey = fmt.Sprintf("%s/%s/%s.tfstate", "aws", c.AwsID, c.ComponentName)
-	} else if c.AwsID == "" && c.AzureID != "" && c.LocalID == "" {
-		blobKey = fmt.Sprintf("%s/%s/%s.tfstate", "azure", c.AzureID, c.ComponentName)
-	} else if c.AwsID == "" && c.AzureID == "" && c.LocalID != "" {
-		blobKey = fmt.Sprintf("%s/%s/%s.tfstate", "local", c.LocalID, c.ComponentName)
-	} else if c.AwsID == "" && c.AzureID == "" && c.LocalID == "" {
-		c.Logger.Fatal().Msg("Please specify a target AWS/Azure/Local ID")
-	} else if c.AwsID != "" && c.AzureID != "" {
-		c.Logger.Info().Msg("You specified both an Azure and AWS ID, using the backend blob key in the Terraform provider")
-	}
-
-	return blobKey
 }
