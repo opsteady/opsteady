@@ -1,0 +1,16 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ivo-local-cert
+  namespace: platform
+spec:
+  secretName: ivo-local-cert-tls
+  issuerRef:
+    name: letsencrypt-staging
+    kind: ClusterIssuer
+  dnsNames:
+    - abcd.ivo.os.opsteady.com
+# Then kubectl describe certificate ivo-azure-cert
+# kubectl describe secrets ivo-azure-cert-tls
+# Debug: kubectl describe orders.acme.cert-manager.io

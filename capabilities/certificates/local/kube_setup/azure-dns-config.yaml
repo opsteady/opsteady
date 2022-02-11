@@ -1,0 +1,9 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: certificates-azure-dns-config
+  namespace: platform
+type: Opaque
+stringData:
+  clientSecret: {{ .capabilities_certificates_local_service_principal_password }}
