@@ -7,6 +7,7 @@ resource "vault_generic_secret" "outputs" {
 
   data_json = <<EOT
 {
+  "${local.component_name_underscores}_resource_group": "${azurerm_resource_group.foundation.name}",
   "${local.component_name_underscores}_public_zone_name": "${azurerm_dns_zone.public.name}",
   "${local.component_name_underscores}_public_zone_id": "${azurerm_dns_zone.public.id}"
 }

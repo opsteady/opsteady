@@ -20,13 +20,13 @@ tasks:
       - from: tigera/operator
         tags: ["v1.20.3", "v1.23.3"]
       - from: jetstack/cert-manager-controller
-        tags: ["v1.6.0", "v1.6.1"]
+        tags: ["v1.6.0", "v1.6.1", "v1.7.1"]
       - from: jetstack/cert-manager-webhook
-        tags: ["v1.6.0", "v1.6.1"]
+        tags: ["v1.6.0", "v1.6.1", "v1.7.1"]
       - from: jetstack/cert-manager-cainjector
-        tags: ["v1.6.0", "v1.6.1"]
+        tags: ["v1.6.0", "v1.6.1", "v1.7.1"]
       - from: jetstack/cert-manager-ctl
-        tags: ["v1.6.0", "v1.6.1"]
+        tags: ["v1.6.0", "v1.6.1", "v1.7.1"]
 
   - name: docker.io
     verbose: true

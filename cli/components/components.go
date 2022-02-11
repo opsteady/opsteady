@@ -6,6 +6,7 @@ import (
 	capabilitiesCertificatesAzure "github.com/opsteady/opsteady/capabilities/certificates/azure/cicd"
 	capabilitiesDNSAWS "github.com/opsteady/opsteady/capabilities/dns/aws/cicd"
 	capabilitiesDNSAzure "github.com/opsteady/opsteady/capabilities/dns/azure/cicd"
+	capabilitiesDNSLocal "github.com/opsteady/opsteady/capabilities/dns/local/cicd"
 	capabilitiesLoadbalancing "github.com/opsteady/opsteady/capabilities/loadbalancing/cicd"
 	capabilitiesUserAuth "github.com/opsteady/opsteady/capabilities/user-auth/cicd"
 	cli "github.com/opsteady/opsteady/cicd"
@@ -52,6 +53,7 @@ func init() {
 	Components["kubernetes-local-cluster"] = &kubernetesLocalCluster.KubernetesLocal{}
 	Components["capabilities-dns-aws"] = &capabilitiesDNSAWS.CapabilitiesDNSAWS{}
 	Components["capabilities-dns-azure"] = &capabilitiesDNSAzure.CapabilitiesDNSAzure{}
+	Components["capabilities-dns-local"] = &capabilitiesDNSLocal.CapabilitiesDNSLocal{}
 	Components["capabilities-certificates-aws"] = &capabilitiesCertificatesAWS.CapabilitiesCertificatesAWS{}
 	Components["capabilities-certificates-azure"] = &capabilitiesCertificatesAzure.CapabilitiesCertificatesAzure{}
 	Components["capabilities-loadbalancing"] = &capabilitiesLoadbalancing.CapabilitiesLoadbalacing{}
