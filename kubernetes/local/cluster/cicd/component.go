@@ -46,3 +46,12 @@ func (k *KubernetesLocal) Destroy() {
 		k.Logger.Fatal().Err(err).Msg("could not delete cluster locally")
 	}
 }
+
+func (k *KubernetesLocal) Info() component.ComponentDepInfo {
+	return component.ComponentDepInfo{
+		Description:    "Creates K3D cluster",
+		Group:          "Kubernetes Cluster",
+		DependsOn:      []string{"foundation-local"},
+		DependsOnGroup: "Foundation",
+	}
+}

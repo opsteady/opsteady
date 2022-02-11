@@ -63,4 +63,8 @@ func init() {
 	Components["docker-base"] = &dockerBase.DockerBase{}
 	Components["docker-cicd"] = &dockerCicd.DockerCicd{}
 	Components["cli"] = &cli.OpsteadyCli{}
+
+	ComponentsNew[managementBootstrap.ComponentInfo.Name] = managementBootstrap.ComponentInfo
 }
+
+var ComponentsNew = make(map[string]component.ComponentInfoImpl)

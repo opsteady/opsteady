@@ -16,3 +16,13 @@ func (k *KubernetesBootstrap) Initialize(defaultComponent component.DefaultCompo
 	k.DefaultComponent.SetVaultInfoToComponentConfig()
 	k.DefaultComponent.AddAzureADCredentialsToComponentConfig()
 }
+
+func (k *KubernetesBootstrap) Info() component.ComponentDepInfo {
+	return component.ComponentDepInfo{
+		Name:           "kubernetes-bootstrap",
+		Description:    "Bootstraps some basics config on the cluster",
+		Group:          "Kubernetes Bootstrap",
+		DependsOn:      []string{"kubernetes-azure-pod-identity"},
+		DependsOnGroup: "Kubernetes Addons",
+	}
+}

@@ -18,3 +18,12 @@ func (c *CapabilitiesCertificatesAWS) Initialize(defaultComponent component.Defa
 		"v1.7.1", // renovate: datasource=helm registryUrl=https://charts.jetstack.io depName=cert-manager versioning=semver
 	))
 }
+
+func (k *CapabilitiesCertificatesAWS) Info() component.ComponentDepInfo {
+	return component.ComponentDepInfo{
+		Description:    "Creates EKS",
+		Group:          "Kubernetes Cluster",
+		DependsOn:      []string{""},
+		DependsOnGroup: "",
+	}
+}

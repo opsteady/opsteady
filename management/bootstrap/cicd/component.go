@@ -12,3 +12,18 @@ func (m *ManagementBootstrap) Initialize(defaultComponent component.DefaultCompo
 	m.DefaultComponent = defaultComponent
 	m.DefaultComponent.Terraform = "" // Use root of the folder
 }
+
+var ComponentInfo = component.DefaultComponentInfoImpl()
+
+func init() {
+	ComponentInfo.Name = "management-bootstrap"
+	ComponentInfo.Group = component.ManagementBootstrap
+}
+
+// Initialize creates a new managementBootstrap struct
+func (c component.ComponentInfoImpl) Initialize(defaultComponent component.DefaultComponent) component.Component {
+	m := &ManagementBootstrap{}
+	m.DefaultComponent = defaultComponent
+	m.DefaultComponent.Terraform = "" // Use root of the folder
+	return m
+}

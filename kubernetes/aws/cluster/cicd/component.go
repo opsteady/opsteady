@@ -14,3 +14,12 @@ func (k *KubernetesAWSCluster) Initialize(defaultComponent component.DefaultComp
 	k.DefaultComponent.RequiresComponents("foundation-aws")
 	k.DefaultComponent.SetVaultInfoToComponentConfig()
 }
+
+func (k *KubernetesAWSCluster) Info() component.ComponentDepInfo {
+	return component.ComponentDepInfo{
+		Description:    "Creates EKS",
+		Group:          "Kubernetes Cluster",
+		DependsOn:      []string{""},
+		DependsOnGroup: "",
+	}
+}

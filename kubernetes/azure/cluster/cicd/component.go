@@ -14,3 +14,13 @@ func (k *KubernetesAzure) Initialize(defaultComponent component.DefaultComponent
 	k.DefaultComponent.RequiresComponents("foundation-azure")
 	k.DefaultComponent.SetVaultInfoToComponentConfig()
 }
+
+func (k *KubernetesAzure) Info() component.ComponentDepInfo {
+	return component.ComponentDepInfo{
+		Name:           "kubernetes-azure-cluster",
+		Description:    "Creates AKS cluster",
+		Group:          "Kubernetes",
+		DependsOn:      []string{"foundation-azure"},
+		DependsOnGroup: "Foundation",
+	}
+}

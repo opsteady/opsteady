@@ -17,3 +17,12 @@ func (k *KubernetesAWSStorageEBS) Initialize(defaultComponent component.DefaultC
 		"2.6.2", // renovate: datasource=helm registryUrl=https://kubernetes-sigs.github.io/aws-ebs-csi-driver depName=aws-ebs-csi-driver versioning=semver
 	))
 }
+
+func (k *KubernetesAWSStorageEBS) Info() component.ComponentDepInfo {
+	return component.ComponentDepInfo{
+		Description:    "Creates EKS",
+		Group:          "Kubernetes Cluster",
+		DependsOn:      []string{""},
+		DependsOnGroup: "",
+	}
+}

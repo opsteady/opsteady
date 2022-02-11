@@ -15,3 +15,12 @@ func (c *CapabilitiesLoadbalacing) Initialize(defaultComponent component.Default
 		"4.0.17", // renovate: datasource=helm registryUrl=https://kubernetes.github.io/ingress-nginx depName=ingress-nginx versioning=semver
 	))
 }
+
+func (k *CapabilitiesLoadbalacing) Info() component.ComponentDepInfo {
+	return component.ComponentDepInfo{
+		Description:    "Creates EKS",
+		Group:          "Kubernetes Cluster",
+		DependsOn:      []string{""},
+		DependsOnGroup: "",
+	}
+}

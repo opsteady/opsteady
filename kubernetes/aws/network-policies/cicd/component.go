@@ -17,3 +17,12 @@ func (k *KubernetesAWSNetworkPolicies) Initialize(defaultComponent component.Def
 		"v3.22.0", // renovate: datasource=helm registryUrl=https://docs.projectcalico.org/charts depName=tigera-operator versioning=semver
 	))
 }
+
+func (k *KubernetesAWSNetworkPolicies) Info() component.ComponentDepInfo {
+	return component.ComponentDepInfo{
+		Description:    "Creates EKS",
+		Group:          "Kubernetes Cluster",
+		DependsOn:      []string{""},
+		DependsOnGroup: "",
+	}
+}

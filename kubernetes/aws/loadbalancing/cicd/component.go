@@ -17,3 +17,12 @@ func (k *KubernetesAWSLoadbalancing) Initialize(defaultComponent component.Defau
 		"1.3.3", // renovate: datasource=helm registryUrl=https://aws.github.io/eks-charts depName=aws-load-balancer-controller versioning=semver
 	))
 }
+
+func (k *KubernetesAWSLoadbalancing) Info() component.ComponentDepInfo {
+	return component.ComponentDepInfo{
+		Description:    "Creates EKS",
+		Group:          "Kubernetes Cluster",
+		DependsOn:      []string{""},
+		DependsOnGroup: "",
+	}
+}

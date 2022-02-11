@@ -16,3 +16,13 @@ func (k *KubernetesAzurePodIdentity) Initialize(defaultComponent component.Defau
 		"4.1.8", // renovate: datasource=helm registryUrl=https://raw.githubusercontent.com/Azure/aad-pod-identity/master/charts depName=aad-pod-identity versioning=semver
 	))
 }
+
+func (k *KubernetesAzurePodIdentity) Info() component.ComponentDepInfo {
+	return component.ComponentDepInfo{
+		Name:           "kubernetes-azure-pod-identity",
+		Description:    "Ads AAD pod identity to AKS cluster",
+		Group:          "Kubernetes Addons",
+		DependsOn:      []string{"kubernetes-azure-cluster"},
+		DependsOnGroup: "Kubernetes",
+	}
+}

@@ -17,3 +17,12 @@ func (c *CapabilitiesDNSAWS) Initialize(defaultComponent component.DefaultCompon
 		"1.7.1", // renovate: datasource=helm registryUrl=https://kubernetes-sigs.github.io/external-dns depName=external-dns versioning=semver
 	))
 }
+
+func (k *CapabilitiesDNSAWS) Info() component.ComponentDepInfo {
+	return component.ComponentDepInfo{
+		Description:    "Creates EKS",
+		Group:          "Kubernetes Cluster",
+		DependsOn:      []string{""},
+		DependsOnGroup: "",
+	}
+}

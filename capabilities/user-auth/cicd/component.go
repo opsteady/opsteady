@@ -25,3 +25,12 @@ func (c *UserAuth) Initialize(defaultComponent component.DefaultComponent) {
 		"0.6.5", // renovate: datasource=helm registryUrl=https://charts.dexidp.io depName=dex versioning=semver
 	))
 }
+
+func (k *UserAuth) Info() component.ComponentDepInfo {
+	return component.ComponentDepInfo{
+		Description:    "Creates EKS",
+		Group:          "Kubernetes Cluster",
+		DependsOn:      []string{""},
+		DependsOnGroup: "",
+	}
+}

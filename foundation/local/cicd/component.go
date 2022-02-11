@@ -15,3 +15,12 @@ func (f *FoundationLocal) Initialize(defaultComponent component.DefaultComponent
 	f.DefaultComponent.AddManagementCredentialsToComponentConfig()
 	f.DefaultComponent.SetVaultInfoToComponentConfig()
 }
+
+func (k *FoundationLocal) Info() component.ComponentDepInfo {
+	return component.ComponentDepInfo{
+		Description:    "Creates Local foundation",
+		Group:          "Foundation",
+		DependsOn:      []string{""},
+		DependsOnGroup: "",
+	}
+}
