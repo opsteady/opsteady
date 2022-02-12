@@ -1,0 +1,53 @@
+---
+global:
+  imagePullSecrets:
+    - name: management-acr
+
+  priorityClassName: "system-cluster-critical"
+
+  leaderElection:
+    namespace: "platform"
+
+nodeSelector:
+  name: system
+
+image:
+  repository: opsteadyos.azurecr.io/jetstack/cert-manager-controller
+  pullPolicy: Always
+
+prometheus:
+  enabled: true
+  servicemonitor:
+    enabled: false
+
+webhook:
+  nodeSelector:
+    name: system
+
+  image:
+    repository: opsteadyos.azurecr.io/jetstack/cert-manager-webhook
+    pullPolicy: Always
+
+  replicaCount: 2
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+
+cainjector:
+  nodeSelector:
+    name: system
+
+  image:
+    repository: opsteadyos.azurecr.io/jetstack/cert-manager-cainjector
+    pullPolicy: Always
+
+startupapicheck:
+  nodeSelector:
+    name: system
+
+  image:
+    repository: opsteadyos.azurecr.io/jetstack/cert-manager-ctl
+    pullPolicy: Always
