@@ -1,3 +1,4 @@
+---
 imagePullSecrets:
   - name: management-acr
 
