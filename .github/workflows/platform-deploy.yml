@@ -20,7 +20,7 @@ jobs:
       id-token: write
       contents: read
     container:
-      image: opsteadyos.azurecr.io/cicd:1.0.0 # versioning=semver datasource=docker
+      image: opsteadyos.azurecr.io/cicd:1.2.1 # versioning=semver datasource=docker
       options: --user root
       credentials:
         username: ${{ secrets.acr_username }}
