@@ -1,3 +1,4 @@
+---
 apiVersion: k3d.io/v1alpha3
 kind: Simple
 name: opsteady
@@ -8,6 +9,14 @@ volumes:
   - volume: /tmp/k3d/storage:/var/lib/rancher/k3s/storage
     nodeFilters:
       - agent:*
+
+ports:
+  - port: 8080:80
+    nodeFilters:
+      - loadbalancer
+  - port: 8443:443
+    nodeFilters:
+      - loadbalancer
 
 options:
   k3s:

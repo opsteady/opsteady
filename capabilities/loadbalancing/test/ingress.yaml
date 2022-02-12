@@ -1,3 +1,4 @@
+---
 kind: Pod
 apiVersion: v1
 metadata:
@@ -17,25 +18,48 @@ kind: Service
 apiVersion: v1
 metadata:
   name: test-service
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: test.ivo.os.opsteady.com
 spec:
   selector:
     app: test
   ports:
     - port: 5678
 ---
-apiVersion: extensions/v1beta1
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ivo-local-cert
+spec:
+  secretName: ivo-local-cert-tls
+  issuerRef:
+    name: letsencrypt-staging
+    kind: ClusterIssuer
+  dnsNames:
+    - test.ivo.os.opsteady.com
+---
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: test-ingress
   annotations:
     kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
 spec:
+  tls:
+    - hosts:
+        - test.ivo.os.opsteady.com
+      secretName: ivo-local-cert-tls
   rules:
-    - http:
+    - host: test.ivo.os.opsteady.com
+      http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: test-service
-              servicePort: 5678
+              service:
+                name: test-service
+                port:
+                  number: 5678
 # kubectl get svc -- to find the IP address or URL of the LB
 # curl -vv http://IP -- should return test (if you see nginx then it is WRONG)
