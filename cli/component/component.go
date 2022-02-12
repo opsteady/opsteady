@@ -155,6 +155,7 @@ func (c *DefaultComponent) PlatformID() string {
 		if c.AwsID == "" {
 			return c.LocalID
 		}
+
 		return c.AwsID
 	}
 

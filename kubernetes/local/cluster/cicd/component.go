@@ -41,6 +41,7 @@ func (k *KubernetesLocal) Deploy() {
 
 func (k *KubernetesLocal) Destroy() {
 	k.SetPlatformInfoToComponentConfig()
+
 	if err := k.k3d.DeleteCluster("opsteady"); err != nil {
 		k.Logger.Fatal().Err(err).Msg("could not delete cluster locally")
 	}

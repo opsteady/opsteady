@@ -80,7 +80,7 @@ func (vc *VaultCredentials) Azure(subscriptionID string) (map[string]interface{}
 	path := fmt.Sprintf("azure/creds/%s", subscriptionID)
 	cacheIndex := fmt.Sprintf("Azure/%s", subscriptionID)
 
-	return vc.getAzureCreds(path, cacheIndex, subscriptionID)
+	return vc.getAzureCreds(path, cacheIndex)
 }
 
 // AKS retrieves service principal credentials for AKS
@@ -88,10 +88,10 @@ func (vc *VaultCredentials) AKS(subscriptionID string) (map[string]interface{}, 
 	path := fmt.Sprintf("azure/creds/%s-k8s", subscriptionID)
 	cacheIndex := fmt.Sprintf("AKS/%s", subscriptionID)
 
-	return vc.getAzureCreds(path, cacheIndex, subscriptionID)
+	return vc.getAzureCreds(path, cacheIndex)
 }
 
-func (vc *VaultCredentials) getAzureCreds(path string, cacheID string, subscriptionID string) (map[string]interface{}, error) {
+func (vc *VaultCredentials) getAzureCreds(path string, cacheID string) (map[string]interface{}, error) {
 	secret := vc.cache.Retrieve(cacheID)
 
 	if secret != nil {
@@ -125,7 +125,7 @@ func (vc *VaultCredentials) getAzureCreds(path string, cacheID string, subscript
 		return nil, errors.Wrapf(err, "could not get tenant ID from Azure secret backend configuration: %+v", azureConfig)
 	}
 
-	time.Sleep(10 * time.Second)
+	time.Sleep(10 * time.Second) //nolint
 
 	vc.cache.Store(cacheID, secret, DefaultTTL)
 
