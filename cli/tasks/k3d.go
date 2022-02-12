@@ -12,7 +12,6 @@ type K3d struct {
 
 // NewK3d returns a K3d task runner
 func NewK3d(tmpFolder string, logger *zerolog.Logger) *K3d {
-
 	return &K3d{
 		tmpFolder: tmpFolder,
 		logger:    logger,

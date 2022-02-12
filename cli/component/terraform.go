@@ -35,7 +35,7 @@ func (c *DefaultComponent) PrepareTerraformBackend() {
 	}
 }
 
-func (c *DefaultComponent) determinBlobKey() string {
+func (c *DefaultComponent) determinBlobKey() string { //nolint
 	// Try to determine which blob key to use for Terraform state
 	var blobKey string
 	if c.AwsID != "" && c.AzureID == "" && c.LocalID == "" { //nolint
