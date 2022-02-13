@@ -1,3 +1,4 @@
+---
 replicaCount: 2
 
 image:
@@ -20,13 +21,12 @@ priorityClassName: "system-cluster-critical"
 nodeSelector:
   name: system
 
-
 ingress:
   enabled: true
 
   annotations:
     kubernetes.io/ingress.class: nginx
-    cert-manager.io/cluster-issuer: letsencrypt
+    cert-manager.io/cluster-issuer: letsencrypt{{ if eq .platform_cloud_name "local" }}-staging{{ end }}
 
   hosts:
     - host: {{ .capabilities_user_auth_oidc_url }}
@@ -41,7 +41,7 @@ ingress:
 
 # See https://dexidp.io/docs/ and https://github.com/dexidp/dex/blob/master/examples/k8s/dex.yaml
 config:
-  issuer: https://{{ .capabilities_user_auth_oidc_url }}
+  issuer: https://{{ .capabilities_user_auth_oidc_url }}{{ if eq .platform_cloud_name "local" }}:8443{{ end }}
 
   storage:
     type: kubernetes

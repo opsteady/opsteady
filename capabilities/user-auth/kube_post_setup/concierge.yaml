@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -45,6 +46,12 @@ spec:
             - --config=/etc/config/pinniped.yaml
             - --downward-api-path=/etc/podinfo
           volumeMounts:
+            {{ if eq .platform_cloud_name "local" }}
+            - name: letsencrypt-staging
+              mountPath: /etc/ssl/certs/letsencrypt-staging.pem
+              subPath: letsencrypt-staging.pem
+              readOnly: false
+            {{ end }}
             - name: tmp
               mountPath: /tmp
             - name: config-volume
@@ -76,6 +83,14 @@ spec:
             periodSeconds: 10
             failureThreshold: 3
       volumes:
+        {{ if eq .platform_cloud_name "local" }}
+        - name: letsencrypt-staging
+          configMap:
+            name: letsencrypt-staging-ca
+            items:
+              - key: letsencrypt-staging
+                path: letsencrypt-staging.pem
+        {{ end }}
         - name: tmp
           emptyDir:
             medium: Memory
