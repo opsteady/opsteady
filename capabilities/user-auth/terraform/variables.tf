@@ -7,6 +7,12 @@ variable "foundation_azure_name" {
   type    = string
   default = ""
 }
+
+variable "foundation_local_name" {
+  type    = string
+  default = ""
+}
+
 variable "capabilities_user_auth_oidc_owners" {
   type = list(string)
 }
@@ -20,6 +26,12 @@ variable "foundation_aws_public_zone_name" {
   type    = string
   default = ""
 }
+
+variable "foundation_local_public_zone_name" {
+  type    = string
+  default = ""
+}
+
 variable "azuread_tenant_id" {
   type = string
 }

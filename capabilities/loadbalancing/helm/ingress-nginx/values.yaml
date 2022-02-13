@@ -60,6 +60,12 @@ controller:
       nodeSelector:
         name: system
 
+{{ if eq .platform_cloud_name "local" }}
+  service:
+    ports:
+      https: 8443
+{{ end }}
+
 # Part of controller.service
 {{ if eq .platform_cloud_name "aws" }}
   service:

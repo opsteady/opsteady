@@ -4,7 +4,7 @@ kind: JWTAuthenticator
 metadata:
   name: pinniped-cli
 spec:
-  issuer: https://{{ .capabilities_user_auth_oidc_url }}
+  issuer: https://{{ .capabilities_user_auth_oidc_url }}{{ if eq .platform_cloud_name "local" }}:8443{{ end }}
   audience: pinniped-cli
   claims:
     username: name

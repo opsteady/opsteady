@@ -162,8 +162,12 @@ func (c *DefaultComponent) PlatformID() string {
 	return c.AzureID
 }
 
-// CloudName returns azure or aws depending of the cloud
+// CloudName returns Azure, AWS or local, depending on the environment ID
 func (c *DefaultComponent) CloudName() string {
+	if c.AzureID == "" && c.AwsID == "" {
+		return "local"
+	}
+
 	if c.AzureID == "" {
 		return "aws"
 	}

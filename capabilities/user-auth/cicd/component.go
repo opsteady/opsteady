@@ -13,8 +13,10 @@ func (c *UserAuth) Initialize(defaultComponent component.DefaultComponent) {
 	c.DefaultComponent.RequiresComponents(
 		"foundation-azure",
 		"foundation-aws",
+		"foundation-local",
 		"kubernetes-azure-cluster",
-		"kubernetes-aws-cluster")
+		"kubernetes-aws-cluster",
+		"kubernetes-local-cluster")
 	c.DefaultComponent.SetVaultInfoToComponentConfig()
 	c.DefaultComponent.AddManagementCredentialsToComponentConfig()
 	c.DefaultComponent.AddAzureADCredentialsToComponentConfig()
