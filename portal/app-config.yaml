@@ -1,5 +1,5 @@
 app:
-  title: Scaffolded Backstage App
+  title: Opsteady
   baseUrl: http://localhost:3000
 
 organization:
@@ -57,7 +57,17 @@ techdocs:
 
 auth:
   # see https://backstage.io/docs/auth/ to learn about auth providers
-  providers: {}
+  session:
+    secret: changeme
+  environment: development
+  providers:
+    oidc:
+      development:
+        clientId: backstage
+        clientSecret: backstage
+        metadataUrl: https://oidc.ivo.os.opsteady.com:8443/.well-known/openid-configuration
+        scope: openid profile email offline_access groups
+        tokenSignedResponseAlg: RS256
 
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options

@@ -30,6 +30,7 @@ import (
 	managementInfra "github.com/opsteady/opsteady/management/infra/cicd"
 	managementVaultConfig "github.com/opsteady/opsteady/management/vault/config/cicd"
 	managementVaultInfra "github.com/opsteady/opsteady/management/vault/infra/cicd"
+	portal "github.com/opsteady/opsteady/portal/cicd"
 )
 
 // Components contains a list of component initializers
@@ -62,5 +63,6 @@ func init() {
 	Components["capabilities-user-auth"] = &capabilitiesUserAuth.UserAuth{}
 	Components["docker-base"] = &dockerBase.DockerBase{}
 	Components["docker-cicd"] = &dockerCicd.DockerCicd{}
+	Components["portal"] = &portal.Portal{}
 	Components["cli"] = &cli.OpsteadyCli{}
 }
