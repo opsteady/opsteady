@@ -74,7 +74,7 @@ config:
       public: true
     - id: backstage
       redirectURIs:
-        - 'http://localhost:7000/api/auth/oidc/handler/frame'
+        - 'http://localhost:7007/api/auth/oidc/handler/frame'
       name: 'Backstage'
       secret: backstage
 

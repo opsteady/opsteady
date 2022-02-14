@@ -20,21 +20,38 @@ import {
   techdocsPlugin,
   TechDocsReaderPage,
 } from '@backstage/plugin-techdocs';
-import { UserSettingsPage } from '@backstage/plugin-user-settings';
-import { apis } from './apis';
+import { ProviderSettingsItem, UserSettingsPage } from '@backstage/plugin-user-settings';
+import { apis, opsteadyAuthApiRef } from './apis';
 import { entityPage } from './components/catalog/EntityPage';
 import { searchPage } from './components/search/SearchPage';
 import { Root } from './components/Root';
 
-import { AlertDisplay, OAuthRequestDialog } from '@backstage/core-components';
+import { AlertDisplay, OAuthRequestDialog, SignInPage, SignInProviderConfig } from '@backstage/core-components';
 import { createApp } from '@backstage/app-defaults';
 import { FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { PermissionedRoute } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common';
+import Star from '@material-ui/icons/Star';  
+
+const opsteadyProvider: SignInProviderConfig = {
+  id: 'opsteady-auth-provider',
+  title: 'Opsteady',
+  message: 'Sign in with Opsteady',
+  apiRef: opsteadyAuthApiRef,
+};
 
 const app = createApp({
   apis,
+  components: {
+    SignInPage: props => (
+      <SignInPage
+        {...props}
+        auto
+        provider={opsteadyProvider}
+      />
+    ),
+  },
   bindRoutes({ bind }) {
     bind(catalogPlugin.externalRoutes, {
       createComponent: scaffolderPlugin.routes.root,
@@ -86,7 +103,19 @@ const routes = (
     <Route path="/search" element={<SearchPage />}>
       {searchPage}
     </Route>
-    <Route path="/settings" element={<UserSettingsPage />} />
+    <Route path="/settings" element={
+      <UserSettingsPage 
+        providerSettings={
+          <ProviderSettingsItem
+            title="ACME"
+            description="Provides sign-in via Opsteady"
+            apiRef={opsteadyAuthApiRef} 
+            icon={Star}          
+          />
+        }
+      />
+      } 
+    />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
   </FlatRoutes>
 );
