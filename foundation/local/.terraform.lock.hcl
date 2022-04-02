@@ -2,31 +2,20 @@
 # Manual edits may be lost in future updates.
 
 provider "registry.terraform.io/hashicorp/azuread" {
-  version     = "2.18.0"
-  constraints = "~> 2.18.0"
+  version     = "2.19.0"
+  constraints = "~> 2.19.0"
   hashes = [
-    "h1:RZAo47MYMbFoKvv/w066V91D69Vhk8PYxvX3+wonxU4=",
-    "h1:W/+YWzbanwX49ipT6caI8bL9UGsXL3xVLiRI7arrG+Q=",
-    "h1:WWTQUKdcK0gov7V3vPlFVvw1hg+PegB1CrpmBfV5vrw=",
-    "h1:cpppwljjeyqTnwNlQGHK+o1Jb5Tf4UAnJiInNkN6P38=",
-    "h1:dttFiYRyq0vpRtuysPO/QgSxLN+zFoN9IkjxNc9IwLQ=",
-    "h1:efilflkWBsW5sXX1KBQA32VfHmvjNT3+bRWjUH4BMXY=",
-    "h1:fLj7pRXGIpJKHn/sfIzHGjueKmJXTUcYWfoLyJfWBJ8=",
-    "h1:foAcWi0pr+wWU35Lz10bO71583+iEwzbTqVq4xsWKyY=",
-    "h1:pknNYVBcXr/iqGrhJI+8OPRjibnoonPfaM/sZ8LyPxo=",
-    "h1:sunEMTYXDVSPoghsm8uDKcBBkIO0mylMQoHQ4NyM5BI=",
-    "h1:yb8ARKrydo3SETtLiO9axLnS+n5JPaE/EpODcezzjSc=",
-    "zh:04b2b5e09dedd45316cd47d21d2ed7e3cd7a4e5f3c8b6e8fba0a10e7eb2a1ca9",
-    "zh:232440381b60d918e0da0ea8e8a2e8a78a4fe1ae785b3f829f2f965464ab79a2",
-    "zh:688111a9cb8d9ffec2ccabacb27456d275bf1d404dd5f85e681715abbdd64654",
-    "zh:7f37b7be7859170f077c58e74be42b5571e364c52aac0a2df3a6a14fbe48d3c5",
-    "zh:a385743bfae40f6a01bf6662a3c7a71035113c33965e0dbf421997a015734d08",
-    "zh:a97b7430647d7b449441e5515f11a4d123f6d6a383a8fbca5c0a4086be407358",
-    "zh:be6d40d1431e8e71a96cce2099a259ef5a8dfb0e849817875d9ee4bb8cf59d40",
-    "zh:db3b541d90881d620111fdae0efe90d1e0972fc80a2b4346d4af8d96e1fc1195",
-    "zh:e6d9e0481f2bdc16ee69aa00001d9713282daccfbc621e0143c53d9f6dbdb537",
-    "zh:ee5b724ca78301057059eff18062fa88d8b24ac7b39f52eb17b8609634427ce0",
-    "zh:fdb169f89551f97f6b0bf90d61d5fda166a25cce6867ec16f63c3bfb4d90a0a2",
+    "h1:+0Y5/ywbpbzcDi55kz6ZafkosV9yZxJaOpbFQ7eymgY=",
+    "h1:36KbZ02rsbb5jyUK/jMZM/DqbSgITftj4SYKGym/cfU=",
+    "h1:508M/z1xl19YseOk4ZyJ19dHGc7K1OqPjHgGBszHmGI=",
+    "h1:9d9PgpVbUsspK4TZePzufiRj50uzbYD0BXZwrOTfTt0=",
+    "h1:B8ARo8A2zGwih/QaKjWLsVXkoUdNDf4GNBmoBhqV3E4=",
+    "h1:ctPAo+w4m9cydE/kSq0WJNOhfoQn/xTDUlOcDXBl41g=",
+    "h1:ekCx136WWCcBf7h9ZxJP7rZ8ShU4nhJsyeVx68s/q4M=",
+    "h1:n3wsa03IMNnwDltZb3Q8QFnyG6IhSHS7WEWE6l7H6so=",
+    "h1:rx+i6+Uj4ivsm69+vAeD+ZnmTW+urlmtlImaxUX4+SE=",
+    "h1:spqEMw4CJLN21QKiUcoxm3XGMoNzY9YMa52Th44mXjc=",
+    "h1:tgE12ZOi7CUrS2g6znJiG2AE9w3kKBucKqqCDbZ4u44=",
   ]
 }
 
