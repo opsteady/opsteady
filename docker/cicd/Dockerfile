@@ -61,7 +61,7 @@ RUN install-packages libc-dev gcc
 RUN install-packages yamllint
 
 # renovate: datasource=github-tags depName=rancher/k3d versioning=semver
-ENV K3D_VERSION=v5.3.0
+ENV K3D_VERSION=v5.4.1
 RUN curl -s https://raw.githubusercontent.com/rancher/k3d/main/install.sh | TAG=${K3D_VERSION} bash
 
 USER 1000
