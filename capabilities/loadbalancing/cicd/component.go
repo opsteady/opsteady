@@ -12,6 +12,6 @@ func (c *CapabilitiesLoadbalacing) Initialize(defaultComponent component.Default
 	c.DefaultComponent = defaultComponent
 	c.DefaultComponent.UseHelm(component.NewHelmChart(
 		"ingress-nginx",
-		"4.0.17", // renovate: datasource=helm registryUrl=https://kubernetes.github.io/ingress-nginx depName=ingress-nginx versioning=semver
+		"4.0.19", // renovate: datasource=helm registryUrl=https://kubernetes.github.io/ingress-nginx depName=ingress-nginx versioning=semver
 	))
 }
