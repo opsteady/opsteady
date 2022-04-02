@@ -27,7 +27,7 @@ ENV KUBERNETES_VERSION=v1.23.5
 RUN getfile https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl
 
 # renovate: datasource=github-tags depName=aws/aws-cli versioning=semver
-ENV AWSCLI_VERSION=2.4.18
+ENV AWSCLI_VERSION=2.5.2
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWSCLI_VERSION}.zip" -o "awscliv2.zip" && \
     unzip awscliv2.zip && \
     ./aws/install
