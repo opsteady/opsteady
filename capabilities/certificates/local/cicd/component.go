@@ -15,6 +15,6 @@ func (c *CapabilitiesCertificatesLocal) Initialize(defaultComponent component.De
 	c.DefaultComponent.SetVaultInfoToComponentConfig()
 	c.DefaultComponent.UseHelm(component.NewHelmChart(
 		"cert-manager",
-		"v1.7.2", // renovate: datasource=helm registryUrl=https://charts.jetstack.io depName=cert-manager versioning=semver
+		"v1.8.0", // renovate: datasource=helm registryUrl=https://charts.jetstack.io depName=cert-manager versioning=semver
 	))
 }
