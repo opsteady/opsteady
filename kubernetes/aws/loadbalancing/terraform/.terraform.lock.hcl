@@ -38,10 +38,20 @@ provider "registry.terraform.io/hashicorp/azurerm" {
 }
 
 provider "registry.terraform.io/hashicorp/tls" {
-  version     = "3.1.0"
-  constraints = "~> 3.1.0"
+  version     = "3.3.0"
+  constraints = "~> 3.3.0"
   hashes = [
-    "h1:fUJX8Zxx38e2kBln+zWr1Tl41X+OuiE++REjrEyiOM4=",
+    "h1:+YGwRIbabEEdNZIzbqrk2WcC4W1eEPzPqM7//WGUjtA=",
+    "h1:A4xOtHhD4jCmn4nO1xCTk2Nl5IP5JpjicjF+Fuu2ZFQ=",
+    "h1:ByAq++Ux1O6SyNKjKhlnFyDNgLxbI6xv/CqXQA2dxS0=",
+    "h1:CBIsQFw+5sO5QUQT/8jxsdEVtaZxp/IL/rh6AbKDMg0=",
+    "h1:DV0GZqXSyh6p/JFn6qJGHrXYn6EcNPfoX5/3aU+aWZw=",
+    "h1:G0907SatDY9G6HGQKTLxEcIeNlkeGbBu3KnFYzVZhuA=",
+    "h1:Uf8HqbZjYn8pKB0og2H9A8IXIKtHT+o8BE3+fjtO1ZQ=",
+    "h1:b5zpgs4ypueqYZrtNzVz/KWPNjg0STcrG+9X2KD+3hk=",
+    "h1:kM+OxPN5XzxJDQCxo1Yn51fhOr3I1gkt8KpkGxpZSNE=",
+    "h1:oitTcxYGyDvHuNsjPJUi00a+AT0k+TWgNsGUSM2CV/E=",
+    "h1:xx/b39Q9FVZSlDc97rlDmQ9dNaaxFFyVzP9kV+47z28=",
   ]
 }
 
