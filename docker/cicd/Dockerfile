@@ -19,7 +19,7 @@ ENV VAULT_VERSION=v1.9.3
 RUN getfile https://releases.hashicorp.com/vault/${VAULT_VERSION:1}/vault_${VAULT_VERSION:1}_linux_amd64.zip
 
 # renovate: datasource=github-releases depName=helm/helm versioning=semver
-ENV HELM_VERSION=v3.8.1
+ENV HELM_VERSION=v3.8.2
 RUN getfile https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz
 
 # renovate: datasource=github-releases depName=kubernetes/kubernetes versioning=semver
