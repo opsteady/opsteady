@@ -3,10 +3,6 @@ module github.com/opsteady/opsteady
 go 1.16
 
 require (
-	github.com/Azure/azure-sdk-for-go/v63 v63.2.0
-	github.com/Azure/go-autorest/autorest/azure/auth v0.5.11
-	github.com/Azure/go-autorest/autorest/to v0.4.0 // indirect
-	github.com/Azure/go-autorest/autorest/validation v0.3.1 // indirect
 	github.com/Masterminds/goutils v1.1.1 // indirect
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/Masterminds/sprig v2.22.0+incompatible
@@ -33,7 +29,6 @@ require (
 	github.com/spf13/cobra v1.4.0
 	github.com/spf13/viper v1.11.0
 	github.com/stretchr/objx v0.2.0 // indirect
-	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2 // indirect
 	github.com/stretchr/testify v1.7.1
 	golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac // indirect
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
