@@ -34,7 +34,7 @@ jobs:
 
             # The 'true' is necessary because sometimes a 'file exists' error occurs for some unknown reason.
             # We just want to continue with the next chart.
-            ./charts-syncer -v9 -c $chart sync || true
+            ./charts-syncer --from-date $(date +%Y-%m-%d -d "60 day ago") -v9 -c $chart sync || true
 
           done
         env:

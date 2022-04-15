@@ -1,7 +1,7 @@
 source:
   repo:
     kind: HELM
-    url: https://charts.dexidp.io
+    url: https://grafana.github.io/helm-charts
 target:
   containerRegistry: opsteadyos.azurecr.io
   containerRepository: opsteadyos.azurecr.io
@@ -9,4 +9,4 @@ target:
     kind: OCI
     url: https://opsteadyos.azurecr.io/helm
 charts:
-  - dex
+  - grafana
