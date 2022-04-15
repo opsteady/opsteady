@@ -11,6 +11,6 @@ spec:
       name: letsencrypt-staging
     solvers:
       - dns01:
-        route53:
-          region: {{ .foundation_aws_region }}
-          hostedZoneID: {{ .foundation_aws_public_zone_id }}
+          route53:
+            region: {{ .foundation_aws_region }}
+            hostedZoneID: {{ .foundation_aws_public_zone_id }}
