@@ -40,10 +40,10 @@ func (k *Kubectl) Delete(manifestFolder string, dryRun bool) error {
 	command.AddArgs("delete")
 
 	if dryRun {
-		command.AddArgs("--ignore-not-found=true", "--dry-run=client", "-oyaml")
+		command.AddArgs("--dry-run=client", "-oyaml")
 	}
 
-	command.AddArgs("-f", ".")
+	command.AddArgs("--ignore-not-found=true", "-f", ".")
 
 	return command.Run()
 }
