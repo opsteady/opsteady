@@ -29,6 +29,6 @@ func (k *KubernetesAWSStorageEFS) Configure(defaultComponent component.DefaultCo
 	k.SetVaultInfoToComponentConfig()
 	k.UseHelm(component.NewHelmChart(
 		"aws-efs-csi-driver",
-		"2.2.3", // renovate: datasource=helm registryUrl=https://kubernetes-sigs.github.io/aws-efs-csi-driver depName=aws-efs-csi-driver versioning=semver
+		"2.2.5", // renovate: datasource=helm registryUrl=https://kubernetes-sigs.github.io/aws-efs-csi-driver depName=aws-efs-csi-driver versioning=semver
 	))
 }

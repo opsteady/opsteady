@@ -30,6 +30,6 @@ func (c *CapabilitiesCertificatesAWS) Configure(defaultComponent component.Defau
 	c.AddRequiresInformationFrom(foundationAWS.Instance.GetMetadata(), kubernetesAWSCluster.Instance.GetMetadata())
 	c.UseHelm(component.NewHelmChart(
 		"cert-manager",
-		"v1.7.1", // renovate: datasource=helm registryUrl=https://charts.jetstack.io depName=cert-manager versioning=semver
+		"v1.8.0", // renovate: datasource=helm registryUrl=https://charts.jetstack.io depName=cert-manager versioning=semver
 	))
 }

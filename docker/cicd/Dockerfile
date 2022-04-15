@@ -11,29 +11,29 @@ RUN install-packages golang-1.17
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # renovate: datasource=github-releases depName=hashicorp/terraform versioning=semver
-ENV TERRAFORM_VERSION=v1.1.5
+ENV TERRAFORM_VERSION=v1.1.8
 RUN getfile https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION:1}/terraform_${TERRAFORM_VERSION:1}_linux_amd64.zip
 
 # renovate: datasource=github-releases depName=hashicorp/vault versioning=semver
-ENV VAULT_VERSION=v1.9.3
+ENV VAULT_VERSION=v1.10.0
 RUN getfile https://releases.hashicorp.com/vault/${VAULT_VERSION:1}/vault_${VAULT_VERSION:1}_linux_amd64.zip
 
 # renovate: datasource=github-releases depName=helm/helm versioning=semver
-ENV HELM_VERSION=v3.8.0
+ENV HELM_VERSION=v3.8.2
 RUN getfile https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz
 
 # renovate: datasource=github-releases depName=kubernetes/kubernetes versioning=semver
-ENV KUBERNETES_VERSION=v1.23.3
+ENV KUBERNETES_VERSION=v1.23.5
 RUN getfile https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl
 
 # renovate: datasource=github-tags depName=aws/aws-cli versioning=semver
-ENV AWSCLI_VERSION=2.4.18
+ENV AWSCLI_VERSION=2.5.5
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWSCLI_VERSION}.zip" -o "awscliv2.zip" && \
     unzip awscliv2.zip && \
     ./aws/install
 
 # renovate: datasource=pypi depName=azure-cli versioning=semver
-ENV AZURECLI_VERSION=2.33.1
+ENV AZURECLI_VERSION=2.35.0
 # https://docs.microsoft.com/en-us/cli/azure/release-notes-azure-cli?tabs=azure-cli
 # Ubuntu 21.04 has months old version therefore using pip to install it
 RUN DEBIAN_FRONTEND=noninteractive install-packages python3-pip
@@ -50,18 +50,18 @@ RUN update-ca-certificates
 RUN install-packages docker-ce-cli
 
 # renovate: datasource=github-releases depName=hadolint/hadolint versioning=semver
-ENV HADOLINT_VERSION=v2.8.0
+ENV HADOLINT_VERSION=v2.10.0
 RUN getfile -n hadolint https://github.com/hadolint/hadolint/releases/download/${HADOLINT_VERSION}/hadolint-Linux-x86_64
 
 # renovate: datasource=github-releases depName=golangci/golangci-lint versioning=semver
-ENV GOLINT_VERSION=1.44.0
+ENV GOLINT_VERSION=v1.45.2
 RUN getfile https://github.com/golangci/golangci-lint/releases/download/v${GOLINT_VERSION}/golangci-lint-${GOLINT_VERSION}-linux-amd64.tar.gz
 RUN install-packages libc-dev gcc
 
 RUN install-packages yamllint
 
 # renovate: datasource=github-tags depName=rancher/k3d versioning=semver
-ENV K3D_VERSION=v5.3.0
+ENV K3D_VERSION=v5.4.1
 RUN curl -s https://raw.githubusercontent.com/rancher/k3d/main/install.sh | TAG=${K3D_VERSION} bash
 
 USER 1000

@@ -13,7 +13,7 @@ jobs:
       id-token: write
       contents: read
     container:
-      image: opsteadyos.azurecr.io/cicd:1.2.1 # versioning=semver datasource=docker
+      image: opsteadyos.azurecr.io/cicd:1.5.1 # versioning=semver datasource=docker
       options: --user root
       credentials:
         username: ${{ secrets.acr_username }}
@@ -31,7 +31,7 @@ jobs:
           echo "::add-mask::$VAULT_TOKEN"
 
       - name: Check out repository code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Configure Opsteady CLI
         run: |
@@ -44,7 +44,7 @@ jobs:
 
       # Added to show info in the PR, don't need to check the logs
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v2
+        uses: golangci/golangci-lint-action@v3
         with:
           version: latest
           args: --issues-exit-code=0 --timeout 10m

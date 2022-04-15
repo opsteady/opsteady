@@ -29,6 +29,6 @@ func (c *CapabilitiesDNSAzure) Configure(defaultComponent component.DefaultCompo
 	c.SetVaultInfoToComponentConfig()
 	c.UseHelm(component.NewHelmChart(
 		"external-dns",
-		"1.7.1", // renovate: datasource=helm registryUrl=https://kubernetes-sigs.github.io/external-dns depName=external-dns versioning=semver
+		"1.8.0", // renovate: datasource=helm registryUrl=https://kubernetes-sigs.github.io/external-dns depName=external-dns versioning=semver
 	))
 }

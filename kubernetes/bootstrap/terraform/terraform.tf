@@ -1,17 +1,17 @@
 terraform {
-  required_version = "=1.1.5"
+  required_version = "=1.1.8"
 
   required_providers {
     azuread = {
-      version = "~> 2.18.0"
+      version = "~> 2.20.0"
     }
 
     kubernetes = {
-      version = "~> 2.8.0"
+      version = "~> 2.10.0"
     }
 
     vault = {
-      version = "~> 3.2.0"
+      version = "~> 3.4.0"
     }
 
     time = {

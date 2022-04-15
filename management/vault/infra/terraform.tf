@@ -1,25 +1,25 @@
 terraform {
-  required_version = "=1.1.5"
+  required_version = "=1.1.8"
 
   required_providers {
     azurerm = {
-      version = "~> 2.96.0"
+      version = "~> 3.2.0"
     }
 
     azuread = {
-      version = "~> 2.18.0"
+      version = "~> 2.20.0"
     }
 
     kubernetes = {
-      version = "~> 2.8.0"
+      version = "~> 2.10.0"
     }
 
     helm = {
-      version = "~> 2.4.0"
+      version = "~> 2.5.0"
     }
 
     tls = {
-      version = "~> 3.1.0"
+      version = "~> 3.3.0"
     }
   }
 

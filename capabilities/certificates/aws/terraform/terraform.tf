@@ -1,17 +1,17 @@
 terraform {
-  required_version = "=1.1.5"
+  required_version = "=1.1.8"
 
   required_providers {
     aws = {
-      version = "~> 4.0.0"
+      version = "~> 4.10.0"
     }
 
     azurerm = {
-      version = "~> 2.96.0"
+      version = "~> 3.2.0"
     }
 
     vault = {
-      version = "~> 3.2.0"
+      version = "~> 3.4.0"
     }
   }
 

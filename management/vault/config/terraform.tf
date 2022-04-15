@@ -1,22 +1,22 @@
 terraform {
-  required_version = "=1.1.5"
+  required_version = "=1.1.8"
 
   required_providers {
     azurerm = {
-      version = "~> 2.96.0"
-    }
-
-    vault = {
       version = "~> 3.2.0"
     }
 
+    vault = {
+      version = "~> 3.4.0"
+    }
+
     azuread = {
-      version = "~> 2.18.0"
+      version = "~> 2.20.0"
     }
 
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.0.0"
+      version = "~> 4.10.0"
     }
 
     random = {
