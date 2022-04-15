@@ -55,7 +55,7 @@ RUN getfile -n hadolint https://github.com/hadolint/hadolint/releases/download/$
 
 # renovate: datasource=github-releases depName=golangci/golangci-lint versioning=semver
 ENV GOLINT_VERSION=v1.45.2
-RUN getfile https://github.com/golangci/golangci-lint/releases/download/v${GOLINT_VERSION}/golangci-lint-${GOLINT_VERSION}-linux-amd64.tar.gz
+RUN getfile https://github.com/golangci/golangci-lint/releases/download/${GOLINT_VERSION}/golangci-lint-${GOLINT_VERSION:1}-linux-amd64.tar.gz
 RUN install-packages libc-dev gcc
 
 RUN install-packages yamllint
