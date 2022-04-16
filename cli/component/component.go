@@ -58,7 +58,7 @@ type DefaultComponent struct {
 	PlatformVersion       string           // Version of the platform (used as a folder in Vault)
 	HelmCharts            []*HelmChart     // We expect all charts to be from management ACR
 	DockerBuildInfo       *DockerBuildInfo // We expect all docker images to be saved to ACR
-	// Names of the folders a component uses which will determin what will be executed, order can be adjusted
+	// Names of the folders a component uses which will determine what will be executed, order can be adjusted
 	Terraform     string
 	CRD           string
 	KubeSetup     string

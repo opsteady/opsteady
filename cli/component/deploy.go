@@ -71,7 +71,10 @@ func (c *DefaultComponent) DeployHelm(componentConfig map[string]interface{}) {
 	helm := tasks.NewHelm(c.Logger)
 
 	for _, chart := range c.HelmCharts {
-		if err := template.Render(c.HelmFolder(), c.HelmTmpFolder(chart.Release), componentConfig); err != nil {
+		// Construct the Helm base folder for this release
+		helmFolder := fmt.Sprintf("%s/%s", c.HelmFolder(), chart.Release)
+
+		if err := template.Render(helmFolder, c.HelmTmpFolder(chart.Release), componentConfig); err != nil {
 			c.Logger.Fatal().Err(err).Str("chart", chart.Release).Msg("could not template Helm values files")
 		}
 

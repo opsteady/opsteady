@@ -1,7 +1,8 @@
+---
 source:
   repo:
     kind: HELM
-    url: https://kubernetes.github.io/ingress-nginx
+    url: https://grafana.github.io/helm-charts
 target:
   containerRegistry: opsteadyos.azurecr.io
   containerRepository: opsteadyos.azurecr.io
@@ -9,4 +10,6 @@ target:
     kind: OCI
     url: https://opsteadyos.azurecr.io/helm
 charts:
-  - ingress-nginx
+  - loki
+  - promtail
+  - grafana

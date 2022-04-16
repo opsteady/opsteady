@@ -1,0 +1,9 @@
+---
+image:
+  repository: grafana/loki
+  pullSecrets:
+    - management-acr
+
+persistence:
+  enabled: true
+  storageClassName: ebs

@@ -12,7 +12,7 @@ on:
 jobs:
   helm-sync:
     env:
-      CHARTS_SYNCER_VERSION: 0.9.1
+      CHARTS_SYNCER_VERSION: 0.15.0
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -34,7 +34,7 @@ jobs:
 
             # The 'true' is necessary because sometimes a 'file exists' error occurs for some unknown reason.
             # We just want to continue with the next chart.
-            ./charts-syncer -v9 -c $chart sync || true
+            ./charts-syncer --from-date $(date +%Y-%m-%d -d "30 day ago") -v9 -c $chart sync || true
 
           done
         env:

@@ -1,3 +1,4 @@
+---
 relay: skopeo
 
 skopeo:
@@ -41,6 +42,10 @@ tasks:
         tags: ["v1.3.4"]
       - from: hashicorp/http-echo
         tags: ["0.2.3"]
+      - from: grafana/loki
+        tags: ["2.5.0"]
+      - from: grafana/promtail
+        tags: ["2.5.0"]
 
   - name: mcr.microsoft.com
     verbose: true
