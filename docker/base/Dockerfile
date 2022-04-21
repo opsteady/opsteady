@@ -1,4 +1,4 @@
-FROM ubuntu:21.10
+FROM ubuntu:22.04
 
 # Create a platform user
 RUN useradd -s /bin/bash -d /home/platform -m platform
