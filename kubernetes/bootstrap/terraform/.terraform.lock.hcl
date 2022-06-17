@@ -58,9 +58,19 @@ provider "registry.terraform.io/hashicorp/time" {
 }
 
 provider "registry.terraform.io/hashicorp/vault" {
-  version     = "3.4.1"
-  constraints = "~> 3.4.0"
+  version     = "3.7.0"
+  constraints = "~> 3.7.0"
   hashes = [
-    "h1:dXJBo807u69+Uib2hjoBQ68G2+nGXcNZeq/THVyQQVc=",
+    "h1:1iaCuOSuivmE5uQLDi5uAh8IWWCBhx6um/wrR8PbwM8=",
+    "h1:A0gfpK/2twePnZsXRO0bwZUu66FIXZfI5jRvDufbTQE=",
+    "h1:BTzld8ynMono7s5SPlJ5m7lSShcVDsGk99Z4rg588Fc=",
+    "h1:EZMX/TxwqGOOletzDSyXYzjVdHZStA1spCTvhSkevZU=",
+    "h1:NGDad23y/OaHFvAv1azAB16Rbc07YaQ15wfvSvdTlSA=",
+    "h1:UsdBM6FUwdSyH4gnFsPnDEmmZd136bZh+s0oV9SF87c=",
+    "h1:dJ75Fouc/4lWGII4LGV2YZUMYiYahGULpjDbC6cgSTU=",
+    "h1:gAJqiShSzKBi77avwgXYetL8mJwU+k6qaZAI+IDrf6c=",
+    "h1:idawLPCbZgHIb+NRLJs4YdIcQgACqYiT5VwQfChkn+w=",
+    "h1:tpJRzoeSYrvlgwnHpC1xZ+oSZEcx19sgu7rpXAFqGzk=",
+    "h1:yzVlnIzvioNnoVi7rDiOl9oXni4SKbEAcPiovJG6kKM=",
   ]
 }
