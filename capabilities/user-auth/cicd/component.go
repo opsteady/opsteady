@@ -22,6 +22,6 @@ func (c *UserAuth) Initialize(defaultComponent component.DefaultComponent) {
 	c.DefaultComponent.AddAzureADCredentialsToComponentConfig()
 	c.DefaultComponent.UseHelm(component.NewHelmChart(
 		"dex",
-		"0.8.2", // renovate: datasource=helm registryUrl=https://charts.dexidp.io depName=dex versioning=semver
+		"0.12.1", // renovate: datasource=helm registryUrl=https://charts.dexidp.io depName=dex versioning=semver
 	))
 }
