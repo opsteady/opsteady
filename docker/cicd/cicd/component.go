@@ -23,7 +23,7 @@ func (d *DockerCicd) Initialize(defaultComponent component.DefaultComponent) {
 		),
 		"VAULT_CA_STORAGE_ACCOUNT": d.GlobalConfig.VaultCaStorageAccountName,
 	}
-	d.SetDockerBuildInfo("cicd", "1.7.1", buildArgs)
+	d.SetDockerBuildInfo("cicd", "1.8.1", buildArgs)
 }
 
 func (d *DockerCicd) Deploy() {
