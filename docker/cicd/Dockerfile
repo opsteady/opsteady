@@ -27,7 +27,7 @@ ENV KUBERNETES_VERSION=v1.23.5
 RUN getfile https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl
 
 # renovate: datasource=github-tags depName=aws/aws-cli versioning=semver
-ENV AWSCLI_VERSION=2.5.5
+ENV AWSCLI_VERSION=2.5.6
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWSCLI_VERSION}.zip" -o "awscliv2.zip" && \
     unzip awscliv2.zip && \
     ./aws/install
@@ -55,7 +55,7 @@ RUN getfile -n hadolint https://github.com/hadolint/hadolint/releases/download/$
 
 # renovate: datasource=github-releases depName=golangci/golangci-lint versioning=semver
 ENV GOLINT_VERSION=v1.45.2
-RUN getfile https://github.com/golangci/golangci-lint/releases/download/v${GOLINT_VERSION}/golangci-lint-${GOLINT_VERSION}-linux-amd64.tar.gz
+RUN getfile https://github.com/golangci/golangci-lint/releases/download/${GOLINT_VERSION}/golangci-lint-${GOLINT_VERSION:1}-linux-amd64.tar.gz
 RUN install-packages libc-dev gcc
 
 RUN install-packages yamllint

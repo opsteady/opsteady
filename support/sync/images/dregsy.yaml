@@ -20,13 +20,13 @@ tasks:
       - from: tigera/operator
         tags: ["v1.20.3", "v1.23.3"]
       - from: jetstack/cert-manager-controller
-        tags: ["v1.6.0", "v1.6.1", "v1.7.1"]
+        tags: ["v1.6.0", "v1.6.1", "v1.7.1", "v1.8.0"]
       - from: jetstack/cert-manager-webhook
-        tags: ["v1.6.0", "v1.6.1", "v1.7.1"]
+        tags: ["v1.6.0", "v1.6.1", "v1.7.1", "v1.8.0"]
       - from: jetstack/cert-manager-cainjector
-        tags: ["v1.6.0", "v1.6.1", "v1.7.1"]
+        tags: ["v1.6.0", "v1.6.1", "v1.7.1", "v1.8.0"]
       - from: jetstack/cert-manager-ctl
-        tags: ["v1.6.0", "v1.6.1", "v1.7.1"]
+        tags: ["v1.6.0", "v1.6.1", "v1.7.1", "v1.8.0"]
 
   - name: docker.io
     verbose: true
@@ -69,17 +69,17 @@ tasks:
       - from: sig-storage/csi-snapshotter
         tags: ["v3.0.3"]
       - from: sig-storage/livenessprobe
-        tags: ["v2.2.0"]
+        tags: ["v2.2.0", "v2.4.0"]
       - from: sig-storage/csi-resizer
-        tags: ["v1.0.0"]
+        tags: ["v1.0.0", "v1.1.0"]
       - from: sig-storage/csi-node-driver-registrar
         tags: ["v2.1.0"]
       - from: provider-aws/aws-ebs-csi-driver
-        tags: ["v1.4.0", "v1.5.0"]
+        tags: ["v1.4.0", "v1.5.0", "v1.5.1"]
       - from: external-dns/external-dns
-        tags: ["v0.10.1", "v0.9.0"]
+        tags: ["v0.10.1", "v0.9.0", "v0.10.2"]
       - from: ingress-nginx/controller
-        tags: ["v1.0.5", "v1.1.0", "v1.1.1"]
+        tags: ["v1.0.5", "v1.1.0", "v1.1.1", "v1.1.3"]
       - from: ingress-nginx/kube-webhook-certgen
         tags: ["v1.1.1"]
       - from: defaultbackend-amd64

@@ -5,4 +5,4 @@ metadata:
   namespace: platform
 type: Opaque
 data:
-  azure.json: { { .azure_dns_azure_dns_config } }
+  azure.json: {{ .azure_dns_azure_dns_config }}

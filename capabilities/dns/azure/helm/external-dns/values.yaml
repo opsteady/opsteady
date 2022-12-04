@@ -24,7 +24,7 @@ extraArgs:
   - --azure-resource-group={{ .azure_foundation_resource_group }}
 
 domainFilters:
-  - { { .azure_foundation_public_zone_name } }
+  - {{ .azure_foundation_public_zone_name }}
 
 extraVolumes:
   - name: azure-dns-config

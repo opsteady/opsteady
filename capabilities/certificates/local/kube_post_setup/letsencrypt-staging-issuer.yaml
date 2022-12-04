@@ -5,7 +5,7 @@ metadata:
   name: letsencrypt-staging
 spec:
   acme:
-    email: { { .azure_certificates_letsencrypt_email } }
+    email: {{ .azure_certificates_letsencrypt_email }}
     server: https://acme-staging-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       # Secret resource that will be used to store the account's private key.
@@ -13,12 +13,12 @@ spec:
     solvers:
       - dns01:
           azureDNS:
-            clientID: { { .local_certificates_service_principal_id } }
+            clientID: {{ .local_certificates_service_principal_id }}
             clientSecretSecretRef:
               name: certificates-azure-dns-config
               key: clientSecret
-            tenantID: { { .local_certificates_tenant_id } }
-            subscriptionID: { { .local_foundation_subscription_id } }
-            resourceGroupName: { { .local_foundation_resource_group } }
-            hostedZoneName: { { .local_foundation_public_zone_name } }
+            tenantID: {{ .local_certificates_tenant_id }}
+            subscriptionID: {{ .local_foundation_subscription_id }}
+            resourceGroupName: {{ .local_foundation_resource_group }}
+            hostedZoneName: {{ .local_foundation_public_zone_name }}
             environment: AzurePublicCloud

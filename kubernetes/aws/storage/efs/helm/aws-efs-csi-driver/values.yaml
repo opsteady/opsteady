@@ -34,12 +34,12 @@ controller:
 
   serviceAccount:
     annotations:
-      eks.amazonaws.com/role-arn: { { .aws_storage_efs_iam_role_arn } }
+      eks.amazonaws.com/role-arn: {{ .aws_storage_efs_iam_role_arn }}
 
 node:
   serviceAccount:
     annotations:
-      eks.amazonaws.com/role-arn: { { .aws_storage_efs_iam_role_arn } }
+      eks.amazonaws.com/role-arn: {{ .aws_storage_efs_iam_role_arn }}
 
 storageClasses:
   - name: efs
@@ -47,7 +47,7 @@ storageClasses:
       storageclass.kubernetes.io/is-default-class: "true"
     parameters:
       provisioningMode: efs-ap
-      fileSystemId: { { .aws_storage_efs_filesystem_id } }
+      fileSystemId: {{ .aws_storage_efs_filesystem_id }}
       directoryPerms: "700"
       gidRangeStart: "1000"
       gidRangeEnd: "2000"

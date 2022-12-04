@@ -4,7 +4,7 @@ metadata:
   name: letsencrypt-staging
 spec:
   acme:
-    email: { { .aws_certificates_letsencrypt_email } }
+    email: {{ .aws_certificates_letsencrypt_email }}
     server: https://acme-staging-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       # Secret resource that will be used to store the account's private key.
@@ -12,5 +12,5 @@ spec:
     solvers:
       - dns01:
         route53:
-          region: { { .aws_foundation_region } }
-          hostedZoneID: { { .aws_foundation_public_zone_id } }
+          region: {{ .aws_foundation_region }}
+          hostedZoneID: {{ .aws_foundation_public_zone_id }}
