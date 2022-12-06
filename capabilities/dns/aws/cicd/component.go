@@ -14,6 +14,6 @@ func (c *CapabilitiesDNSAWS) Initialize(defaultComponent component.DefaultCompon
 	c.DefaultComponent.SetVaultInfoToComponentConfig()
 	c.DefaultComponent.UseHelm(component.NewHelmChart(
 		"external-dns",
-		"1.8.0", // renovate: datasource=helm registryUrl=https://kubernetes-sigs.github.io/external-dns depName=external-dns versioning=semver
+		"1.12.0", // renovate: datasource=helm registryUrl=https://kubernetes-sigs.github.io/external-dns depName=external-dns versioning=semver
 	))
 }
