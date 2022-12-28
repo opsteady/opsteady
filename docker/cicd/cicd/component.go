@@ -29,11 +29,11 @@ func (d *DockerCicd) Configure(defaultComponent component.DefaultComponent) {
 		"FROM_IMAGE": fmt.Sprintf("%s/%s:%s",
 			d.GlobalConfig.ManagementDockerRegistry,
 			"base",
-			"1.0.0", // renovate: datasource=docker registryUrl=opsteadyos.azurecr.io depName=opsteadyos.azurecr.io/base versioning=semver
+			"2.0.0", // renovate: datasource=docker registryUrl=opsteadyos.azurecr.io depName=opsteadyos.azurecr.io/base versioning=semver
 		),
 		"VAULT_CA_STORAGE_ACCOUNT": d.GlobalConfig.VaultCaStorageAccountName,
 	}
-	d.SetDockerBuildInfo("cicd", "1.7.1", buildArgs)
+	d.SetDockerBuildInfo("cicd", "2.0.0", buildArgs)
 }
 
 func (d *DockerCicd) Deploy() {
