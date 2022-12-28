@@ -1,4 +1,4 @@
-FROM ubuntu:21.10
+FROM ubuntu:22.10
 
 # Create a platform user
 RUN useradd -s /bin/bash -d /home/platform -m platform
@@ -15,8 +15,11 @@ RUN chmod +x /usr/local/bin/getfile
 RUN install-packages curl file unzip ca-certificates gnupg lsb-release software-properties-common
 
 # Add docker repo
-RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+RUN mkdir -p /etc/apt/keyrings
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+RUN echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 # Add the platform user to the docker group for access
 RUN groupadd docker && usermod -a -G docker platform
