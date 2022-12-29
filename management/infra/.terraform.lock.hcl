@@ -82,10 +82,20 @@ provider "registry.terraform.io/hashicorp/random" {
 }
 
 provider "registry.terraform.io/hashicorp/time" {
-  version     = "0.7.2"
-  constraints = "~> 0.7.2"
+  version     = "0.9.0"
+  constraints = "~> 0.9.0"
   hashes = [
-    "h1:YYLAfhMFP5nhV2iZPslqsLkZN+6sZo7gMJW7pLcLfM8=",
+    "h1:9mDxE348uWkifiupkikglLYJKKxmr6x35ZW/pcWLcBg=",
+    "h1:ahCGE0FoHJfYQcs1DAKNX9x/PQYzkelYZtSsWXRW7kg=",
+    "h1:eOp4Vicru9Y/PU8mzOaWi9b8fEVeONqOvcQkSFpQYa8=",
+    "h1:g3NTFs7Kqfy9iMkzEoOCfPV1ZQJFQVfd2V7j8ve4qQU=",
+    "h1:gCRlP4+OIam0jPrzfLGcdQIAeAXd//SnI1az2QGN/O4=",
+    "h1:j68wAkNOT3Y+6eZN4c4xUiFqOMX+gfEstKcFRlBJlGs=",
+    "h1:mdfn7SobwjbVPGYcyN03vllaAoU5WUaigsXkvALEdeY=",
+    "h1:q1gK4a/F9PaD1FWJgAsIFDk+VStGsHlAI+OKPyUKhg0=",
+    "h1:sq22NWxNBZaUKMmnkf1S997pdGoWuJYQOPdaP79fgeM=",
+    "h1:wG/nDhPITjQCBLXmsNMamXHgqj/9j+cpMo24ILe6l5k=",
+    "h1:woVF3r3vVP/xzXgG+1EZ+RK5UusIBJ+oK3TCJLlaKwA=",
   ]
 }
 
