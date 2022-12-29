@@ -9,9 +9,8 @@ require (
 	github.com/cenkalti/backoff/v3 v3.2.2 // indirect
 	github.com/coreos/go-oidc/v3 v3.1.0 // indirect
 	github.com/hashicorp/go-retryablehttp v0.7.0 // indirect
-	github.com/hashicorp/go-version v1.3.0 // indirect
 	github.com/hashicorp/hcl v1.0.1-vault-3 // indirect
-	github.com/hashicorp/vault-plugin-auth-jwt v0.12.1
+	github.com/hashicorp/vault-plugin-auth-jwt v0.14.0
 	github.com/hashicorp/vault/api v1.8.2
 	github.com/hashicorp/yamux v0.0.0-20210826001029-26ff87cf9493 // indirect
 	github.com/huandu/xstrings v1.3.2 // indirect
