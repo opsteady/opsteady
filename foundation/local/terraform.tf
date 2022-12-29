@@ -12,7 +12,7 @@ terraform {
     }
 
     azuread = {
-      version = "~> 2.20.0"
+      version = "~> 2.31.0"
     }
   }
 
