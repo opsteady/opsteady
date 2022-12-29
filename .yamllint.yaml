@@ -6,6 +6,8 @@ ignore: |
   .github/
   capabilities/loadbalancing/helm/ingress-nginx/values.yaml
   capabilities/user-auth/kube_post_setup/concierge_credential.yaml
+  capabilities/user-auth/kube_post_setup/concierge.yaml
+  capabilities/user-auth/kube_post_setup/letsencrypt-staging-ca-cm.yaml
   capabilities/user-auth/kube_post_setup/ingress.yaml
 
 # We don't want to add --- in every yaml

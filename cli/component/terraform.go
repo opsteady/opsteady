@@ -2,7 +2,7 @@ package component
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 )
 
 // PrepareTerraformBackend prepares the terraform to use remote storage
@@ -29,7 +29,7 @@ func (c *DefaultComponent) PrepareTerraformBackend() {
 	c.Logger.Info().Str("backend", blobKey).Msg("Using backend blob key")
 	tfBackendCreds = fmt.Sprintf("key = \"%s\"\n%s", blobKey, tfBackendCreds)
 
-	if err := ioutil.WriteFile(c.TerraformBackendConfigPath, []byte(tfBackendCreds), readWriteAll); err != nil {
+	if err := os.WriteFile(c.TerraformBackendConfigPath, []byte(tfBackendCreds), readWriteAll); err != nil {
 		c.Logger.Fatal().Err(err).Str("path", c.TerraformBackendConfigPath).Msg("could not write the backend config file")
 	}
 }

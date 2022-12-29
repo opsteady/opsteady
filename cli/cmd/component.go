@@ -78,7 +78,7 @@ func executeComponent(executeComponent func(c component.Component)) {
 		Docker:                     "docker",
 	}
 
-	logger.Debug().Msg("Run the the component")
+	logger.Debug().Msg("Run the component")
 	comp.Configure(defaultComponent)
 
 	defer comp.Clean()
