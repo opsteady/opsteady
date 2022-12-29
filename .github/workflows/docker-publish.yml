@@ -50,24 +50,24 @@ jobs:
 
       - name: Validate base docker
         run: |
-          go run main.go validate -c docker-base --cache
+          go run main.go validate -c base --cache
 
       - name: Build base docker
         run: |
-          go run main.go build -c docker-base --cache
+          go run main.go build -c base --cache
 
       - name: Publish base docker
         run: |
-          go run main.go publish -c docker-base --cache
+          go run main.go publish -c base --cache
 
       - name: Validate cicd docker
         run: |
-          go run main.go validate -c docker-cicd --cache
+          go run main.go validate -c cicd --cache
 
       - name: Build cicd docker
         run: |
-          go run main.go build -c docker-cicd --cache
+          go run main.go build -c cicd --cache
 
       - name: Publish cicd docker
         run: |
-          go run main.go publish -c docker-cicd --cache
+          go run main.go publish -c cicd --cache
