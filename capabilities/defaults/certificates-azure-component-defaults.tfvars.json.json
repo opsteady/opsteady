@@ -1,3 +1,3 @@
 {
-  "capabilities_certificates_azure_letsencrypt_email": "letsencrypt@opsteady.com"
+  "azure_certificates_letsencrypt_email": "letsencrypt@opsteady.com"
 }

@@ -1,5 +1,5 @@
 resource "aws_iam_role" "certificates" {
-  name = "eks-certificates-${var.foundation_aws_name}"
+  name = "eks-certificates-${var.aws_foundation_name}"
 
   assume_role_policy = <<EOF
 {
@@ -8,12 +8,12 @@ resource "aws_iam_role" "certificates" {
     {
       "Effect": "Allow",
       "Principal": {
-        "Federated": "${var.kubernetes_aws_cluster_openid_connect_provider_platform_arn}"
+        "Federated": "${var.aws_cluster_openid_connect_provider_platform_arn}"
       },
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "${replace(var.kubernetes_aws_cluster_openid_connect_provider_platform_url, "https://", "")}:sub": "system:serviceaccount:platform:cert-manager"
+          "${replace(var.aws_cluster_openid_connect_provider_platform_url, "https://", "")}:sub": "system:serviceaccount:platform:cert-manager"
         }
       }
     }
@@ -30,7 +30,7 @@ data "aws_iam_policy_document" "certificates_policy" {
     ]
 
     resources = [
-      "arn:aws:route53:::hostedzone/${var.foundation_aws_public_zone_id}",
+      "arn:aws:route53:::hostedzone/${var.aws_foundation_public_zone_id}",
     ]
   }
 

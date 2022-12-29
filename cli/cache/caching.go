@@ -9,7 +9,6 @@ package cache
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"os"
 	"sync"
 	"time"
@@ -152,7 +151,7 @@ func (c *CacheImpl) saveToFile() error {
 
 	c.logger.Trace().Msg("Save the JSON cache data to file")
 
-	if err := ioutil.WriteFile(c.filePath, data, readWrite); err != nil {
+	if err := os.WriteFile(c.filePath, data, readWrite); err != nil {
 		return errors.Wrap(err, "could not save JSON cache data into file")
 	}
 
@@ -170,7 +169,7 @@ func (c *CacheImpl) initializeFromFile() error {
 		return nil
 	}
 
-	content, err := ioutil.ReadFile(c.filePath)
+	content, err := os.ReadFile(c.filePath)
 
 	if err != nil {
 		return errors.Wrapf(err, "could not file %s", c.filePath)

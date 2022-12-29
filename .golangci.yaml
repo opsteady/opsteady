@@ -18,6 +18,12 @@ linters:
     - gofumpt # Not used
     - forcetypeassert # We are doing conversions which we don't want to check, Vault data to string for example
     - varnamelen # We are content with the short names
+    - ifshort # Deprecated
+    - deadcode # Deprecated
+    - structcheck # Deprecated
+    - varcheck # Deprecated
+    - nosnakecase # Deprecated
+    - exhaustruct # To many false negatives because of Cobra
 
 issues:
   # https://github.com/golangci/golangci-lint/issues/826

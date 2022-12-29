@@ -1,18 +1,33 @@
 package cicd
 
-import "github.com/opsteady/opsteady/cli/component"
+import (
+	"github.com/opsteady/opsteady/cli/component"
+	foundationAzure "github.com/opsteady/opsteady/foundation/azure/cicd"
+	kubernetesAzureCluster "github.com/opsteady/opsteady/kubernetes/azure/cluster/cicd"
+)
 
-// CapabilititesDNSAzure is an Azure implmentation for the external-dns controller
+// CapabilitiesDNSAzure is an Azure implementation for the external-dns controller
 type CapabilitiesDNSAzure struct {
 	component.DefaultComponent
 }
 
-// Initialize creates a new CapabilitiesDNSAzure component
-func (c *CapabilitiesDNSAzure) Initialize(defaultComponent component.DefaultComponent) {
+var Instance = &CapabilitiesDNSAzure{}
+
+func init() {
+	m := component.DefaultMetadata()
+	m.Name = "dns"
+	m.Group = component.CapabilitiesBasic
+	m.AddTarget(component.TargetAzure)
+	m.AddGroupDependency(component.KubernetesAddons)
+	Instance.Metadata = &m
+}
+
+// Configure configures CapabilitiesDNSAzure before running
+func (c *CapabilitiesDNSAzure) Configure(defaultComponent component.DefaultComponent) {
 	c.DefaultComponent = defaultComponent
-	c.DefaultComponent.RequiresComponents("foundation-azure", "kubernetes-azure-cluster")
-	c.DefaultComponent.SetVaultInfoToComponentConfig()
-	c.DefaultComponent.UseHelm(component.NewHelmChart(
+	c.AddRequiresInformationFrom(foundationAzure.Instance.GetMetadata(), kubernetesAzureCluster.Instance.GetMetadata())
+	c.SetVaultInfoToComponentConfig()
+	c.UseHelm(component.NewHelmChart(
 		"external-dns",
 		"1.8.0", // renovate: datasource=helm registryUrl=https://kubernetes-sigs.github.io/external-dns depName=external-dns versioning=semver
 	))

@@ -2,17 +2,17 @@ image:
   repository: 602401143452.dkr.ecr.eu-west-1.amazonaws.com/amazon/aws-load-balancer-controller
   # TODO: update to Opsteady ACR (https://github.com/opsteady/opsteady/issues/135)
 
-clusterName: {{ .kubernetes_aws_cluster_name }}
+clusterName: {{ .aws_cluster_name }}
 
-vpcId: {{ .foundation_aws_vpc_id }}
+vpcId: {{ .aws_foundation_vpc_id }}
 
-region: {{ .foundation_aws_region }}
+region: {{ .aws_foundation_region }}
 
 serviceAccount:
   create: true
   name: aws-load-balancer-controller
   annotations:
-    eks.amazonaws.com/role-arn: {{ .kubernetes_aws_loadbalancing_iam_role_arn }}
+    eks.amazonaws.com/role-arn: {{ .aws_loadbalancing_iam_role_arn }}
 
 podDisruptionBudget:
   maxUnavailable: 1

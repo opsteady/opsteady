@@ -18,11 +18,21 @@ type KubernetesLocal struct {
 	k3d *tasks.K3d
 }
 
-// Initialize creates a new KubernetesLocal struct
-func (k *KubernetesLocal) Initialize(defaultComponent component.DefaultComponent) {
+var Instance = &KubernetesLocal{}
+
+func init() {
+	m := component.DefaultMetadata()
+	m.Name = "cluster"
+	m.Group = component.Kubernetes
+	m.AddTarget(component.TargetLocal)
+	m.AddGroupDependency(component.Foundation)
+	Instance.Metadata = &m
+}
+
+// Configure configures KubernetesLocal before running
+func (k *KubernetesLocal) Configure(defaultComponent component.DefaultComponent) {
 	k.DefaultComponent = defaultComponent
-	k.DefaultComponent.RequiresComponents("foundation-azure")
-	k.DefaultComponent.SetVaultInfoToComponentConfig()
+	k.SetVaultInfoToComponentConfig()
 	k.k3d = tasks.NewK3d(k.ComponentFolder, k.Logger)
 }
 

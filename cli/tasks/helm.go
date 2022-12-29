@@ -39,7 +39,7 @@ func (h *Helm) Upgrade(valuesFolder, url, name, namespace, version string, dryRu
 		"--values",
 		fmt.Sprintf("%s/values.yaml", valuesFolder),
 	)
-	command.AddEnv("HELM_EXPERIMENTAL_OCI", "1")
+	command.AddTarget("HELM_EXPERIMENTAL_OCI", "1")
 
 	return command.Run()
 }
@@ -84,7 +84,7 @@ func (h *Helm) Save(path, url string) error {
 	h.logger.Info().Msg("Package the helm chart")
 
 	command := NewCommand("helm", path)
-	command.AddEnv("HELM_EXPERIMENTAL_OCI", "1")
+	command.AddTarget("HELM_EXPERIMENTAL_OCI", "1")
 	command.AddArgs(
 		"chart",
 		"save",
@@ -100,7 +100,7 @@ func (h *Helm) Push(path, url string) error {
 	h.logger.Info().Msg("Push the helm chart")
 
 	command := NewCommand("helm", path)
-	command.AddEnv("HELM_EXPERIMENTAL_OCI", "1")
+	command.AddTarget("HELM_EXPERIMENTAL_OCI", "1")
 	command.AddArgs(
 		"chart",
 		"push",
@@ -124,7 +124,7 @@ func (h *Helm) LoginToHelmRegistry(user, pass, registry, tmpFolder string) error
 		user,
 		"--password",
 		pass)
-	command.AddEnv("HELM_EXPERIMENTAL_OCI", "1")
+	command.AddTarget("HELM_EXPERIMENTAL_OCI", "1")
 
 	return command.Run()
 }

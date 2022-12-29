@@ -100,7 +100,7 @@ func (t *Terraform) Init() error {
 		command.AddArgs(fmt.Sprintf("-backend-config=%s", t.backendConfigPath))
 	}
 
-	command.AddEnv("TF_PLUGIN_CACHE_DIR", t.cachePath)
+	command.AddTarget("TF_PLUGIN_CACHE_DIR", t.cachePath)
 
 	return command.Run()
 }

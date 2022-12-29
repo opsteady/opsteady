@@ -1,5 +1,5 @@
 resource "azurerm_key_vault_key" "platform" {
-  name         = "disk-enc-${var.foundation_azure_name}"
+  name         = "disk-enc-${var.azure_foundation_name}"
   key_vault_id = var.foundation_azure_key_vault_id
   key_type     = "RSA"
   key_size     = 2048
@@ -11,7 +11,7 @@ resource "azurerm_key_vault_key" "platform" {
 }
 
 resource "azurerm_disk_encryption_set" "platform" {
-  name                = var.foundation_azure_name
+  name                = var.azure_foundation_name
   resource_group_name = azurerm_resource_group.kubernetes.name
   location            = azurerm_resource_group.kubernetes.location
   key_vault_key_id    = azurerm_key_vault_key.platform.id

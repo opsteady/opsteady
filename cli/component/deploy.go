@@ -46,7 +46,7 @@ func (c *DefaultComponent) DeployTerraform(componentConfig map[string]interface{
 	backendStorageName := componentConfig["management_bootstrap_terraform_state_account_name"].(string)
 	terraform := tasks.NewTerraform(c.TerraformFolder(), c.TerraformBackendConfigPath, backendStorageName, c.GlobalConfig.CachePath, c.Logger)
 
-	varsPath := fmt.Sprintf("%s/%s.tfvars.json", c.GlobalConfig.TmpFolder, c.ComponentName)
+	varsPath := fmt.Sprintf("%s/%s.tfvars.json", c.GlobalConfig.TmpFolder, c.Metadata.Name)
 	c.WriteConfigToJSON(varsPath)
 
 	if c.DryRun {

@@ -1,18 +1,18 @@
-variable "foundation_local_name" {
+variable "local_foundation_name" {
   description = "Name to be used for resources or as a suffix, mostly plt1"
   type        = string
 }
 
-variable "foundation_local_public_name" {
+variable "local_foundation_public_name" {
   description = "The name used as the sub domain"
   type        = string
 }
 
-variable "foundation_local_subscription_id" {
+variable "local_foundation_subscription_id" {
   type = string
 }
 
-variable "foundation_local_location" {
+variable "local_foundation_location" {
   type = string
 }
 
@@ -45,14 +45,10 @@ variable "vault_token" {
   type = string
 }
 
-variable "platform_version" {
+variable "platform_terraform_output_path" {
   type = string
 }
 
-variable "platform_environment_name" {
-  type = string
-}
-
-variable "platform_component_name" {
+variable "platform_vault_vars_name" {
   type = string
 }

@@ -1,5 +1,5 @@
 resource "aws_iam_role" "aws_load_balancer_controller" {
-  name = "aws-load-balancer-controller-${var.foundation_aws_name}"
+  name = "aws-load-balancer-controller-${var.aws_foundation_name}"
 
   assume_role_policy = <<EOF
 {
@@ -8,12 +8,12 @@ resource "aws_iam_role" "aws_load_balancer_controller" {
     {
       "Effect": "Allow",
       "Principal": {
-        "Federated": "${var.kubernetes_aws_cluster_openid_connect_provider_platform_arn}"
+        "Federated": "${var.aws_cluster_openid_connect_provider_platform_arn}"
       },
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "${replace(var.kubernetes_aws_cluster_openid_connect_provider_platform_url, "https://", "")}:sub": "system:serviceaccount:platform:aws-load-balancer-controller"
+          "${replace(var.aws_cluster_openid_connect_provider_platform_url, "https://", "")}:sub": "system:serviceaccount:platform:aws-load-balancer-controller"
         }
       }
     }
@@ -23,7 +23,7 @@ EOF
 }
 
 resource "aws_iam_policy" "aws_load_balancer_controller" {
-  name        = "aws-load-balancer-controller-${var.foundation_aws_name}"
+  name        = "aws-load-balancer-controller-${var.aws_foundation_name}"
   path        = "/"
   description = "AWS Load Balancer Controller"
 
@@ -251,7 +251,7 @@ EOF
 }
 
 resource "aws_iam_policy_attachment" "aws_load_balancer_controller" {
-  name       = "aws-load-balancer-controller-${var.foundation_aws_name}"
+  name       = "aws-load-balancer-controller-${var.aws_foundation_name}"
   roles      = [aws_iam_role.aws_load_balancer_controller.name]
   policy_arn = aws_iam_policy.aws_load_balancer_controller.arn
 }

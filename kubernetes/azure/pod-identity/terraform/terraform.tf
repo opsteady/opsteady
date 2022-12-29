@@ -14,6 +14,6 @@ terraform {
 }
 
 provider "azurerm" {
-  subscription_id = var.foundation_azure_subscription_id
+  subscription_id = var.azure_foundation_subscription_id
   features {}
 }

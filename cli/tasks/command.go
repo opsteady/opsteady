@@ -12,8 +12,8 @@ import (
 type Command interface {
 	Run() error
 	AddArgs(...string)
-	AddEnv(string, string)
-	AddEnvs(map[string]string)
+	AddTarget(string, string)
+	AddTargets(map[string]string)
 }
 
 // CommandImpl is the implementation of the Command interface
@@ -62,13 +62,13 @@ func (c *CommandImpl) AddArgs(args ...string) {
 	c.Args = append(c.Args, args...)
 }
 
-// AddEnv adds value as environment variable of the command
-func (c *CommandImpl) AddEnv(key, value string) {
+// AddTarget adds value as environment variable of the command
+func (c *CommandImpl) AddTarget(key, value string) {
 	c.Env[key] = value
 }
 
-// AddEnvs adds values as environment variables of the command
-func (c *CommandImpl) AddEnvs(values map[string]string) {
+// AddTargets adds values as environment variables of the command
+func (c *CommandImpl) AddTargets(values map[string]string) {
 	for k, v := range values {
 		c.Env[k] = v
 	}

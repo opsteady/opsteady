@@ -6,4 +6,4 @@ metadata:
   namespace: platform
 type: Opaque
 data:
-  azure.json: {{ .capabilities_dns_local_azure_dns_config }}
+  azure.json: {{ .local_dns_azure_dns_config }}

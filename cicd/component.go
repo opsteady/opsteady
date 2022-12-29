@@ -10,8 +10,18 @@ type OpsteadyCli struct {
 	component.DefaultComponent
 }
 
-// Initialize creates a new OpsteadyCli struct
-func (o *OpsteadyCli) Initialize(defaultComponent component.DefaultComponent) {
+var Instance = &OpsteadyCli{}
+
+func init() {
+	m := component.DefaultMetadata()
+	m.Name = "cli"
+	m.Group = component.Cli
+	m.AddTarget(component.TargetDev)
+	Instance.Metadata = &m
+}
+
+// Configure configures OpsteadyCli before running
+func (o *OpsteadyCli) Configure(defaultComponent component.DefaultComponent) {
 	o.DefaultComponent = defaultComponent
 }
 

@@ -2,7 +2,7 @@ package component
 
 import "fmt"
 
-// DockerBuildInfo contains information about the docker image to to be created
+// DockerBuildInfo contains information about the docker image to be created
 type DockerBuildInfo struct {
 	Name      string
 	Version   string

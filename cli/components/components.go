@@ -32,35 +32,111 @@ import (
 	managementVaultInfra "github.com/opsteady/opsteady/management/vault/infra/cicd"
 )
 
-// Components contains a list of component initializers
-var Components = make(map[string]component.Initialize)
-
 func init() {
-	Components["management-bootstrap"] = &managementBootstrap.ManagementBootstrap{}
-	Components["management-infra"] = &managementInfra.ManagementInfra{}
-	Components["management-vault-infra"] = &managementVaultInfra.ManagementVaultInfra{}
-	Components["management-vault-config"] = &managementVaultConfig.ManagementVaultConfig{}
-	Components["foundation-azure"] = &foundationAzure.FoundationAzure{}
-	Components["foundation-aws"] = &foundationAWS.FoundationAWS{}
-	Components["foundation-local"] = &foundationLocal.FoundationLocal{}
-	Components["kubernetes-aws-cluster"] = &kubernetesAWSCluster.KubernetesAWSCluster{}
-	Components["kubernetes-bootstrap"] = &kubernetesBootstrap.KubernetesBootstrap{}
-	Components["kubernetes-aws-storage-ebs"] = &kubernetesAWSStorageEBS.KubernetesAWSStorageEBS{}
-	Components["kubernetes-aws-storage-efs"] = &kubernetesAWSStorageEFS.KubernetesAWSStorageEFS{}
-	Components["kubernetes-aws-network-policies"] = &kubernetesAWSNetworkPolicies.KubernetesAWSNetworkPolicies{}
-	Components["kubernetes-aws-loadbalancing"] = &kubernetesAWSLoadbalancing.KubernetesAWSLoadbalancing{}
-	Components["kubernetes-azure-pod-identity"] = &kubernetesAzurePodIdentity.KubernetesAzurePodIdentity{}
-	Components["kubernetes-azure-cluster"] = &kubernetesAzureCluster.KubernetesAzure{}
-	Components["kubernetes-local-cluster"] = &kubernetesLocalCluster.KubernetesLocal{}
-	Components["capabilities-dns-aws"] = &capabilitiesDNSAWS.CapabilitiesDNSAWS{}
-	Components["capabilities-dns-azure"] = &capabilitiesDNSAzure.CapabilitiesDNSAzure{}
-	Components["capabilities-dns-local"] = &capabilitiesDNSLocal.CapabilitiesDNSLocal{}
-	Components["capabilities-certificates-aws"] = &capabilitiesCertificatesAWS.CapabilitiesCertificatesAWS{}
-	Components["capabilities-certificates-azure"] = &capabilitiesCertificatesAzure.CapabilitiesCertificatesAzure{}
-	Components["capabilities-certificates-local"] = &capabilitiesCertificatesLocal.CapabilitiesCertificatesLocal{}
-	Components["capabilities-loadbalancing"] = &capabilitiesLoadbalancing.CapabilitiesLoadbalacing{}
-	Components["capabilities-user-auth"] = &capabilitiesUserAuth.UserAuth{}
-	Components["docker-base"] = &dockerBase.DockerBase{}
-	Components["docker-cicd"] = &dockerCicd.DockerCicd{}
-	Components["cli"] = &cli.OpsteadyCli{}
+	Targets.addComponent(cli.Instance)
+	Targets.addComponent(dockerBase.Instance)
+	Targets.addComponent(dockerCicd.Instance)
+	Targets.addComponent(managementBootstrap.Instance)
+	Targets.addComponent(managementInfra.Instance)
+	Targets.addComponent(managementVaultInfra.Instance)
+	Targets.addComponent(managementVaultConfig.Instance)
+	Targets.addComponent(foundationAzure.Instance)
+	Targets.addComponent(foundationAWS.Instance)
+	Targets.addComponent(kubernetesAWSCluster.Instance)
+	Targets.addComponent(kubernetesAzureCluster.Instance)
+	Targets.addComponent(kubernetesBootstrap.Instance)
+	Targets.addComponent(kubernetesAzurePodIdentity.Instance)
+	Targets.addComponent(foundationLocal.Instance)
+	Targets.addComponent(kubernetesAWSStorageEBS.Instance)
+	Targets.addComponent(kubernetesAWSStorageEFS.Instance)
+	Targets.addComponent(kubernetesAWSNetworkPolicies.Instance)
+	Targets.addComponent(kubernetesAWSLoadbalancing.Instance)
+	Targets.addComponent(kubernetesLocalCluster.Instance)
+	Targets.addComponent(capabilitiesDNSAzure.Instance)
+	Targets.addComponent(capabilitiesDNSAWS.Instance)
+	Targets.addComponent(capabilitiesDNSLocal.Instance)
+	Targets.addComponent(capabilitiesCertificatesAWS.Instance)
+	Targets.addComponent(capabilitiesCertificatesAzure.Instance)
+	Targets.addComponent(capabilitiesCertificatesLocal.Instance)
+	Targets.addComponent(capabilitiesLoadbalancing.Instance)
+	Targets.addComponent(capabilitiesUserAuth.Instance)
+}
+
+// AllTargets contains all targets
+type AllTargets struct {
+	All []*Target
+}
+
+// Target contains sorted groups based on dependency for specific target
+type Target struct {
+	Name   component.Target
+	Groups []*Group
+}
+
+// Group contains sorted components based on dependency for specific group
+type Group struct {
+	Name       component.Group
+	Components []component.Component
+}
+
+// Targets contains a list of component initializers
+var Targets = AllTargets{}
+
+func (t *AllTargets) addComponent(c component.Component) {
+	meta := c.GetMetadata()
+	for _, ta := range meta.Targets {
+		target := getTargetOrCreateEmptyTarget(t, ta)
+		group := getGroupOrCreateEmptyGroup(target, meta.Group)
+		group.Components = append(group.Components, c)
+	}
+}
+
+func getTargetOrCreateEmptyTarget(t *AllTargets, target component.Target) *Target {
+	for _, ta := range t.All {
+		if target == ta.Name {
+			return ta
+		}
+	}
+
+	ta := &Target{
+		Name: target,
+	}
+	t.All = append(t.All, ta)
+
+	return ta
+}
+
+func getGroupOrCreateEmptyGroup(target *Target, group component.Group) *Group {
+	for _, g := range target.Groups {
+		if group == g.Name {
+			return g
+		}
+	}
+
+	ga := &Group{
+		Name: group,
+	}
+	target.Groups = append(target.Groups, ga)
+
+	return ga
+}
+
+// FindComponent searches for the component or returns nil
+// We are accepting Target and Group to be empty, this however doesn't always work, if you are for example selecting bootstrap
+func (t *AllTargets) FindComponent(ta component.Target, g component.Group, name string) component.Component {
+	for _, tar := range t.All {
+		if ta == tar.Name || string(ta) == "" {
+			for _, ga := range tar.Groups {
+				if g == ga.Name || string(g) == "" {
+					for _, c := range ga.Components {
+						if name == c.GetMetadata().Name {
+							return c
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return nil
 }

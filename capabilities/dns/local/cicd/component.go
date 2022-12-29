@@ -1,19 +1,34 @@
 package cicd
 
-import "github.com/opsteady/opsteady/cli/component"
+import (
+	"github.com/opsteady/opsteady/cli/component"
+	foundationLocal "github.com/opsteady/opsteady/foundation/local/cicd"
+	kubernetesLocalCluster "github.com/opsteady/opsteady/kubernetes/local/cluster/cicd"
+)
 
-// CapabilititesDNSLocal is a local implementation for the external-dns controller
+// CapabilitiesDNSLocal is a local implementation for the external-dns controller
 type CapabilitiesDNSLocal struct {
 	component.DefaultComponent
 }
 
-// Initialize creates a new CapabilitiesDNSLocal component
-func (c *CapabilitiesDNSLocal) Initialize(defaultComponent component.DefaultComponent) {
+var Instance = &CapabilitiesDNSLocal{}
+
+func init() {
+	m := component.DefaultMetadata()
+	m.Name = "dns"
+	m.Group = component.CapabilitiesBasic
+	m.AddTarget(component.TargetLocal)
+	m.AddGroupDependency(component.Kubernetes)
+	Instance.Metadata = &m
+}
+
+// Configure configures CapabilitiesDNSLocal before running
+func (c *CapabilitiesDNSLocal) Configure(defaultComponent component.DefaultComponent) {
 	c.DefaultComponent = defaultComponent
-	c.DefaultComponent.RequiresComponents("foundation-local", "kubernetes-local-cluster")
-	c.DefaultComponent.SetVaultInfoToComponentConfig()
-	c.DefaultComponent.AddAzureADCredentialsToComponentConfig()
-	c.DefaultComponent.UseHelm(component.NewHelmChart(
+	c.AddRequiresInformationFrom(foundationLocal.Instance.GetMetadata(), kubernetesLocalCluster.Instance.GetMetadata())
+	c.SetVaultInfoToComponentConfig()
+	c.AddAzureADCredentialsToComponentConfig()
+	c.UseHelm(component.NewHelmChart(
 		"external-dns",
 		"1.8.0", // renovate: datasource=helm registryUrl=https://kubernetes-sigs.github.io/external-dns depName=external-dns versioning=semver
 	))

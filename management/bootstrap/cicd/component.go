@@ -1,14 +1,26 @@
 package cicd
 
-import "github.com/opsteady/opsteady/cli/component"
+import (
+	"github.com/opsteady/opsteady/cli/component"
+)
 
 // ManagementBootstrap is a component for the management bootstrap
 type ManagementBootstrap struct {
 	component.DefaultComponent
 }
 
-// Initialize creates a new managementBootstrap struct
-func (m *ManagementBootstrap) Initialize(defaultComponent component.DefaultComponent) {
+var Instance = &ManagementBootstrap{}
+
+func init() {
+	m := component.DefaultMetadata()
+	m.Name = "bootstrap"
+	m.Group = component.Management
+	m.AddTarget(component.TargetManagement)
+	Instance.Metadata = &m
+}
+
+// Configure configures ManagementBootstrap before running
+func (m *ManagementBootstrap) Configure(defaultComponent component.DefaultComponent) {
 	m.DefaultComponent = defaultComponent
-	m.DefaultComponent.Terraform = "" // Use root of the folder
+	m.Terraform = "" // Use root of the folder
 }

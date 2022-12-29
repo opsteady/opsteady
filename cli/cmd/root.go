@@ -51,6 +51,7 @@ func init() {
 	initComponentFlags(testCmd)
 	initComponentFlags(validateCmd)
 	initComponentFlags(publishCmd)
+	initSetup()
 }
 
 func initializeLogging() {

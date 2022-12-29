@@ -21,10 +21,10 @@ policy: sync
 registry: txt
 
 extraArgs:
-  - --azure-resource-group={{ .foundation_azure_resource_group }}
+  - --azure-resource-group={{ .azure_foundation_resource_group }}
 
 domainFilters:
-  - {{ .foundation_azure_public_zone_name }}
+  - {{ .azure_foundation_public_zone_name }}
 
 extraVolumes:
   - name: azure-dns-config

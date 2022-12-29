@@ -8,7 +8,6 @@ import (
 	"github.com/opsteady/opsteady/cli/configuration"
 	"github.com/opsteady/opsteady/cli/credentials"
 	"github.com/opsteady/opsteady/cli/tasks"
-	"github.com/opsteady/opsteady/cli/utils"
 	"github.com/opsteady/opsteady/cli/vault"
 	"github.com/rs/zerolog"
 )
@@ -27,11 +26,8 @@ type Component interface {
 	Test()
 	Clean()
 	Publish()
-}
-
-// Initialize is an interface that ensures component initialization.
-type Initialize interface {
-	Initialize(DefaultComponent)
+	GetMetadata() *Metadata
+	Configure(DefaultComponent)
 }
 
 // DefaultComponent implements the Component interface in a general way.
@@ -39,6 +35,7 @@ type Initialize interface {
 // can adjust it the way they want or even override the whole function.
 // The implemented functions stop (Fatal) if an error is detected.
 type DefaultComponent struct {
+	*Metadata
 	// Component dependencies
 	Vault                      vault.Vault
 	Credentials                credentials.Credentials
@@ -47,17 +44,14 @@ type DefaultComponent struct {
 	Logger                     *zerolog.Logger
 	TerraformBackendConfigPath string
 	// Component configuration
-	DefaultDependencies   []string // Dependencies that all components must have (used for fetching data from Vault)
-	ComponentDependencies []string // Dependencies component has (used for fetching data from Vault)
-	ComponentName         string
-	ComponentFolder       string
-	DryRun                bool
-	AwsID                 string
-	AzureID               string
-	LocalID               string
-	PlatformVersion       string           // Version of the platform (used as a folder in Vault)
-	HelmCharts            []*HelmChart     // We expect all charts to be from management ACR
-	DockerBuildInfo       *DockerBuildInfo // We expect all docker images to be saved to ACR
+	PlatformID                     string
+	CurrentTarget                  Target
+	RequiresInformationFromDefault []*Metadata // Dependencies that all components must have (used for fetching data from Vault)
+	ComponentFolder                string
+	DryRun                         bool
+	PlatformVersion                string           // Version of the platform (used as a folder in Vault)
+	HelmCharts                     []*HelmChart     // We expect all charts to be from management ACR
+	DockerBuildInfo                *DockerBuildInfo // We expect all docker images to be saved to ACR
 	// Names of the folders a component uses which will determin what will be executed, order can be adjusted
 	Terraform     string
 	CRD           string
@@ -71,14 +65,14 @@ type DefaultComponent struct {
 	OverrideValidateOrder []string
 }
 
+// GetMetadata returns Metadata
+func (c *DefaultComponent) GetMetadata() *Metadata {
+	return c.Metadata
+}
+
 // Test runs the component tests.
 func (c *DefaultComponent) Test() {
 	c.Logger.Warn().Msg("Test not implemented")
-}
-
-// RequiresComponents sets other components this component requires on.
-func (c *DefaultComponent) RequiresComponents(dependencies ...string) {
-	c.ComponentDependencies = dependencies
 }
 
 // RequiresComponents sets other components this component requires on.
@@ -93,24 +87,24 @@ func (c *DefaultComponent) SetDockerBuildInfo(name, version string, buildArgs ma
 // SetCloudCredentialsToEnv gets the AWS or Azure credentials and
 // sets them to env so they can be used by the CLI further down the process.
 func (c *DefaultComponent) SetCloudCredentialsToEnv() {
-	if c.AwsID != "" {
+	if TargetAws == c.CurrentTarget {
 		c.setAwsCloudCredentialsToEnv()
 	}
 
-	if c.AzureID != "" {
-		c.setAzureCloudCredentialsToEnv(c.AzureID)
+	if TargetAzure == c.CurrentTarget {
+		c.setAzureCloudCredentialsToEnv(c.PlatformID)
 	}
 
-	if c.LocalID != "" { // Local uses credentials of local sub for all local deployments
-		c.setAzureCloudCredentialsToEnv(c.LocalID)
+	if TargetLocal == c.CurrentTarget {
+		c.setAzureCloudCredentialsToEnv(c.PlatformID)
 	}
 }
 
 func (c *DefaultComponent) setAwsCloudCredentialsToEnv() {
-	awsAccountCreds, err := c.Credentials.AWS(c.AwsID, "60m")
+	awsAccountCreds, err := c.Credentials.AWS(c.PlatformID, "60m")
 
 	if err != nil {
-		c.Logger.Fatal().Err(err).Str("awsID", c.AwsID).Msg("Could not get credentials")
+		c.Logger.Fatal().Err(err).Str("awsID", c.PlatformID).Msg("Could not get credentials")
 	}
 
 	if err := os.Setenv("AWS_ACCESS_KEY_ID", awsAccountCreds["access_key"].(string)); err != nil {
@@ -149,36 +143,6 @@ func (c *DefaultComponent) setAzureCloudCredentialsToEnv(id string) {
 	}
 }
 
-// PlatformID returns AzureID if both AWS and/or Azure and/or Local ID are set
-func (c *DefaultComponent) PlatformID() string {
-	if c.AzureID == "" {
-		if c.AwsID == "" {
-			return c.LocalID
-		}
-
-		return c.AwsID
-	}
-
-	return c.AzureID
-}
-
-// CloudName returns Azure, AWS or local, depending on the environment ID
-func (c *DefaultComponent) CloudName() string {
-	if c.AzureID == "" && c.AwsID == "" {
-		return "local"
-	}
-
-	if c.AzureID == "" {
-		return "aws"
-	}
-
-	return "azure"
-}
-
-func (c *DefaultComponent) ComponentNameAndAllTheDependencies() []string {
-	return utils.UniqueNonEmptyElementsOf(append([]string{c.ComponentName}, append(c.DefaultDependencies, c.ComponentDependencies...)...))
-}
-
 // SetVaultInfoToComponentConfig sets Vault address and token to ComponentConfig
 // so that other steps can use it.
 func (c *DefaultComponent) SetVaultInfoToComponentConfig() {
@@ -190,14 +154,18 @@ func (c *DefaultComponent) SetVaultInfoToComponentConfig() {
 // to ComponentConfig so that other steps can use it.
 func (c *DefaultComponent) SetPlatformInfoToComponentConfig() {
 	c.ComponentConfig.GeneralAddOrOverride("platform_version", c.PlatformVersion)
-	c.ComponentConfig.GeneralAddOrOverride("platform_environment_name", c.PlatformID())
-	c.ComponentConfig.GeneralAddOrOverride("platform_cloud_name", c.CloudName())
-	c.ComponentConfig.GeneralAddOrOverride("platform_component_name", c.ComponentName)
+	c.ComponentConfig.GeneralAddOrOverride("platform_environment_name", c.PlatformID)
+	c.ComponentConfig.GeneralAddOrOverride("platform_target_name", string(c.CurrentTarget))
+	c.ComponentConfig.GeneralAddOrOverride("platform_component_name", c.Name)
+	c.ComponentConfig.GeneralAddOrOverride("platform_vault_vars_name", c.VariableNames(c.CurrentTarget))
+	c.ComponentConfig.GeneralAddOrOverride("platform_terraform_output_path",
+		fmt.Sprintf("config/%s/platform/%s/%s/%s-tf", c.PlatformVersion, string(c.CurrentTarget), c.PlatformID, c.Name))
 }
 
 // RetrieveComponentConfig returns component config
 func (c *DefaultComponent) RetrieveComponentConfig() map[string]interface{} {
-	values, err := c.ComponentConfig.RetrieveConfig(c.PlatformVersion, c.PlatformID(), c.ComponentNameAndAllTheDependencies())
+	// Dependencies and my self
+	values, err := c.ComponentConfig.RetrieveConfig(c.PlatformVersion, c.PlatformID, append(c.RequiresInformationFrom, c.Metadata))
 
 	if err != nil {
 		c.Logger.Fatal().Err(err).Msg("could not retrieve component configuration")
@@ -233,17 +201,17 @@ func (c *DefaultComponent) AddManagementCredentialsToComponentConfig() {
 
 // LoginKubernetes logs in to AKS or EKS or Local
 func (c *DefaultComponent) LoginKubernetes(componentConfig map[string]interface{}) {
-	if c.AwsID != "" {
+	if TargetAws == c.CurrentTarget {
 		aws := tasks.NewAws(c.GlobalConfig.TmpFolder, c.Logger)
 
-		if err := aws.LoginToEKS(componentConfig["foundation_aws_region"].(string), componentConfig["kubernetes_aws_cluster_name"].(string)); err != nil {
+		if err := aws.LoginToEKS(componentConfig["aws_foundation_region"].(string), componentConfig["aws_cluster_name"].(string)); err != nil {
 			c.Logger.Fatal().Err(err).Msg("could not login to EKS")
 		}
 	}
 
-	if c.AzureID != "" {
+	if TargetAzure == c.CurrentTarget {
 		c.Logger.Info().Msg("Preparing AKS environment...")
-		AKSCreds, err := c.Credentials.AKS(c.AzureID)
+		AKSCreds, err := c.Credentials.AKS(c.PlatformID)
 
 		if err != nil {
 			c.Logger.Fatal().Err(err).Msg("could not get credentials to prepare AKS")
@@ -255,7 +223,7 @@ func (c *DefaultComponent) LoginKubernetes(componentConfig map[string]interface{
 			c.Logger.Fatal().Err(err).Msg("could not login to Azure")
 		}
 
-		clusterName := componentConfig["kubernetes_azure_cluster_name"].(string)
+		clusterName := componentConfig["azure_cluster_name"].(string)
 		clusterResourceGroup := fmt.Sprintf("kubernetes-%s", clusterName)
 		// Management cluster is different therefore we override this stuff here
 		if clusterName == management {
@@ -267,7 +235,7 @@ func (c *DefaultComponent) LoginKubernetes(componentConfig map[string]interface{
 		}
 	}
 
-	if c.LocalID != "" {
+	if TargetLocal == c.CurrentTarget {
 		k3d := tasks.NewK3d(c.GlobalConfig.TmpFolder, c.Logger)
 
 		if err := k3d.LoginToKubernetes("opsteady"); err != nil {

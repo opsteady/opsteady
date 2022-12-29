@@ -1,16 +1,30 @@
 package cicd
 
-import "github.com/opsteady/opsteady/cli/component"
+import (
+	"github.com/opsteady/opsteady/cli/component"
+	foundationAzure "github.com/opsteady/opsteady/foundation/azure/cicd"
+)
 
 // KubernetesAzure is a component for creating Kubernetes (AKS)
 type KubernetesAzure struct {
 	component.DefaultComponent
 }
 
-// Initialize creates a new KubernetesAzure struct
-func (k *KubernetesAzure) Initialize(defaultComponent component.DefaultComponent) {
+var Instance = &KubernetesAzure{}
+
+func init() {
+	m := component.DefaultMetadata()
+	m.Name = "cluster"
+	m.Group = component.Kubernetes
+	m.AddTarget(component.TargetAzure)
+	m.AddGroupDependency(component.Foundation)
+	Instance.Metadata = &m
+}
+
+// Configure configures KubernetesAzure before running
+func (k *KubernetesAzure) Configure(defaultComponent component.DefaultComponent) {
 	k.DefaultComponent = defaultComponent
-	k.DefaultComponent.Terraform = "" // Use root of the folder
-	k.DefaultComponent.RequiresComponents("foundation-azure")
-	k.DefaultComponent.SetVaultInfoToComponentConfig()
+	k.Terraform = "" // Use root of the folder
+	k.AddRequiresInformationFrom(foundationAzure.Instance.Metadata)
+	k.SetVaultInfoToComponentConfig()
 }

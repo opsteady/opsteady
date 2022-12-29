@@ -11,6 +11,7 @@ import (
 	"github.com/opsteady/opsteady/cli/components"
 	"github.com/opsteady/opsteady/cli/credentials"
 	"github.com/opsteady/opsteady/cli/vault"
+	managementBootstrap "github.com/opsteady/opsteady/management/bootstrap/cicd"
 	"github.com/spf13/cobra"
 )
 
@@ -20,24 +21,27 @@ const (
 
 var (
 	componentFlag       string
+	groupFlag           string
 	azureIDFlag         string
 	awsIDFlag           string
 	localIDFlag         string
 	dryRunFlag          bool
 	platformVersionFlag string
+	currentTarget       component.Target
+	platformID          string
 )
 
-func executeComponent(cmd *cobra.Command, executeComponent func(c component.Component)) {
-	stopWhenAwsOrAzureIDNotSpecified(cmd)
+func executeComponent(executeComponent func(c component.Component)) {
+	setTargetAndPlatformID()
+
 	// Cleaning the TMP folder is very important because it stores rendered files
 	// If not cleaned you might apply wrong settings or files to wrong environments
 	ensureTmpFolderExistsAndIsEmpty()
 
-	logger.Debug().Msg("Find the component")
+	logger.Debug().Str("target", string(currentTarget)).Str("group", groupFlag).Str("component", componentFlag).Msg("Find the component")
+	comp := components.Targets.FindComponent(currentTarget, component.Group(groupFlag), componentFlag)
 
-	comp, ok := components.Components[componentFlag]
-
-	if !ok {
+	if comp == nil {
 		logger.Fatal().Str("component", componentFlag).Msg("Could not find component")
 	}
 
@@ -50,6 +54,9 @@ func executeComponent(cmd *cobra.Command, executeComponent func(c component.Comp
 		logger.Fatal().Err(err).Msg("Could not initialize Vault")
 	}
 
+	meta := comp.GetMetadata()
+	meta.AddRequiresInformationFrom(managementBootstrap.Instance.GetMetadata())
+
 	defaultComponent := component.DefaultComponent{
 		Vault:                      vaultImpl,
 		Credentials:                credentials.NewCredentials(vaultImpl, vaultCache, &logger),
@@ -57,13 +64,11 @@ func executeComponent(cmd *cobra.Command, executeComponent func(c component.Comp
 		GlobalConfig:               globalConfig,
 		Logger:                     &logger,
 		TerraformBackendConfigPath: "/tmp/tf-backend-config", // this is the default filesystem location for the Terraform backend configuration
-		DefaultDependencies:        []string{"management-bootstrap"},
-		ComponentName:              componentFlag,
+		Metadata:                   comp.GetMetadata(),
 		ComponentFolder:            calculateComponentFolder(comp),
+		CurrentTarget:              currentTarget,
 		DryRun:                     dryRunFlag,
-		AwsID:                      awsIDFlag,
-		AzureID:                    azureIDFlag,
-		LocalID:                    localIDFlag,
+		PlatformID:                 platformID,
 		PlatformVersion:            platformVersionFlag,
 		Terraform:                  "terraform",
 		CRD:                        "crd",
@@ -73,18 +78,53 @@ func executeComponent(cmd *cobra.Command, executeComponent func(c component.Comp
 		Docker:                     "docker",
 	}
 
-	logger.Debug().Msg("Run the the component")
-	comp.Initialize(defaultComponent)
+	logger.Debug().Msg("Run the component")
+	comp.Configure(defaultComponent)
 
-	defer comp.(component.Component).Clean()
-	executeComponent(comp.(component.Component))
+	defer comp.Clean()
+	executeComponent(comp)
 }
 
-func stopWhenAwsOrAzureIDNotSpecified(cmd *cobra.Command) {
-	if cmd.Use == "deploy" || cmd.Use == "destroy" {
-		if azureIDFlag == "" && awsIDFlag == "" && localIDFlag == "" {
-			logger.Fatal().Msgf("You need to specify an 'azure-id' or 'aws-id' or 'local-id' flag for %s command", cmd.Use)
-		}
+func checkIDs(cmd *cobra.Command) { //nolint:cyclop
+	if azureIDFlag == "" && awsIDFlag == "" && localIDFlag == "" {
+		logger.Fatal().Msgf("You need to specify an 'azure-id' or 'aws-id' or 'local-id' flag for %s command", cmd.Use)
+	}
+
+	if azureIDFlag != "" && (awsIDFlag != "" || localIDFlag != "") {
+		logger.Fatal().Msg("You can not mix 'azure-id' flag with 'aws-id' or 'local-id'")
+	}
+
+	if awsIDFlag != "" && (azureIDFlag != "" || localIDFlag != "") {
+		logger.Fatal().Msg("You can not mix 'aws-id' flag with 'azure-id' or 'local-id'")
+	}
+
+	if localIDFlag != "" && (awsIDFlag != "" || azureIDFlag != "") {
+		logger.Fatal().Msg("You can not mix 'local-id' flag with 'aws-id' or 'azure-id'")
+	}
+}
+
+func setTargetAndPlatformID() {
+	currentTarget = ""
+	platformID = ""
+
+	if localIDFlag != "" {
+		currentTarget = component.TargetLocal
+		platformID = localIDFlag
+	}
+
+	if awsIDFlag != "" {
+		currentTarget = component.TargetAws
+		platformID = awsIDFlag
+	}
+
+	if azureIDFlag != "" {
+		currentTarget = component.TargetAzure
+		platformID = azureIDFlag
+	}
+
+	if azureIDFlag == "management" {
+		currentTarget = component.TargetManagement // Override this and set to management instead of azure
+		platformID = azureIDFlag
 	}
 }
 
@@ -102,7 +142,7 @@ func ensureTmpFolderExistsAndIsEmpty() {
 	}
 }
 
-func calculateComponentFolder(comp component.Initialize) string {
+func calculateComponentFolder(comp component.Component) string {
 	fullPath := reflect.ValueOf(comp).Elem().Type().PkgPath()
 	withoutGithub := strings.ReplaceAll(fullPath, "github.com/opsteady/opsteady/", "")
 
@@ -141,6 +181,7 @@ func initializeCacheDependency() (cache.Cache, cache.Cache) {
 func initComponentFlags(cmd *cobra.Command) {
 	rootCmd.AddCommand(cmd)
 	cmd.Flags().StringVarP(&componentFlag, "component", "c", "", "Name of the component")
+	cmd.Flags().StringVarP(&groupFlag, "group", "g", "", "Name of the group the component is in")
 	cmd.Flags().StringVarP(&azureIDFlag, "azure-id", "", "", "Azure platform ID")
 	cmd.Flags().StringVarP(&awsIDFlag, "aws-id", "", "", "AWS platform ID")
 	cmd.Flags().StringVarP(&localIDFlag, "local-id", "", "", "Local platform ID")
@@ -158,9 +199,12 @@ var deployCmd = &cobra.Command{
 	Short: "Deploy the component",
 	Long:  `Deploy the component`,
 	Run: func(cmd *cobra.Command, args []string) {
-		executeComponent(cmd, func(c component.Component) {
+		executeComponent(func(c component.Component) {
 			c.Deploy()
 		})
+	},
+	PreRun: func(cmd *cobra.Command, args []string) {
+		checkIDs(cmd)
 	},
 }
 
@@ -169,9 +213,12 @@ var destroyCmd = &cobra.Command{
 	Short: "Destroy the component",
 	Long:  `Destroy the component`,
 	Run: func(cmd *cobra.Command, args []string) {
-		executeComponent(cmd, func(c component.Component) {
+		executeComponent(func(c component.Component) {
 			c.Destroy()
 		})
+	},
+	PreRun: func(cmd *cobra.Command, args []string) {
+		checkIDs(cmd)
 	},
 }
 
@@ -180,7 +227,7 @@ var testCmd = &cobra.Command{
 	Short: "Test the component",
 	Long:  `Test the component`,
 	Run: func(cmd *cobra.Command, args []string) {
-		executeComponent(cmd, func(c component.Component) {
+		executeComponent(func(c component.Component) {
 			c.Test()
 		})
 	},
@@ -191,7 +238,7 @@ var validateCmd = &cobra.Command{
 	Short: "Validate the component",
 	Long:  `Validate the component`,
 	Run: func(cmd *cobra.Command, args []string) {
-		executeComponent(cmd, func(c component.Component) {
+		executeComponent(func(c component.Component) {
 			c.Validate()
 		})
 	},
@@ -202,7 +249,7 @@ var buildCmd = &cobra.Command{
 	Short: "Build the component",
 	Long:  `Build the component`,
 	Run: func(cmd *cobra.Command, args []string) {
-		executeComponent(cmd, func(c component.Component) {
+		executeComponent(func(c component.Component) {
 			c.Build()
 		})
 	},
@@ -213,7 +260,7 @@ var publishCmd = &cobra.Command{
 	Short: "Publish the component",
 	Long:  `Publish the component`,
 	Run: func(cmd *cobra.Command, args []string) {
-		executeComponent(cmd, func(c component.Component) {
+		executeComponent(func(c component.Component) {
 			c.Publish()
 		})
 	},

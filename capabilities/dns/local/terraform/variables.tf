@@ -1,32 +1,28 @@
-variable "foundation_local_name" {
+variable "local_foundation_name" {
   type = string
 }
 
-variable "foundation_local_location" {
+variable "local_foundation_location" {
   type = string
 }
 
-variable "foundation_local_resource_group" {
+variable "local_foundation_resource_group" {
   type = string
 }
 
-variable "foundation_local_subscription_id" {
+variable "local_foundation_subscription_id" {
   type = string
 }
 
-variable "foundation_local_public_zone_id" {
+variable "local_foundation_public_zone_id" {
   type = string
 }
 
-variable "platform_version" {
+variable "platform_terraform_output_path" {
   type = string
 }
 
-variable "platform_environment_name" {
-  type = string
-}
-
-variable "platform_component_name" {
+variable "platform_vault_vars_name" {
   type = string
 }
 

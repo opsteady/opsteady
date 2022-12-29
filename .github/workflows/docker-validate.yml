@@ -46,8 +46,8 @@ jobs:
 
       - name: Validate base docker
         run: |
-          go run main.go validate -c docker-base --cache
+          go run main.go validate -c base --cache
 
       - name: Validate cicd docker
         run: |
-          go run main.go validate -c docker-cicd --cache
+          go run main.go validate -c cicd --cache

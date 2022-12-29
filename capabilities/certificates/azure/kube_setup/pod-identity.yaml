@@ -6,8 +6,8 @@ metadata:
   namespace: platform
 spec:
   type: 0
-  resourceID: {{ .capabilities_certificates_azure_msi_id }}
-  clientID: {{ .capabilities_certificates_azure_msi_client_id }}
+  resourceID: {{ .azure_certificates_msi_id }}
+  clientID: {{ .azure_certificates_msi_client_id }}
 ---
 apiVersion: "aadpodidentity.k8s.io/v1"
 kind: AzureIdentityBinding
