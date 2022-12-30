@@ -17,6 +17,7 @@ func NewDocker(logger *zerolog.Logger) *Docker {
 	}
 }
 
+// Build runs the `docker build` command.
 func (d *Docker) Build(workingDir, fullImageName string, args map[string]string) error {
 	d.logger.Info().Msg("Running docker build")
 
@@ -30,6 +31,7 @@ func (d *Docker) Build(workingDir, fullImageName string, args map[string]string)
 	return command.Run()
 }
 
+// Push runs the `docker push` command.
 func (d *Docker) Push(workingDir, fullImageName string) error {
 	d.logger.Info().Msg("Push docker image")
 
@@ -39,6 +41,7 @@ func (d *Docker) Push(workingDir, fullImageName string) error {
 	return command.Run()
 }
 
+// Validate runs the `hadolint` command to validate the Dockerfile.
 func (d *Docker) Validate(workingDir string) error {
 	d.logger.Info().Msg("Validate docker image")
 
