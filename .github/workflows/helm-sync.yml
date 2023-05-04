@@ -18,7 +18,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
 
-      - uses: robinraju/release-downloader@v1.7
+      - uses: robinraju/release-downloader@v1.8
         with:
           repository: "bitnami-labs/charts-syncer"
           tag: "v${{ env.CHARTS_SYNCER_VERSION }}"
