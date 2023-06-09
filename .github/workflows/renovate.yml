@@ -21,7 +21,7 @@ jobs:
           APP_ID: ${{ secrets.APP_ID }}
 
       - name: Checkout
-        uses: actions/checkout@v3.2.0
+        uses: actions/checkout@v3.5.3
 
       - name: Renovate
         uses: renovatebot/github-action@v32.241.11
