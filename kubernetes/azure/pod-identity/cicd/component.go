@@ -28,6 +28,6 @@ func (k *KubernetesAzurePodIdentity) Configure(defaultComponent component.Defaul
 	k.AddRequiresInformationFrom(foundationAzure.Instance.GetMetadata(), kubernetesAzureCluster.Instance.GetMetadata())
 	k.UseHelm(component.NewHelmChart(
 		"aad-pod-identity",
-		"4.1.15", // renovate: datasource=helm registryUrl=https://raw.githubusercontent.com/Azure/aad-pod-identity/master/charts depName=aad-pod-identity versioning=semver
+		"4.1.18", // renovate: datasource=helm registryUrl=https://raw.githubusercontent.com/Azure/aad-pod-identity/master/charts depName=aad-pod-identity versioning=semver
 	))
 }
