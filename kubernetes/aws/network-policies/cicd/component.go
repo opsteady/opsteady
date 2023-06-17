@@ -29,6 +29,6 @@ func (k *KubernetesAWSNetworkPolicies) Configure(defaultComponent component.Defa
 	k.SetVaultInfoToComponentConfig()
 	k.UseHelm(component.NewHelmChart(
 		"tigera-operator",
-		"v3.24.5", // renovate: datasource=helm registryUrl=https://docs.projectcalico.org/charts depName=tigera-operator versioning=semver
+		"v3.26.1", // renovate: datasource=helm registryUrl=https://docs.projectcalico.org/charts depName=tigera-operator versioning=semver
 	))
 }
