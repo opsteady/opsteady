@@ -29,6 +29,6 @@ func (c *CapabilitiesLoadBalancing) Configure(defaultComponent component.Default
 	c.AddRequiresInformationFrom(foundationAWS.Instance.GetMetadata(), kubernetesAzureCluster.Instance.GetMetadata(), kubernetesAWSCluster.Instance.GetMetadata())
 	c.UseHelm(component.NewHelmChart(
 		"ingress-nginx",
-		"4.4.0", // renovate: datasource=helm registryUrl=https://kubernetes.github.io/ingress-nginx depName=ingress-nginx versioning=semver
+		"4.7.1", // renovate: datasource=helm registryUrl=https://kubernetes.github.io/ingress-nginx depName=ingress-nginx versioning=semver
 	))
 }
